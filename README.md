@@ -1,15 +1,17 @@
-### Taste Trove
-# Description deliverable
+# Taste Trove #
+## Description deliverable ##
 
-**Elevator Pitch**
-Do you like cooking or baking? Do you wish you had access to your friends and family’s recipes? My application, Taste Trove, will allow users to post recipes and see those posted by others. Scroll through mouth watering recipes till you find one that fits your tastes. Use the number of ‘makes’ on a recipe to see which is the most popular. Add a recipe of your own in minutes!
+### Elevator Pitch ###
 
+Do you like cooking or baking? Do you wish you had access to your friends and family’s cookbook recipes? My application, Taste Trove, allows users to post recipes and see those posted by others. Once signed in, scroll through mouth watering recipes till you find one that fits your tastes. Use the number of 'makes' on a recipe to see what is most popular. Click the 'add recipe' button to share one of your own.
+
+### Design ###
 ![Alt Text](bp/login.png)
 ![Alt Text](bp/add_recipe.png)
 ![Alt Text](bp/all_recipes.png)
 ![Alt Text](bp/flip.png)
 
-**Key Features**
+### Key Features ###
 - Secure login
 - Add/delete recipes
 - Display user’s recipes
@@ -17,7 +19,7 @@ Do you like cooking or baking? Do you wish you had access to your friends and fa
 - ‘Make’ a recipe
 - Users, recipes, ‘makes’, persistently stored
 
-**Technologies**
+### Technologies ###
 I will use the required technologies in the following ways:
 
 - HTML: Three HTML pages using the proper HTML structure. One for login, one for the user’s recipes, one for all recipes.
@@ -35,7 +37,7 @@ I will use the required technologies in the following ways:
   - Recipes
   - ‘Makes’ on a recipe
 
-- WebSocket - Users can see each other's recipes and see how many times a recipe has been ‘made’.
+- WebSocket: Users can see each other's recipes and see how many times a recipe has been ‘made’.
 
 - React: Will be properly used to wrap the previous things in a better design.
 
