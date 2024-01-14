@@ -24,20 +24,18 @@ I will use the required technologies in the following ways:
 
 - HTML: Three HTML pages using the proper HTML structure. One for login, one for the user’s recipes, one for all recipes.
 
-- CSS: Attractive design that works for different screen size. Scroll through recipes.
+- CSS: Attractive design that works for different screen size. Scroll through recipes. Colors and fonts that stand out.
 
-- JavaScript: Login, adding/deleting recipes, 'making' recipes
+- JavaScript: Login, adding/delete recipes, flip to see recipe, increase 'makes' for a recipe, toggle between user recipes and all recipes.
 
-- Service: Login, Retrieving
+- Service: Login, retrieving recipe info.
   
-- Database/Login: Persisted app and auth data
-  - Sign in to your own account.
-  - Users
-  - Who posted each recipe
+- Database/Login:
+  - Users login info
   - Recipes
+  - Who posted each recipe
   - ‘Makes’ on a recipe
 
-- WebSocket: Users can see each other's recipes and see how many times a recipe has been ‘made’.
+- WebSocket: Users can see each other's recipes and its number of 'makes'.
 
-- React: Will be properly used to wrap the previous things in a better design.
-
+- React: Wrap application into React web framework.
