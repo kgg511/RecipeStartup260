@@ -34,3 +34,8 @@ startup.
 
 Fork: Create a copy of a github repository. Maintains a link to the original 
 repository so you can pull down updates.
+
+1/18: EC2
+http://52.87.41.204/
+ssh -i cs260/[filename] ubuntu@52.87.41.204
+
