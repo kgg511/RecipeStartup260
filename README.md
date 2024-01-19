@@ -22,7 +22,7 @@ Do you like cooking or baking? Do you wish you had access to your friends and fa
 ### Technologies ###
 I will use the required technologies in the following ways:
 
-- HTML: Three HTML pages using the proper HTML structure. One for login, one for the user’s recipes, one for all recipes.
+- HTML: Four HTML pages using the proper HTML structure. One for login, one for the user’s recipes, one for all recipes and one to add recipes.
 
 - CSS: Attractive design that works for different screen size. Scroll through recipes. Colors and fonts that stand out.
 
