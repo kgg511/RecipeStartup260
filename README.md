@@ -39,3 +39,24 @@ I will use the required technologies in the following ways:
 - WebSocket: Users can see each other's recipes and its number of 'makes'.
 
 - React: Wrap application into React web framework.
+
+## HTML deliverable ##
+For this deliverable I built the structure of my application using HTML.
+
+- HTML: Four HTML pages: login, user recipes, all recipes, and add a recipe.
+- Links: 
+  - Login page links to all recipes.
+  - all recipes links to login and user recipes.
+  - Add a recipe has a button that links to user recipes.
+- Text: Each recipe has a name, ingredients, and instructions.
+- Images:
+  - The login page will display a random dessert image from a 3rd party application.
+  - Each recipe has an image.
+- DB/Login:
+  - Login page with username and password.
+  - The users, their recipes, and their makes are stored.
+- WebSocket:
+  - Users can see recipes posted by other users.
+  - Users can see how many ‘makes’ a recipe has received.
+
+
