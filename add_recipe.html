@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Tell browsers not to scale the viewport automatically -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taste Trove</title>
+    <link rel="icon" href="favicon.ico" />
+  </head>
+  <body>
+    <!-- Use header, main, and footer elements to give semantic structure -->
+    <header>
+      <h1>TasteTrove</h1>
+      <nav>
+        <!-- Menu is a semantic alternative to <ul> that represents an interaction -->
+        <menu>
+          <li><a href="index.html">Sign out</a></li>
+          <li><a href="my_recipes.html">My Recipes</a></li>
+          <li><a href="all_recipes.html">All Recipes</a></li>
+        </menu>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Add Recipe</h2>
+
+      <form id="recipeForm">
+        <label for="recipeName">Recipe Name:</label>
+        <input type="text" id="recipeName" required>
+        <br>
+
+        <label for="recipeImage">Recipe Image</label>
+        <input type="file" id="recipeImage" required>
+        <br>
+        
+        <div>
+            <div>
+                <label for="ingredient">Ingredient 1: </label>
+                <input type="text" id="ingredients" placeholder="flour" required>
+                <label for="amount">Amount:</label>
+                <input type="text" id="ingredients" placeholder="1/2 cups" required>
+            </div>
+            <div>
+                <label for="ingredient">Ingredient 2: </label>
+                <input type="text" id="ingredients" placeholder="flour" required>
+                <label for="amount">Amount:</label>
+                <input type="text" id="ingredients" placeholder="1/2 cups">
+            </div>
+        </div>
+        <br>
+        <button>Add More Ingredients</button>
+        <br>
+        <button type="submit">Submit Recipe</button>
+    </form>
+        
+    </main>
+
+    <footer>
+      <hr />
+      <span class="text-reset">Katherine Greer</span>
+      <br />
+      <a href="https://github.com/kgg511/RecipeStartup260">GitHub</a>
+    </footer>
+  </body>
+</html>
