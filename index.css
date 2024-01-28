@@ -1,0 +1,43 @@
+
+header{
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
+
+
+}
+
+Main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    
+}
+
+div.Login{
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 500px;
+    flex: 1;
+    display: flex; 
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
+    background-color: #DED6D1;
+    border: 2px solid #D7C0D0;
+    border-radius: 10px;
+
+}
+
+.form-control{
+    margin-bottom: 5px;
+}
+
+.btn.btn-primary{
+    margin-bottom: 10px;
+    background-color: #D7C0D0;
+}
