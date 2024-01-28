@@ -1,0 +1,16 @@
+header{
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
+
+}
+
+body{
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
+    
+    
+}

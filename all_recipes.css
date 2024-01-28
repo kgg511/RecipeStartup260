@@ -1,6 +1,17 @@
 
+header{
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
 
-
+}
+main{
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
+}
 .flip-card {
     margin-bottom: 20px; 
     position:relative;
