@@ -1,16 +1,26 @@
 header{
     display: flex;
+    flex: 1;
     align-items: center;
-    justify-self: center;
-    flex-direction: column;
-
+    justify-content: space-between;
+    background-color: #D7C0D0;
 }
 
-body{
+nav{
+    display: flex;
+    flex-direction: row;
+}
+
+main{
     display: flex;
     align-items: center;
-    justify-self: center;
+    justify-content: center;
     flex-direction: column;
-    
-    
+}
+
+footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
