@@ -6,6 +6,12 @@ header{
     background-color: #D7C0D0;
 }
 
+ul {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+
 nav{
     display: flex;
     flex-direction: row;

@@ -41,3 +41,10 @@ div.Login{
     margin-bottom: 10px;
     background-color: #D7C0D0;
 }
+
+footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
