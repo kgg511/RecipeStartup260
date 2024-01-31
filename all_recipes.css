@@ -19,6 +19,18 @@ nav{
   align-items: center;
 }
 
+@media (orientation: portrait) {
+  nav h1, nav h5{
+    font-size: 15px;
+  }
+  h2{
+    font-size: 15px;
+  }
+  
+  
+}
+
+
 a{
   color: black;
 }
