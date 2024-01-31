@@ -11,6 +11,12 @@ nav{
     flex-direction: row;
 }
 
+.btn-primary{
+    background-color: #5F5449;
+    border-color:#5F5449;
+
+}
+
 main{
     display: flex;
     align-items: center;
