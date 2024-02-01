@@ -36,7 +36,11 @@ nav{
   }
   h2{
     font-size: 15px;
-  } 
+  }
+  
+  .grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
 
 }
 
@@ -145,8 +149,19 @@ main{
 }
 
 .btn-primary{
-  margin: 30px;
-  margin-bottom: 0px;
+
+  margin: 0px;
+  background-color: #CE8147;
+  border-color: #CE8147;
+}
+
+.btn-primary:hover {
+  background-color: #CE8147;; /* New background color on hover */
+}
+
+/* Active state styles for the button (when pressed) */
+.btn-primary:active {
+  background-color: #432818; /* New background color when pressed */
 }
 
 footer{
