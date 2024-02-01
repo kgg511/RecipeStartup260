@@ -39,6 +39,17 @@ div.Login{
 
 }
 
+@media (orientation: portrait) {
+    div.Login{
+        width:350px;
+    }
+    div.login_image{
+        width: 40rem;
+        height: 20rem;
+
+    }
+  }
+
 .form-control{
     margin-bottom: 5px;
 }
