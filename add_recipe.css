@@ -6,6 +6,15 @@ header{
     background-color: #D7C0D0;
 }
 
+@media (orientation: portrait) {
+    nav h1, nav h5{
+      font-size: 15px;
+    }
+    h2{
+      font-size: 15px;
+    } 
+  }
+
 ul {
     margin-top: 0;
     margin-bottom: 0;

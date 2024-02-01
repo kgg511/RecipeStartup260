@@ -19,15 +19,25 @@ nav{
   align-items: center;
 }
 
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr); /* Three columns */
+}
+
 @media (orientation: portrait) {
+  body {
+    /* Styles for smaller screens */
+    width: 80%; /* Adjust the width as needed */
+    margin: 0 auto; /* Center the content */
+  }
   nav h1, nav h5{
     font-size: 15px;
   }
   h2{
     font-size: 15px;
-  }
-  
-  
+  } 
+
 }
 
 
@@ -100,6 +110,7 @@ main{
     width: 100%;
     -webkit-backface-visibility: hidden; /* Safari */
     backface-visibility: hidden;
+    overflow-y: auto; 
     
   }
   
