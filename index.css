@@ -5,17 +5,23 @@ header{
     align-items: center;
     justify-self: center;
     flex-direction: column;
-
-
 }
 
-Main{
+main{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
 
-    
+div.login_image{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60rem;
+    height: 30rem;
+
 }
 
 div.Login{
