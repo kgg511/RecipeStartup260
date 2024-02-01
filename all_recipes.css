@@ -12,6 +12,10 @@ ul {
   margin-bottom: 0;
 }
 
+.makes{
+  font-weight: bolder;
+}
+
 
 nav{
   display: flex;
@@ -137,9 +141,7 @@ main{
 
   }
 
-
   .icon-button {
-    background-color: #007bff; /* Example background color */
     color: white; /* Example text color */
     border: none;
     padding: 10px;
@@ -151,12 +153,12 @@ main{
 .btn-primary{
 
   margin: 0px;
-  background-color: #CE8147;
-  border-color: #CE8147;
+  background-color: #BB7B4B;
+  border-color: #BB7B4B;
 }
 
 .btn-primary:hover {
-  background-color: #CE8147;; /* New background color on hover */
+  background-color: #BB7B4B;; /* New background color on hover */
 }
 
 /* Active state styles for the button (when pressed) */
