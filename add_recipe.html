@@ -27,12 +27,12 @@
       <form id="recipeForm" action="my_recipes.html">
         <div class="form-group">
           <label for="nameLabel">Recipe Name</label>
-          <input type="text" class="form-control" id="exampleName" aria-describedby="nameHelp" placeholder="name">
+          <input type="text" class="form-control" id="exampleName" aria-describedby="nameHelp" placeholder="name" required>
         </div>
 
         <div class="form-group">
           <label for="imageFile">Image</label>
-          <input type="file" class="form-control-file" id="imageFile">
+          <input type="file" class="form-control-file" id="imageFile" >
         </div>
 
         <Section class = "ingredients">
@@ -58,7 +58,7 @@
 
         <div class="form-group">
           <label for="instructions">Instructions (Please number)</label>
-          <textarea class="form-control" id="formInstructions" rows="3"></textarea>
+          <textarea class="form-control" id="formInstructions" rows="3" required></textarea>
         </div>
 
         <button class="btn btn-primary" type="submit">Add Recipe</button>
