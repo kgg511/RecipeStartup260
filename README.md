@@ -1,5 +1,5 @@
 # Taste Trove #
-## Description deliverable ##
+## Description Deliverable ##
 
 ### Elevator Pitch ###
 
@@ -40,7 +40,7 @@ I will use the required technologies in the following ways:
 
 - React: Wrap application into React web framework.
 
-## HTML deliverable ##
+## HTML Deliverable ##
 For this deliverable I built the structure of my application using HTML.
 
 - HTML: Four HTML pages: login, user recipes, all recipes, and add a recipe.
@@ -59,4 +59,13 @@ For this deliverable I built the structure of my application using HTML.
   - Users can see recipes posted by other users.
   - Users can see how many ‘makes’ a recipe has received.
 
+## CSS Deliverable ##
+For this deliverable I styled my application into its final appearance.
+
+- Header, footer, and main content body
+- Navigation elements: I altered my nav to display the links next to each other with space in-between and altered their font-size.
+- Window resizing: The app looks good on computers and smaller devices.
+- Application elements: Used borders, colors, spacing, flippable cards, etc, to create an attractive application.
+- Application text content: Consistent fonts. When recipe instructions are too long they become scrollable.
+- Application images: Image on login page as stand in for 3rd party web-api. Size increases/decreases based on screen size.
 
