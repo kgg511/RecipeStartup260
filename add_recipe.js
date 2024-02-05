@@ -42,6 +42,7 @@ function add_ingredient_line(){
 //submit the recipe to the database when they hit submit
 function submit_recipe(){
     //update recipe list for this person
+    console.log("start submit_recipe");
     const personId = 'someUniqueId'; // Replace with the actual person's identifier
     const storedRecipes = JSON.parse(localStorage.getItem(`recipes_${personId}`)) || [];
 
@@ -53,7 +54,7 @@ function submit_recipe(){
     ingredientRows.forEach(row =>{ //fill ingredients list with objects
         let name = row.querySelector("#ingredientName").value;
         let amount = row.querySelector("#ingredientAmount").value;
-        ingredients.append({Name: name, Amount: amount});
+        ingredients.push({Name: name, Amount: amount});
     })
 
     const recipe = {
@@ -64,9 +65,10 @@ function submit_recipe(){
     };
 
     storedRecipes.push(recipe); //update list
+    console.log(recipe);
     localStorage.setItem(`recipes_${personId}`, JSON.stringify(storedRecipes));
     window.location.href = "my_recipes.html";
 
-    console.log("recipe submitted!")
+    console.log("recipe submitted!");
 
 }
