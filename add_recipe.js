@@ -57,11 +57,13 @@ function submit_recipe(){
         ingredients.push({Name: name, Amount: amount});
     })
 
+    let RecipeID = generateUniqueRandomID();
     const recipe = {
         RecipeName: document.getElementById('#exampleName').value,
         RecipeImage: document.getElementById('#imageFile').value, //hmm its optional
         RecipeIngredients: ingredients,
         RecipeInstructions: document.getElementById('#formInstructions').value,
+        RecipeID: RecipeID
     };
 
     storedRecipes.push(recipe); //update list
@@ -70,5 +72,17 @@ function submit_recipe(){
     window.location.href = "my_recipes.html";
 
     console.log("recipe submitted!");
-
 }
+
+function generateUniqueRandomID() { //database also stores a list of IDs
+  const existingIDs = localStorage.getItem("existingIDs"); 
+  const max = 1000000;
+  const min = 1;
+  let newID;
+  do {
+    newID = Math.random() * (max - min) + min;;
+  } while (existingIDs.includes(newID));
+  return newID;
+}
+
+
