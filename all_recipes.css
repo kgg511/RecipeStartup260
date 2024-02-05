@@ -15,6 +15,7 @@ ul {
 nav{
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
   align-items: center;
 }
 
@@ -29,13 +30,18 @@ nav{
     /* Styles for smaller screens */
     width: 80%; /* Adjust the width as needed */
     margin: 0 auto; /* Center the content */
+    padding: 0
   }
   nav h1, nav h5{
-    font-size: 15px;
+    font-size: 1.5vh;
   }
   h2{
-    font-size: 15px;
+    font-size: .8em;
   }
+  ul{
+    padding-left: 1vh;
+  }
+
   
   .grid {
     grid-template-columns: repeat(1, 1fr);
@@ -173,6 +179,3 @@ footer{
   flex-direction: column;
 }
   
-
-
-
