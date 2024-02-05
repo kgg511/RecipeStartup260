@@ -41,18 +41,18 @@
           <div id = "ingredientList"> Ingredients
             <div class="row">
               <div class="col">
-                <input type="text" class="form-control" placeholder="ingredient (flour)" required>
+                <input type="text" id = "ingredientName" class="form-control" placeholder="ingredient (flour)" required>
               </div>
               <div class="col">
-                <input type="text" class="form-control" placeholder="amount (1/2 cups)" required>
+                <input type="text" id = "ingredientAmount" class="form-control" placeholder="amount (1/2 cups)" required>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <input type="text" class="form-control" placeholder="ingredient (flour)">
+                <input type="text" id = "ingredientName" class="form-control" placeholder="ingredient (flour)">
               </div>
               <div class="col">
-                <input type="text" class="form-control" placeholder="amount (1/2 cups)">
+                <input type="text" id = "ingredientAmount" class="form-control" placeholder="amount (1/2 cups)">
               </div>
             </div>
           </div>
@@ -65,7 +65,7 @@
           <textarea class="form-control" id="formInstructions" rows="3" required></textarea>
         </div>
 
-        <button class="btn btn-primary" type="submit">Add Recipe</button>
+        <button class="btn btn-primary" onclick = "submit_recipe()" type="submit">Add Recipe</button>
         
       </form>
 
