@@ -10,4 +10,5 @@ function login() { //TODO: must have correct username and password
 //Login: username and password must be in the database
 
 
+
 //Register: they can't use a username that is already in use
