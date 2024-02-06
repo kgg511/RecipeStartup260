@@ -44,7 +44,7 @@ function submit_recipe(){
     //update recipe list for this person
     console.log("start submit_recipe");
     const personId = 'someUniqueId'; // Replace with the actual person's identifier
-    const storedRecipes = JSON.parse(localStorage.getItem(`recipes_${personId}`)) || [];
+    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${personId}`)) || new Map(); //one person's recipes
 
     const recipe_form = document.querySelector("#recipeForm");
     const ingredients = []; //list of objects
@@ -63,12 +63,13 @@ function submit_recipe(){
         RecipeImage: document.getElementById('#imageFile').value, //hmm its optional
         RecipeIngredients: ingredients,
         RecipeInstructions: document.getElementById('#formInstructions').value,
+        RecipesMakes: 0,
         RecipeID: RecipeID
     };
 
-    storedRecipes.push(recipe); //update list
+    RecipesDict.set(RecipeID, recipe); //update list
     console.log(recipe);
-    localStorage.setItem(`recipes_${personId}`, JSON.stringify(storedRecipes));
+    localStorage.setItem(`recipes_${personId}`, JSON.stringify(RecipesDict));
     window.location.href = "my_recipes.html";
 
     console.log("recipe submitted!");
