@@ -43,9 +43,9 @@ function add_ingredient_line(){
 //where does await go
 async function submit_recipe(){
     //update recipe list for this person
-    username = localStorage.getItem("userName");
+    const username = localStorage.getItem("UserName");
     console.log("start submit_recipe");
-    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || new Map(); //one person's recipes
+    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || {}; //one person's recipes
 
     const recipe_form = document.querySelector("#recipeForm");
     const ingredients = []; //list of objects
@@ -58,18 +58,18 @@ async function submit_recipe(){
         ingredients.push({Name: name, Amount: amount});
     })
 
-    let RecipeID = generateUniqueRandomID();
+    let RecipeID = await generateUniqueRandomID();
     const recipe = {
-        RecipeName: document.getElementById('#exampleName').value,
-        RecipeImage: document.getElementById('#imageFile').value, //hmm its optional
+        RecipeName: document.getElementById('exampleName').value,
+        RecipeImage: document.getElementById('imageFile').value, //hmm its optional
         RecipeIngredients: ingredients,
-        RecipeInstructions: document.getElementById('#formInstructions').value,
+        RecipeInstructions: document.getElementById('formInstructions').value,
         RecipesMakes: 0,
         RecipeID: RecipeID,
         UserName: username
     };
 
-    RecipesDict.set(RecipeID, recipe); //update list
+    RecipesDict[RecipeID] = recipe; //update map
     console.log(recipe);
     localStorage.setItem(`recipes_${username}`, JSON.stringify(RecipesDict));
     window.location.href = "my_recipes.html";
@@ -77,14 +77,17 @@ async function submit_recipe(){
     console.log("recipe submitted!");
 }
 
-function generateUniqueRandomID() { //database also stores a list of IDs
-  const existingIDs = localStorage.getItem("existingIDs"); 
+async function generateUniqueRandomID() { //database also stores a list of IDs
+  const existingIDs = JSON.parse(localStorage.getItem("existingIDs")) || []; 
+  //woops gotta turn it in 
   const max = 1000000;
   const min = 1;
   let newID;
   do {
-    newID = Math.random() * (max - min) + min;;
+    newID = parseInt(Math.random() * (max - min) + min);
   } while (existingIDs.includes(newID));
+  existingIDs.push(newID)
+  localStorage.setItem("existingIDs", JSON.stringify(existingIDs)); //add new id
   return newID;
 }
 
