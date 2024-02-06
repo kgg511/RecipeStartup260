@@ -22,46 +22,34 @@ function add_make(){
 //
 //generate Recipes
 
-function generate_Recipes(){
+function generate_recipes(){
    //read the recipes from the database
    //build the card
    //when make button is created, add event listener for makes
    //when delete button is created add event listener for delete
    const People = localStorage.getItem("People"); //list of ids
-
+    //for each person get their recipes and call makeCard on all of them
   People.forEach(element => {
     
    });
 
    const storedRecipes = JSON.parse(localStorage.getItem(`recipes_${personId}`)) || [];
    
-
 }
 
+//the person's id
+//we should pass in the id of the person who made it
+async function press_make(personID, RecipeID){ //
+    //fetch recipe, increment makes, update database
+        return new Promise(async (pressResolve) => {
+            this.paint(50);
+            await this.playSound(volume);
+            this.paint(25);
+            pressResolve();
+        });
+};
 
 
-function generateCard(Recipe){
-// const rowElement = document.createElement("div");
-   // rowElement.setAttribute("class", "row");
-   // colElement1.appendChild(inputElement1);
-   //assume Recipe is an object
-
-   //{Name: name, Amount: amount}
-
-    const title = document.createElement("h5");
-    title.setAttribute("class", "card-title");
-    title.textContent = Recipe.RecipeName;
-
-    const ul = document.createElement("ul");
-    ul.setAttribute("class", "list-group list-group-flush");
-    Recipe.RecipeIngredients.forEach(ingredient => {
-      //create a list item for each ingredient
-        const li = document.createElement("li");
-        li.setAttribute("class", "list-group-item");
-        li.textContent = `${ingredient.Amount} ${ingredient.Name}`;
-        ul.appendChild(li);
-   });
-}
 
 
 // const recipe = {
@@ -74,9 +62,9 @@ function generateCard(Recipe){
 // };
 
 function makeCard(Recipe){ //pass in recipe OBJECT
-    const RecipeName = Recipe.RecipeName;
+    const RecipeName = Recipe.RecipeName; //add this one
     const RecipeImage = Recipe.RecipeImage;
-    const userName = Recipe.UserName;
+    const UserName = Recipe.UserName;
     const ingredients = Recipe.RecipeIngredients;
     const RecipeInstructions = Recipe.RecipeInstructions;
     const RecipeMakes = Recipe.RecipeMakes;
@@ -117,7 +105,8 @@ function makeCard(Recipe){ //pass in recipe OBJECT
 
     const subtitleFront = document.createElement("h6");
     subtitleFront.className = "card-subtitle mb-2 text-muted";
-    subtitleFront.textContent = userName;
+    subtitleFront.Personid = UserName; //id is their username
+    subtitleFront.textContent = UserName;
 
     // Append elements to the front of the card
     cardBodyFrontDiv.appendChild(titleFront);
@@ -192,6 +181,9 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     const buttonElement = document.createElement("button");
     buttonElement.className = "btn btn-primary";
     buttonElement.innerHTML = '<i class="fa-solid fa-cookie"></i>';
+    buttonElement.addEventListener("click", async () => {
+        await press_make(RecipeID);
+    });
 
     const pElement = document.createElement("p");
     pElement.className = "makes";

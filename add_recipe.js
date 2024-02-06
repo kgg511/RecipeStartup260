@@ -40,11 +40,12 @@ function add_ingredient_line(){
 
 
 //submit the recipe to the database when they hit submit
-function submit_recipe(){
+//where does await go
+async function submit_recipe(){
     //update recipe list for this person
+    username = localStorage.getItem("userName");
     console.log("start submit_recipe");
-    const personId = 'someUniqueId'; // Replace with the actual person's identifier
-    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${personId}`)) || new Map(); //one person's recipes
+    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || new Map(); //one person's recipes
 
     const recipe_form = document.querySelector("#recipeForm");
     const ingredients = []; //list of objects
@@ -64,12 +65,13 @@ function submit_recipe(){
         RecipeIngredients: ingredients,
         RecipeInstructions: document.getElementById('#formInstructions').value,
         RecipesMakes: 0,
-        RecipeID: RecipeID
+        RecipeID: RecipeID,
+        UserName: username
     };
 
     RecipesDict.set(RecipeID, recipe); //update list
     console.log(recipe);
-    localStorage.setItem(`recipes_${personId}`, JSON.stringify(RecipesDict));
+    localStorage.setItem(`recipes_${username}`, JSON.stringify(RecipesDict));
     window.location.href = "my_recipes.html";
 
     console.log("recipe submitted!");

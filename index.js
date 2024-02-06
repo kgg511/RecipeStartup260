@@ -2,7 +2,7 @@
 
 function login() { //TODO: must have correct username and password
     const nameEl = document.querySelector("#exampleUsername");
-    localStorage.setItem("userName", nameEl.value);
+    localStorage.setItem("UserName", nameEl.value);
     console.log(`your username is ${nameEl.value}`);
     window.location.href = "all_recipes.html";
     
