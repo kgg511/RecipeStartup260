@@ -38,14 +38,7 @@ function generate_Recipes(){
 
 }
 
-// const recipe = {
-//     RecipeName: document.getElementById('#exampleName').value,
-//     RecipeImage: document.getElementById('#imageFile').value, //hmm its optional
-//     RecipeIngredients: ingredients,
-//     RecipeInstructions: document.getElementById('#formInstructions').value,
-//     RecipesMakes: 0,
-//     RecipeID: RecipeID
-// };
+
 
 function generateCard(Recipe){
 // const rowElement = document.createElement("div");
@@ -71,14 +64,29 @@ function generateCard(Recipe){
 }
 
 
+// const recipe = {
+//     RecipeName: document.getElementById('#exampleName').value,
+//     RecipeImage: document.getElementById('#imageFile').value, //hmm its optional
+//     RecipeIngredients: ingredients,
+//     RecipeInstructions: document.getElementById('#formInstructions').value,
+//     RecipesMakes: 0,
+//     RecipeID: RecipeID
+// };
 
+function makeCard(Recipe){ //pass in recipe OBJECT
+    const RecipeName = Recipe.RecipeName;
+    const RecipeImage = Recipe.RecipeImage;
+    const userName = Recipe.UserName;
+    const ingredients = Recipe.RecipeIngredients;
+    const RecipeInstructions = Recipe.RecipeInstructions;
+    const RecipeMakes = Recipe.RecipeMakes;
+    const RecipeID = Recipe.RecipeID;
 
-function makeCard(){ //returns card
     // Create the main container div
     const cardDiv = document.createElement("div");
     cardDiv.className = "card";
     cardDiv.style.width = "18rem";
-    cardDiv.id = "2";
+    cardDiv.id = Recipe.RecipeID;
 
     // Create the flip-card container
     const flipCardDiv = document.createElement("div");
@@ -95,7 +103,7 @@ function makeCard(){ //returns card
     // Create the image element
     const imgElement = document.createElement("img");
     imgElement.className = "card-img-top";
-    imgElement.src = "media/cookie.png";
+    imgElement.src = RecipeImage;
     imgElement.alt = "Recipe Image";
 
     // Create the card-body container for front
@@ -105,11 +113,11 @@ function makeCard(){ //returns card
     // Add content to the front of the card
     const titleFront = document.createElement("h5");
     titleFront.className = "card-title";
-    titleFront.textContent = "Cookies";
+    titleFront.textContent = RecipeName;
 
     const subtitleFront = document.createElement("h6");
     subtitleFront.className = "card-subtitle mb-2 text-muted";
-    subtitleFront.textContent = "SandraBakes36";
+    subtitleFront.textContent = userName;
 
     // Append elements to the front of the card
     cardBodyFrontDiv.appendChild(titleFront);
@@ -129,18 +137,17 @@ function makeCard(){ //returns card
     // Add content to the back of the card
     const titleBack = document.createElement("h5");
     titleBack.className = "card-title";
-    titleBack.textContent = "Cookies";
+    titleBack.textContent = RecipeName;
 
     // Create the list group for ingredients
     const listGroup = document.createElement("ul");
     listGroup.className = "list-group list-group-flush";
 
     // Add ingredients to the list group
-    const ingredients = ["6 cups flour", "2 cups sugar", "1 tsp salt"];
     ingredients.forEach((ingredient) => {
         const listItem = document.createElement("li");
         listItem.className = "list-group-item";
-        listItem.textContent = ingredient;
+        listItem.textContent = `${ingredient.Amount} ${ingredient.Name}`;
         listGroup.appendChild(listItem);
     });
 
@@ -152,22 +159,26 @@ function makeCard(){ //returns card
     directions.textContent = "Directions:";
 
     // Create the ol element for directions
-    const olElement = document.createElement("ol");
+    //const olElement = document.createElement("ol");
 
     // Add directions to the ol element
-    const recipeDirections = ["Cream butter and sugar.", "Sacrifice your firstborn child.", "Put in oven."];
-    recipeDirections.forEach((step) => {
-        const liElement = document.createElement("li");
-        liElement.textContent = step;
-        olElement.appendChild(liElement);
-    });
+    // const recipeDirections = ["Cream butter and sugar.", "Sacrifice your firstborn child.", "Put in oven."];
+    // recipeDirections.forEach((step) => {
+    //     const liElement = document.createElement("li");
+    //     liElement.textContent = step;
+    //     olElement.appendChild(liElement);
+    // });
+    const instruct= document.createElement("p");
+    instruct.textContent = RecipeInstructions;
+
 
     // Append elements to the back of the card
     cardBodyBackDiv.appendChild(titleBack);
     cardBodyBackDiv.appendChild(listGroup);
     cardBodyBackDiv.appendChild(hrElement);
     cardBodyBackDiv.appendChild(directions);
-    cardBodyBackDiv.appendChild(olElement);
+    cardBodyBackDiv.appendChild(instruct);
+    //cardBodyBackDiv.appendChild(olElement);
 
     flipCardBackDiv.appendChild(cardBodyBackDiv);
 
@@ -184,7 +195,7 @@ function makeCard(){ //returns card
 
     const pElement = document.createElement("p");
     pElement.className = "makes";
-    pElement.textContent = "6";
+    pElement.textContent = RecipeMakes;
 
     // Append button and paragraph elements to the main container
     cardDiv.appendChild(flipCardDiv);
