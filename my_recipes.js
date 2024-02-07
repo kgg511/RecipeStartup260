@@ -37,6 +37,19 @@ async function press_make(RecipeID, username){ //
 
 };
 
+async function delete_recipe(RecipeID, username){
+    const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
+    const recipe = RecipesDict[RecipeID];
+    recipe.RecipeMakes += 1;
+    RecipesDict[RecipeID] = recipe;
+    await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
+
+    //remove old card from html and replace with updated card
+    const elementToDelete = document.getElementById(RecipeID)
+    elementToDelete.remove();
+
+}
+
 async function fetch_db(name){
     return JSON.parse(localStorage.getItem(name));
 }
@@ -59,6 +72,8 @@ async function alter_db(name, value){
 //     RecipeID: RecipeID
 // };
 
+//<div class="flip-card">
+//<div><a href="#" class="delete"><i class="fa-solid fa-x"></i></i></a></div>
 function makeCard(Recipe){ //pass in recipe OBJECT
     const RecipeName = Recipe.RecipeName; //add this one
     const RecipeImage = Recipe.RecipeImage;
@@ -77,6 +92,21 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     // Create the flip-card container
     const flipCardDiv = document.createElement("div");
     flipCardDiv.className = "flip-card";
+
+    //create the delete button
+    const deleteDiv = document.createElement("div");
+    const a = document.createElement("a");
+    a.className = "delete";
+    a.addEventListener("click", async () => {
+        await delete_recipe(RecipeID, UserName);
+    });
+
+    const i = document.createElement("i");
+    i.className = "fa-solid fa-x";
+
+    a.appendChild(i);
+    deleteDiv.appendChild(a);
+    flipCardDiv.appendChild(deleteDiv);
 
     // Create the flip-card-inner container
     const flipCardInnerDiv = document.createElement("div");
