@@ -40,7 +40,7 @@ async function press_make(RecipeID, username){ //
 async function fetch_db(name){
     return JSON.parse(localStorage.getItem(name));
 }
-
+ 
 async function alter_db(name, value){
     localStorage.setItem(name, value);
 }
@@ -181,10 +181,6 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     buttonElement.innerHTML = '<i class="fa-solid fa-cookie"></i>';
     buttonElement.addEventListener("click", async () => {
         await press_make(RecipeID, UserName);
-        // await press_make(RecipeID, UserName).then(() => {generate_recipes();})
-        // .catch(error => {
-        //     console.error('Error:', error);
-        // });;
     });
 
     const pElement = document.createElement("p");

@@ -7,7 +7,8 @@ async function generate_recipes(){
         const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${user}`)) || {}
 
         for(let key in RecipesDict){
-            await makeCard(RecipesDict[key]);
+            const result = await makeCard(RecipesDict[key]);
+            document.querySelector("div.grid").appendChild(result);
         }
 
     };
@@ -137,7 +138,7 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     buttonElement.className = "btn btn-primary";
     buttonElement.innerHTML = '<i class="fa-solid fa-cookie"></i>';
     buttonElement.addEventListener("click", async () => {
-        await press_make(RecipeID);
+        await press_make(RecipeID, UserName);
     });
 
     const pElement = document.createElement("p");
@@ -150,7 +151,29 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     cardDiv.appendChild(pElement);
 
     // Append the card to grid
-    document.querySelector("div.grid").appendChild(cardDiv);
+    return cardDiv;
+}
 
+
+async function press_make(RecipeID, username){ //
+    //update recipe in the database
+    const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
+    const recipe = RecipesDict[RecipeID];
+    recipe.RecipeMakes += 1;
+    RecipesDict[RecipeID] = recipe;
+    await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
+
+    //remove old card from html and replace with updated card
+    const elementToReplace = document.getElementById(RecipeID)
+    elementToReplace.replaceWith(makeCard(recipe));
+
+};
+
+async function fetch_db(name){
+    return JSON.parse(localStorage.getItem(name));
+}
+ 
+async function alter_db(name, value){
+    localStorage.setItem(name, value);
 }
 
