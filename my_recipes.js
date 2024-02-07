@@ -186,6 +186,7 @@ function makeCard(Recipe){ //pass in recipe OBJECT
 async function generate_recipes(){
     //window.location.href = "my_recipes.html";
     const username = localStorage.getItem("UserName"); //get this persons recipes
+    document.querySelector("#title").textContent = `My Recipes: ${username}`; //display username
     const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || {};
    //read the recipes from the database
    //build the card
