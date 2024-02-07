@@ -40,8 +40,7 @@ async function press_make(RecipeID, username){ //
 async function delete_recipe(RecipeID, username){
     const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
     const recipe = RecipesDict[RecipeID];
-    recipe.RecipeMakes += 1;
-    RecipesDict[RecipeID] = recipe;
+    delete RecipesDict[RecipeID];
     await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
 
     //remove old card from html and replace with updated card
