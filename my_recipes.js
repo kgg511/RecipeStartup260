@@ -23,15 +23,29 @@ async function add_make(){
 
 //the person's id
 //we should pass in the id of the person who made it
-async function press_make(personID, RecipeID){ //
-    //fetch recipe, increment makes, update database
-        return new Promise(async (pressResolve) => {
-            this.paint(50);
-            await this.playSound(volume);
-            this.paint(25);
-            pressResolve();
-        });
+async function press_make(RecipeID, username){ //
+    //update recipe in the database
+    const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
+    const recipe = RecipesDict[RecipeID];
+    recipe.RecipeMakes += 1;
+    RecipesDict[RecipeID] = recipe;
+    await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
+
+    //remove old card from html and replace with updated card
+    const elementToReplace = document.getElementById(RecipeID)
+    elementToReplace.replaceWith(makeCard(recipe));
+
 };
+
+async function fetch_db(name){
+    return JSON.parse(localStorage.getItem(name));
+}
+
+async function alter_db(name, value){
+    localStorage.setItem(name, value);
+}
+
+
 
 
 
@@ -166,7 +180,11 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     buttonElement.className = "btn btn-primary";
     buttonElement.innerHTML = '<i class="fa-solid fa-cookie"></i>';
     buttonElement.addEventListener("click", async () => {
-        await press_make(RecipeID);
+        await press_make(RecipeID, UserName);
+        // await press_make(RecipeID, UserName).then(() => {generate_recipes();})
+        // .catch(error => {
+        //     console.error('Error:', error);
+        // });;
     });
 
     const pElement = document.createElement("p");
@@ -179,7 +197,7 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     cardDiv.appendChild(pElement);
 
     // Append the card to grid
-    document.querySelector("div.grid").appendChild(cardDiv);
+    return cardDiv;
 
 }
 
@@ -195,9 +213,27 @@ async function generate_recipes(){
    
     //for each person get their recipes and call makeCard on all of them
     for(let key in RecipesDict){
-      await makeCard(RecipesDict[key]);
+
+      const card = await makeCard(RecipesDict[key]);
+      document.querySelector("div.grid").appendChild(card);
   
     }
     
-   
+  }
+
+
+  async function update_recipe(RecipeID, username){
+    
+    //update recipe in the database
+    const recipes = localStorage.getItem(`recipes_${username}`, JSON.stringify(RecipesDict));
+    const recipe = recipes[RecipeID];
+    recipe.RecipeMakes += 1;
+    localStorage.setItem(`recipes_${username}`, JSON.stringify(RecipesDict));
+
+    //remove card from html
+    document.querySelector(`#${RecipeID}`).remove();
+
+    //add updated card to html
+    document.querySelector("div.grid").appendChild(makeCard(recipe));
+
   }
