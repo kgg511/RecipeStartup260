@@ -47,7 +47,7 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     // Create the image element
     const imgElement = document.createElement("img");
     imgElement.className = "card-img-top";
-    imgElement.src = RecipeImage;
+    imgElement.src = "media/cookie.png";
     imgElement.alt = "Recipe Image";
 
     // Create the card-body container for front

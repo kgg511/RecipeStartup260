@@ -42,6 +42,11 @@ function add_ingredient_line(){
 //submit the recipe to the database when they hit submit
 //where does await go
 async function submit_recipe(){
+    if(!filled_form()){ //do nothing
+      console.log("form not filled so recipe not submitted!")
+      window.location.href = "my_recipes.html";
+      return;
+    }
     //update recipe list for this person
     const username = localStorage.getItem("UserName");
     console.log("start submit_recipe");
@@ -78,6 +83,31 @@ async function submit_recipe(){
     //await generate_recipes();
     window.location.href = "my_recipes.html";
 
+}
+
+function filled_form(){
+  //confirms that no fields are empty
+  
+  //Name
+  if(document.getElementById('exampleName').value == ""){
+    return false;
+  }
+  //Image
+  else if(document.getElementById('imageFile').value == ""){
+    return false;
+  }
+  //Instructions
+  else if(document.getElementById('formInstructions').value == ""){
+    return false;
+  }
+  //Ingredients
+  Array.from(document.querySelectorAll("#ingredientList .row")).forEach(row => {
+    if(row.querySelector("#ingredientName").value == "" || row.querySelector("#ingredientAmount").value == ""){
+      return false;
+    }
+  });
+
+  return true;
 }
 
 async function generateUniqueRandomID() { //database also stores a list of IDs
