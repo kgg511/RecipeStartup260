@@ -69,3 +69,18 @@ For this deliverable I styled my application into its final appearance.
 - Application text content: Consistent fonts. When recipe instructions are too long they become scrollable.
 - Application images: Image on login page as stand in for 3rd party web-api. Size increases/decreases based on screen size.
 
+## JavaScript Deliverable ##
+For this deliverable I added JavaScript to my application so that it works for a single user. There are placeholders for future add-ons.
+
+- Login: When you click login, it takes the user to the My Recipes page.
+- Database:
+  - Login: It stores the username separately but also adds it to a list of known usernames in local storage.
+  - Add Recipe: When the user submits a recipe form, their recipe is added to the list of recipes for that user in local storage.
+  - My Recipes: It takes the recipes from local storage for that user and displays them.
+  - All Recipes: It takes all recipes from local storage and displays them.
+- WebSocket: I used an Interval function to periodically call a function which increases the ‘makes’ on a random recipe. This will be replaced with WebSocket later.
+- Application logic:
+  - users can add new recipes.
+  - users can ‘make’ recipes.
+  - users can delete their own recipes.
+  - users can see recipes made by all users.
