@@ -216,10 +216,17 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     pElement.className = "makes";
     pElement.textContent = RecipeMakes;
 
+    makeDiv = document.createElement("div");
+    makeDiv.appendChild(buttonElement);
+
+    makesDiv = document.createElement("div");
+    makesDiv.appendChild(pElement);
+
+
     // Append button and paragraph elements to the main container
     cardDiv.appendChild(flipCardDiv);
-    cardDiv.appendChild(buttonElement);
-    cardDiv.appendChild(pElement);
+    cardDiv.appendChild(makeDiv);
+    cardDiv.appendChild(makesDiv);
 
     // Append the card to grid
     return cardDiv;
