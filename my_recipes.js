@@ -1,28 +1,3 @@
-
-//update makes in the database when the userclicks on a make
-//update the number of makes displayed
-
-// const recipe = {
-//     RecipeName: document.getElementById('#exampleName').value,
-//     RecipeImage: document.getElementById('#imageFile').value, //hmm its optional
-//     RecipeIngredients: ingredients,
-//     RecipeInstructions: document.getElementById('#formInstructions').value,
-// };
-
-//find the recipe that they clicked on
-async function add_make(){
-    //update the number of makes displayed
-    //figure out which one they clicked on
-}
-
-//locate the person's recipes
-//
-//generate Recipes
-//the first time it will display nothing
-
-
-//the person's id
-//we should pass in the id of the person who made it
 async function press_make(RecipeID, username){ //
     //update recipe in the database
     const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
@@ -31,9 +6,10 @@ async function press_make(RecipeID, username){ //
     RecipesDict[RecipeID] = recipe;
     await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
 
-    //remove old card from html and replace with updated card
+    //update makes
     const elementToReplace = document.getElementById(RecipeID)
-    elementToReplace.replaceWith(makeCard(recipe));
+    const makes = elementToReplace.querySelector(".makes");
+    makes.textContent = recipe.RecipeMakes;
 
 };
 
@@ -58,21 +34,6 @@ async function alter_db(name, value){
 }
 
 
-
-
-
-
-// const recipe = {
-//     RecipeName: document.getElementById('#exampleName').value,
-//     RecipeImage: document.getElementById('#imageFile').value, //hmm its optional
-//     RecipeIngredients: ingredients,
-//     RecipeInstructions: document.getElementById('#formInstructions').value,
-//     RecipesMakes: 0,
-//     RecipeID: RecipeID
-// };
-
-//<div class="flip-card">
-//<div><a href="#" class="delete"><i class="fa-solid fa-x"></i></i></a></div>
 function makeCard(Recipe){ //pass in recipe OBJECT
     const RecipeName = Recipe.RecipeName; //add this one
     const RecipeImage = Recipe.RecipeImage;
@@ -174,19 +135,8 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     const directions = document.createElement("h6");
     directions.textContent = "Directions:";
 
-    // Create the ol element for directions
-    //const olElement = document.createElement("ol");
-
-    // Add directions to the ol element
-    // const recipeDirections = ["Cream butter and sugar.", "Sacrifice your firstborn child.", "Put in oven."];
-    // recipeDirections.forEach((step) => {
-    //     const liElement = document.createElement("li");
-    //     liElement.textContent = step;
-    //     olElement.appendChild(liElement);
-    // });
     const instruct= document.createElement("p");
     instruct.textContent = RecipeInstructions;
-
 
     // Append elements to the back of the card
     cardBodyBackDiv.appendChild(titleBack);
@@ -222,7 +172,6 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     makesDiv = document.createElement("div");
     makesDiv.appendChild(pElement);
 
-
     // Append button and paragraph elements to the main container
     cardDiv.appendChild(flipCardDiv);
     cardDiv.appendChild(makeDiv);
@@ -238,24 +187,18 @@ async function generate_recipes(){
     const username = localStorage.getItem("UserName"); //get this persons recipes
     document.querySelector("#title").textContent = `My Recipes: ${username}`; //display username
     const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || {};
-   //read the recipes from the database
-   //build the card
-   //when make button is created, add event listener for makes
-   //when delete button is created add event listener for delete
-   
+
     //for each person get their recipes and call makeCard on all of them
     for(let key in RecipesDict){
 
       const card = await makeCard(RecipesDict[key]);
       document.querySelector("div.grid").appendChild(card);
   
-    }
-    
+    } 
   }
 
 
   async function update_recipe(RecipeID, username){
-    
     //update recipe in the database
     const recipes = localStorage.getItem(`recipes_${username}`, JSON.stringify(RecipesDict));
     const recipe = recipes[RecipeID];

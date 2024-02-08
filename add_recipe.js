@@ -29,18 +29,8 @@ function add_ingredient_line(){
     ingredientList.appendChild(rowElement);
 //<Section class = "ingredients">
 }
-/* <div class="row">
-            <div class="col">
-              <input type="text" class="form-control" placeholder="ingredient (flour)">
-            </div>
-            <div class="col">
-              <input type="text" class="form-control" placeholder="amount (1/2 cups)">
-            </div>
-          </div> */
-
 
 //submit the recipe to the database when they hit submit
-//where does await go
 async function submit_recipe(){
     if(!filled_form()){ //do nothing
       console.log("form not filled so recipe not submitted!")
@@ -80,7 +70,6 @@ async function submit_recipe(){
 
     
     console.log("recipe submitted!");
-    //await generate_recipes();
     window.location.href = "my_recipes.html";
 
 }

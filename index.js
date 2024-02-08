@@ -1,5 +1,3 @@
-
-
 async function login() { //TODO: must have correct username and password
     const nameEl = document.querySelector("#exampleUsername");
     localStorage.setItem("UserName", nameEl.value);
@@ -18,5 +16,3 @@ async function update_usernames(username){
   usernames.push(username);
   localStorage.setItem("Usernames", JSON.stringify(usernames));
 }
-
-//localStorage.setItem(`recipes_${username}`, JSON.stringify(RecipesDict));

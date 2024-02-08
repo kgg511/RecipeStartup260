@@ -1,21 +1,14 @@
 async function generate_recipes(){
-    
     const usernames = JSON.parse(localStorage.getItem("Usernames"));
-
     for(let user of usernames) 
     {
         const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${user}`)) || {}
-
         for(let key in RecipesDict){
             const result = await makeCard(RecipesDict[key]);
             document.querySelector("div.grid").appendChild(result);
         }
-
     };
-    
-   
   }
-
 
 function makeCard(Recipe){ //pass in recipe OBJECT
     const RecipeName = Recipe.RecipeName; //add this one
@@ -103,19 +96,8 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     const directions = document.createElement("h6");
     directions.textContent = "Directions:";
 
-    // Create the ol element for directions
-    //const olElement = document.createElement("ol");
-
-    // Add directions to the ol element
-    // const recipeDirections = ["Cream butter and sugar.", "Sacrifice your firstborn child.", "Put in oven."];
-    // recipeDirections.forEach((step) => {
-    //     const liElement = document.createElement("li");
-    //     liElement.textContent = step;
-    //     olElement.appendChild(liElement);
-    // });
     const instruct= document.createElement("p");
     instruct.textContent = RecipeInstructions;
-
 
     // Append elements to the back of the card
     cardBodyBackDiv.appendChild(titleBack);
@@ -163,10 +145,10 @@ async function press_make(RecipeID, username){ //
     RecipesDict[RecipeID] = recipe;
     await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
 
-    //remove old card from html and replace with updated card
+    //update makes
     const elementToReplace = document.getElementById(RecipeID)
-    elementToReplace.replaceWith(makeCard(recipe));
-
+    const makes = elementToReplace.querySelector(".makes");
+    makes.textContent = recipe.RecipeMakes;
 };
 
 async function fetch_db(name){
@@ -196,5 +178,4 @@ async function alterRandomRecipe(){
         const randomRecipeID = Object.keys(RecipesDict)[Math.floor(Math.random() * Object.keys(RecipesDict).length)];
         await press_make(randomRecipeID, randomUsername);
     }
-
 }
