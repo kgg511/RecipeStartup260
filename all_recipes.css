@@ -24,7 +24,7 @@ nav{
 .grid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(2, 1fr); /* Three columns */
+  grid-template-columns: repeat(3, 1fr); /* Three columns */
 }
 
 @media (orientation: portrait) {
@@ -170,8 +170,7 @@ main{
 }
 
 .btn-primary{
-
-  margin: 0px;
+  margin-top: 20px;
   background-color: #BB7B4B;
   border-color: #BB7B4B;
 }
