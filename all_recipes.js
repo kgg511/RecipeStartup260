@@ -177,3 +177,24 @@ async function alter_db(name, value){
     localStorage.setItem(name, value);
 }
 
+
+function runRandomlyEvery6Seconds() {
+    // Function to be called every 6 seconds
+    setInterval(alterRandomRecipe, 6000); // 6000 milliseconds = 6 seconds
+}
+
+async function alterRandomRecipe(){
+    //random username
+    const currentUser = localStorage.getItem("UserName");
+    const usernames = JSON.parse(localStorage.getItem("Usernames"));
+    const randomIndex = Math.floor(Math.random() * usernames.length);
+    const randomUsername = usernames[randomIndex];
+
+    //pick a random recipe and press_make on it
+    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${randomUsername}`)) || {};
+    if(Object.keys(RecipesDict).length > 0){
+        const randomRecipeID = Object.keys(RecipesDict)[Math.floor(Math.random() * Object.keys(RecipesDict).length)];
+        await press_make(randomRecipeID, randomUsername);
+    }
+
+}
