@@ -1121,5 +1121,143 @@ local storage value must be string/number/boolean. To store object convert to JS
 
 ![storage2](notes/localStorage2.png)
 
+**2/20:☑ Promises, Async/await**
+https://codepen.io/kgg511/pen/ExMLRqG
+
+Promises
+JS is single threaded, meaning it only executes one piece of code at the same time
+Asynchronously execute code using Promise
+Promise object States
+Pending: Running asynchronously
+Fulfilled: Successfully completed
+Rejected: Failed to complete
+
+Create
+new Promise(executor function that runs asynch op)
+
+EXAMPLE
+const delay = (msg, wait) => {
+  setTimeout(() => {
+    console.log(msg, wait);
+  }, 1000 * wait);
+};
+
+new Promise((resolve, reject) => {
+  for (let i = 0; i < 3; i++) {
+    delay('In promise', i); //calls this function 3 times in succession but schedules log messages after delays (whatever i is)
+  }
+});
+
+for (let i = 0; i < 3; i++) {
+  delay('After promise', i); //it must wait for each to finish before calling the next one
+}
+
+Resolve and Reject (setting state)
+Promise executor function takes functions resolve & reject as parameters
+calling resolve sets promise to fulfilled state, calling reject sets to rejected state
+
+const coinToss = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    if (Math.random() > 0.5) {
+      resolve('success'); //if case happens change state to succcess
+    } else {
+      reject('error');
+    }
+  }, 10000);
+});
+
+coinToss //attach to the object
+  .then((result) => console.log(`Coin toss result: ${result}`))
+  .catch((err) => console.log(`Error: ${err}`))
+  .finally(() => console.log('Toss completed'));
+
+Then, catch, finally
+promise object has three functions: then,catch,finally
+then: called if promise fulfilled
+catch: called if promise rejected
+finally: called after all processing
+
+Observer Pattern
+Observers also do asyn processing. 
+promises immediately begin to execute when created
+observers form a pipeline that you pass an execution object into. Can be reused.
+
+Modify the CodePen to include a new function that makes the pizza and include it in the promise chain.
+
+MULTIPLE PROMISES
+generally one catch at the end, but you can have many then
+placeOrder(order)
+    .then((order) => cookOrder(order)) //once place order, Cook the order
+    .then((order) => serveOrder(order))
+    .catch((order) => { //if at any point it fails call this
+      orderFailure(order);
+    });
 
 
+ Async/await
+https://codepen.io/kgg511/pen/XWGqBry
+await requires the function it is awaiting to be async and to return a promise (manually resolve promise inside function with resolve())
+
+more concise representation of promise
+await: block until promise state moves to fulfilled or throw exception if rejected
+
+Create equivalent executions with these 2 things
+
+1.promise then/catch chain
+coinToss()
+  .then((result) => console.log(`Toss result ${result}`))
+  .catch((err) => console.error(`Error: ${err}`))
+  .finally(() => console.log(`Toss completed`));
+
+
+2.using async/await
+try {
+  const result = await coinToss(); //wait until move to success/error
+  console.log(`Toss result ${result}`); //success
+} catch (err) {
+  console.error(`Error: ${err}`); //reject
+} finally {
+  console.log(`Toss completed`); //finally
+}
+
+async
+You cannot await unless it is called at the top level of JS OR it is in a function defined with async.
+async declares a function that returns a promise. Turns function into async function that can make asynch requests
+If you just put async in the def of a function it turns into a promise that is immediately resolved
+If the async function returns a promise then it’s going to create a promise that is pending until somewhere else you do await function_name().
+async function cow() {
+  return new Promise((resolve) => {
+    resolve('moo');
+  });
+}
+console.log(cow());
+// OUTPUT: Promise {<pending>}
+
+await
+await wraps a call ot the async function and blocks execution until the promise has resolved, which returns the result of the promise.
+console.log(cow()); // OUTPUT: Promise {<pending>}
+console.log(await cow()); //OUTPUT: moo
+
+Together
+application: call fetch web API on endpoint. 
+two promises: network call, converting the result to JSOn
+Promise implementation
+const httpPromise = fetch('https://simon.cs260.click/api/user/me');
+const jsonPromise = httpPromise.then((r) => r.json());
+jsonPromise.then((j) => console.log(j));
+console.log('done');
+
+aync/await implementation
+const httpResponse = await fetch('https://simon.cs260.click/api/user/me');
+const jsonResponse = await httpResponse.json();
+console.log(jsonResponse));
+console.log('done');
+
+
+**2/21: Debugging JavaScript, Simon JavaScript, Startup JavaScript**
+
+Debugging JavaScript
+console tab you can see print statements or run JS code there to see variable values
+Sources: you can set breakpoints by clicking the numbers. Then just reload the page and it will stop there
+
+**Midterm line**
