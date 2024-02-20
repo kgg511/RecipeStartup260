@@ -556,7 +556,7 @@ Flex
 |-------------|--------------|
 | `<body>` <br> `<header>` <br> `<h1>CSS flex &amp; media query</h1>` <br> `</header>` <br> `<main>` <br> `<section>` <br> `<h2>Controls</h2>` <br> `</section>` <br> `<section>` <br> `<h2>Content</h2>` <br> `</section>` <br> `</main>` <br> `<footer>` <br> `<h2>Footer</h2>` <br> `</footer>` | `body {` <br> `  display: flex; //display all children in flex flow` <br> `  flex-direction: column; //top level put on top of each other` <br> `  margin: 0;` <br> `  height: 100vh;}` <br> `<br>` <br> `header {` <br> `  flex: 0 80px; //0=will not grow, starting height 80px` <br> `  background: hsl(223, 57%, 38%);}` <br> `<br>` <br> `footer {` <br> `  flex: 0 30px;` <br> `  background: hsl(180, 10%, 10%);}` <br> `<br>` <br> `main {` <br> `  flex: 1; //one unit of growth. Only growing thing so gets all space` <br> `  display: flex; //children in flex flow` <br> `  flex-direction: row; //children put next to each other}` <br> `<br>` <br> `section:nth-child(1) {` <br> `  flex: 1; //give 25% of space with this 1/4` <br> `  background-color: hsl(180, 10%, 80%);}` <br> `<br>` <br> `section:nth-child(2) {` <br> `  flex: 3; //content gets the other 3/4` <br> `  background-color: white;}` |
 
-[flex1](notes/e.png)
+![flex1](notes/e.png)
 
 Media Query: Handle small screen size
 @media (orientation: portrait) {
@@ -710,11 +710,11 @@ const y = 2; //you cannot change the value
 **avoid keyword var
 
 PRIMITIVES
-[primitives](notes/primitives.png)
+![primitives](notes/primitives.png)
 you don’t have to declare a variable before using it so it could have type undefined
 
 Object Types
-[object](notes/object.png)
+![object](notes/object.png)
 
 weakly typed. A variable always has a type but it can change when assigned to a new value. Or might be automatically converted
 2 + ‘3’ = ‘23’ //addition makes it string
@@ -748,7 +748,173 @@ console.log(`string ${l + (1 + 1)} text`); //eval l+ (1=1) and concat with the r
 JS supports unicode. string is 16-bit unsigned integer
 
 String functions
-[string](notes/string.png)
+![string](notes/string.png)
 s.length(), s.split(‘:’)
+
+2/12: Functions, Arrow functions, Arrays, JSON, Objects and classes
+
+Functions
+functions are objects -> can be given a name, passed as parameter, returned, or referenced from object/array
+type inferred by assignment of value to parameter
+If parameter not provided then the value of thee parameter is undefined when the function executes
+function labeler(value, title = 'title') {
+  console.log(`${title}=${value}`);
+}
+labeler(); // OUTPUT: title=undefined
+
+labeler('fish'); // OUTPUT: title=fish
+labeler('fish', 'animal'); // OUTPUT: animal=fish
+
+Anonymous functions
+console.log(
+  doMath(function (a, b) {return a - b; },
+    5,3));
+const add = function (a, b) {return a + b;};
+
+Inner functions: Declare functions inside other functions
+function labeler(value) {
+  function stringLabeler(value) {
+    console.log('string=' + value);
+  }
+  if (typeof value == 'string') {
+    stringLabeler(value);
+}
+
+Arrow functions
+const a = [1, 2, 3, 4];
+a.sort((v1, v2) => v1 - v2); //pass in function that takes two parameters and returns difference
+return keyword is optional if no {} and it has only one expression. Automatically returns result of expression. However if {} are included then it behaves like regular function and need return
+()=>{return 3;}
+
+This pointer: Arrow function inherit this pointer from the scope of creation.
+closure: function can continue referencing creation scope even after passed out of scope.
+function makeClosure(a) {
+  a = 'a2';
+  const b = 'b2';
+  return () => [a, b]; //this function remembers what a & b are from this scope
+}
+
+Example:
+//when user scrolls, call debounce
+window.addEventListener(
+  'scroll',
+  debounce(500, () => {
+    console.log('Executed an expensive calculation');
+  })
+);
+
+//if function call again before window times out it resets timeout
+function debounce(windowMs, windowFunc) {
+  let timeout;
+  return function () {
+    console.log('scroll event');
+    clearTimeout(timeout);
+    timeout = setTimeout(() => windowFunc(), windowMs);
+  };
+}
+
+Arrays
+const a = [1, 2, 3];
+![arrays](notes/string.png)
+
+JSON
+easily convertible to and from JS objects
+JSON contains one of these types: string, number, boolean, array, object {“a”:”1”, “b”:”hi”}, null
+JSON may have different data types within the same documents
+Objects contains 0+ key value pairs. Key is always a string, value must be one of the JSON data types. {} for objects
+
+Json Document Example
+{
+  "class": { //object with 2 key-value pairs
+    "title": "web programming",
+    "description": "Amazing"
+  },
+  "enrollment": ["Marco", "Jana", "فَاطِمَة"], //array w 3 elements
+  "start": "2025-02-01", //string
+  "end": null //null, indicates end date is unknown
+}
+
+Convert to JS
+const obj = { a: 2, b: 'crockford', c: undefined }; //make object
+const json = JSON.stringify(obj); //turn object into a json
+const objFromJson = JSON.parse(json); //turn JSON back into object
+To parse you are just passing a long string so it might contain multiple items not just one object
+
+JS Objects and classes
+JS object represents a bunch of name-value pairs called properties
+property name must be String or Symbol, value can be any type
+
+const obj = new Object({ a: 3 }); //create Object with one property
+obj['b'] = 'fish'; //add another property
+obj.c = [1, 2, 3]; //add another property
+obj.hello = function () {
+  console.log('hello');
+};
+
+The term ‘object’ can refer to standard JS objects like Promise/Map/Object/Function/Data,etc or JS Object object new Object() or a JS object you create.
+
+Object-literals: Declare variable of object type like this also:
+const obj = {
+  a: 3,
+  b: 'fish',
+};
+
+static Object functions:s
+![static](notes/static.png)
+Object.entries(obj)
+
+Constructor: Any function that returns an object is considered a constructor and can be involved with new
+function Person(name) {
+  return {
+    name: name,
+    log: function () {
+      console.log('My name is ' + this.name);
+    },
+  };
+}
+const p = new Person('Eich');
+p.log();
+
+this pointer: Depends on the scope of its use, but here refers to a pointer to the object.
+Classes: You can use classes to define object (reusable component). Have explicit constructor
+
+class Person {
+  constructor(name) {
+   #name
+
+    this.name = name; //not private
+    this.#name = name; //makes the property private
+
+  }
+  log() {
+    console.log('My name is ' + this.name);
+  }
+}
+
+Inheritance: 
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+
+  print() {
+    return 'My name is ' + this.name;
+  }
+}
+
+class Employee extends Person {
+  constructor(name, position) {
+    super(name);
+    this.position = position;
+  }
+
+  print() {
+    return super.print() + '. I am a ' + this.position;
+  }
+}
+
+const e = new Employee('Eich', 'programmer');
+console.log(e.print());
+
 
 
