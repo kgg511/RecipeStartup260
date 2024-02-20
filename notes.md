@@ -456,6 +456,138 @@ RGB hex: #00FFAA22
 RGB function: rgb(128, 255, 128, .5)
 HSL: hsl(180, 30%, 90%, .5)
 
+**2/2: Fonts Animation ☑ CSS practice**
+Fonts: https://codepen.io/leesjensen/pen/zYaLgVW
+
+4 font families: Serif, sans-seif, fixed, symbol
+import fonts
+@font-face {
+  font-family: 'Quicksand';
+  src: url('https://cs260.click/fonts/quicksand.woff2');
+}
+
+p {
+  font-family: Quicksand;
+}
+open source fonts 
+-@import url('https://fonts.googleapis.com/css2?family=Rubik Microbe&display=swap');
+
+p {
+  font-family: 'Rubik Microbe';
+}
+
+
+Animation
+STEPS to animate: (zooming in on text)
+keyframes: define the key points of animation and CSS will create a smooth transition from one keyframe to another
+
+p {
+  text-align: center;
+  font-size: 20vh;
+
+  animation-name: demo; //animate, using keyframes named demo
+  animation-duration: 3s; //animation lasts 3 seconds
+}
+
+@keyframes demo {
+  from {
+    font-size: 0vh; //frame
+  }
+
+  95% {
+    font-size: 21vh; //frame
+  }
+
+  to {
+    font-size: 20vh; //frame
+  }
+}
+
+https://codepen.io/kgg511/pen/YzgrExd
+
+**⅖: Responsive design. Grid, Flex: **
+reconfigure interface to accommodate screen size
+CSS display element: change how HTML element is displayed
+<div class="none">None</div>
+.none {
+  display: none;
+}
+![responsive](notes/c.png)
+tell browser to not scale the page (include in HEAD)
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+Float: Allows inline elements to wrap around it. right/left/none
+aside {
+  float: right;
+  padding: 3em;
+  margin: 0.5em;
+  border: black solid thin;}
+![responsive](notes/d.png)
+
+
+Media queries: @media selector detects size of device and applies CSS to it.
+@media (orientation: portrait) {
+  div pr{
+    transform: rotate(270deg); 
+//if screen is in portrait mode (short side on top) then rotate all div 270 degrees
+  }
+}
+
+//if in portrait mode, disappear
+@media (orientation: portrait) {
+  aside {
+    display: none;
+  }
+}
+Grid and Flexbox both automatically resize child elements
+
+Grid
+When you want to display group of child elements in responsive grid
+use the display property and put grid
+.container {
+  display: grid; //grid
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+  grid-auto-rows: 300px; //fixed height of 300 pixels
+  grid-gap: 1em; //1 em b/t each grid square
+}
+
+Flex
+| Left Column | Right Column |
+|-------------|--------------|
+| `<body>` <br> `<header>` <br> `<h1>CSS flex &amp; media query</h1>` <br> `</header>` <br> `<main>` <br> `<section>` <br> `<h2>Controls</h2>` <br> `</section>` <br> `<section>` <br> `<h2>Content</h2>` <br> `</section>` <br> `</main>` <br> `<footer>` <br> `<h2>Footer</h2>` <br> `</footer>` | `body {` <br> `  display: flex; //display all children in flex flow` <br> `  flex-direction: column; //top level put on top of each other` <br> `  margin: 0;` <br> `  height: 100vh;}` <br> `<br>` <br> `header {` <br> `  flex: 0 80px; //0=will not grow, starting height 80px` <br> `  background: hsl(223, 57%, 38%);}` <br> `<br>` <br> `footer {` <br> `  flex: 0 30px;` <br> `  background: hsl(180, 10%, 10%);}` <br> `<br>` <br> `main {` <br> `  flex: 1; //one unit of growth. Only growing thing so gets all space` <br> `  display: flex; //children in flex flow` <br> `  flex-direction: row; //children put next to each other}` <br> `<br>` <br> `section:nth-child(1) {` <br> `  flex: 1; //give 25% of space with this 1/4` <br> `  background-color: hsl(180, 10%, 80%);}` <br> `<br>` <br> `section:nth-child(2) {` <br> `  flex: 3; //content gets the other 3/4` <br> `  background-color: white;}` |
+
+[flex1](notes/e.png)
+
+Media Query: Handle small screen size
+@media (orientation: portrait) {
+  main {
+    flex-direction: column; //stack all items on top instead of side by side
+  }
+}
+
+@media (max-height: 700px) {
+  header {
+    display: none; //drop header and footer if screen too small
+  }
+  footer {
+    display: none;
+  }
+}
+
+how to center text horizontal & vertical
+flex: 1;
+  display: flex;
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  flex-direction: column; //display on top of each other
+
+alter margin if two words on top of each other have some annoying space you want to overwrite
+margin-top: 0; //NO space on top of word
+margin-bottom: 0; //NO space below word
+
+h2.login: The h2 element with the class=login
+header h2: The h2 elements inside header (all descendants)
+
 
 
 
