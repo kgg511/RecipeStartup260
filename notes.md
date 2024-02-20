@@ -230,12 +230,14 @@ Special characters
 if request https://google.com you get index.html
 
 Special characters
+<!--
 & -> &amp;
 < -> &lt;
 > -> &gt;
 “ -> &quot;
 ‘ -> &apos;
 emoji -> &#128512;
+-->
 
 ☑ Structure
 common structure elements: body, header, footer, main, section aside, p, table, ol/ul, div, and span
@@ -269,7 +271,7 @@ Some text
 EXAMPLE input
 <input type="text" name="username" placeholder="Enter your username">
 
-![input][(https://github.com/kgg511/RecipeStartup260/edit/main/notes/a.png)]
+![input](https://github.com/kgg511/RecipeStartup260/main/notes/a.png)
 
 some input elements have built-in validation.
 required attribute to say that there has to be value inside
@@ -302,7 +304,7 @@ canvas: draw/animate
   ctx.stroke();
 </script>
 
-1/29: 
+**1/29: **
 Simon HTML ☑ 
 4 html pages
 main level should be index.html
@@ -334,12 +336,12 @@ number of makes on a recipe
 wild recipe
 ./deployFiles.sh -k ~/keys/production.pem -h yourdomain.click -s startup
 
-1/31: CSS
+**1/31: CSS**
 CSS introduction 
 CSS focused on defining rulesets
 A rule is a selector (selects elements to apply rule to) and one or more declarations representing the property to style with the given property rule
 
-![input][(https://github.com/kgg511/RecipeStartup260/edit/main/notes/b.png)]
+![selector](https://github.com/kgg511/RecipeStartup260/main/notes/b.png)
 EX: select all paragraph elements, 4 declarations (sans-serif font, font size twice as big, navy text, gray shadow)
 
 Three ways to associate CSS to with HTML
@@ -376,9 +378,7 @@ span {
 box model: a box of nested boxes
 ORDER: content, padding, border, margin
 
-
 Selectors
-
 Element type selector
 
 body { //all children of the body will have this ond
