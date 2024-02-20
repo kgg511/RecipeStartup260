@@ -71,6 +71,75 @@ esc
 :wq + enter
 sudo service caddy restart
 
+**1/24: The Console, editors**
+pwd: tells you what directory you are in
+ls -la: see all files including hidden ones
+echo - Output the parameters of the command
+cd - Change directory
+mkdir - Make directory
+rmdir - Remove directory
+rm - Remove file(s)
+mv - Move file(s)
+cp - Copy files
+ls - List files
+curl - Command line client URL browser
+grep - Regular expression search
+find - Find files
+top - View running processes with CPU and memory usage
+df - View disk statistics
+cat - Output the contents of a file
+less - Interactively output the contents of a file
+wc - Count the words in a file
+ps - View the currently running processes
+kill - Kill a currently running process
+sudo - Execute a command as a super user (admin)
+ssh - Create a secure shell on a remote computer
+scp - Securely copy files to a remote computer
+history - Show the history of commands
+ping - Check if a website is up
+tracert - Trace the connections to a website
+dig - Show the DNS information for a domain
+man - Look up a command in the manual
+
+
+|: Take output from command on left and pass as input to command on right
+>: redirect output to file, overwrite file if exists
+>>: redirect output to file, append to if exists.
+
+Editors
+VScode: editor for daily coding 
+VI: when you are shelled into your production environment and need a simple, but powerful, console based editor for quickly editing text files.
+
+VI
+To use: change directory to one with some code to edit.
+vi index.html
+command mode: default. 
+To edit, type i to enter insert mode,
+esc to escape,  :w to save, :q to quit
+https://vim.rtorr.com/
+
+VIM commands
+:h -> help
+i -> insert mode. Use ESC to exit
+u -> undo
+ctrl-r -> redo
+gg -> go to beginning of file
+G -> go to end of file
+/ -> search for patterns
+n -> next search match
+N -> previous search match
+v -> visually select text
+y -> yank/copy selected text to clipboard
+p -> past clipboard
+ctrl -wv -> split window vertically
+crl -ww -> toggle windows
+ctrl -wq -> close current window
+:e -> open file
+:w -> write file (save)
+:q -> quit, :q! to not save
+
+
+
 
 
 
