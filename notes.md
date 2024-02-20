@@ -588,6 +588,167 @@ margin-bottom: 0; //NO space below word
 h2.login: The h2 element with the class=login
 header h2: The h2 elements inside header (all descendants)
 
+2/7: Debugging CSS, ☑ CSS frameworks, Simon CSS, ☑ Startup CSS
+https://codepen.io/kgg511/pen/GReMQJM
+Debugging CSS, 
+open up in browser, inspect, and then look to see why
+Styles pane shows CSS properties applied to selected element
+align-items: center; centers the child elements vertically within the flex container.
+justify-content: center; centers the child elements horizontally within the flex container.
+Since text-align is more relevant for inline and inline-block elements, it may not have a noticeable effect on a flex container or its child elements
 
+CSS frameworks 
+Provide functions/components commonly used in web applications
+
+Tailwind
+instead of using rulesets, uses smaller definition that are applied to individual HTML elements. Moves CSS directly to html
+<div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+
+Bootstrap
+https://getbootstrap.com/docs/5.2/getting-started/introduction/#cdn-links
+
+integrate Bootstrap by referencing Bootstrap CSS files from their CDN
+add HTML link elements to head element like THIS:
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+    crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    ...
+  </body>
+</html>
+
+if use Bootstrap components that use javascript, include bootstrap JS module: Put this at the end of your HTML body element: 
+<body>
+  ...
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"
+  ></script>
+</body>
+
+later include NPM to get bootstrap by running this in console npm install bootstrap@5.2.3 **Update to newest version
+
+Using Bootstrap
+one linked in HTML files, we can use components
+// Bootstrap styled button
+<button type="button" class="btn btn-primary">Bootstrap</button>
+
+// Default browser styled button
+<button type="button">Plain</button>
+
+2/9: The flip effect
+
+<div class="flip-card">
+    <div class="flip-card-inner">
+        <div class="flip-card-front">
+            <!-- Front content goes here -->
+        </div>
+        <div class="flip-card-back">
+            <!-- Back content goes here -->
+        </div>
+    </div>
+</div>
+
+https://unsplash.com/collections/2533969/food-
+
+**2/9: JavaScript introduction, JavaScript Console, Adding JavaScript to HTML, Types, operators, conditionals, and loops, String**
+
+JavaScript introduction, 
+weakly typed language based on C, Java, Scheme
+Not compiled
+function join(a, b) {
+  return a + ' ' + b;
+}
+console.log(join('Hello', 'world'));
+
+JavaScript Console, 
+console.log('hello %s', 'world');
+
+specify CSS declarations to style log output
+console.log('%c JavaScript Demo', 'font-size:1.5em; color:green;');
+Timers: See how long a piece of code is running by wrapping in 
+console.time('demo time');
+// ... some code that takes a long time.
+console.timeEnd('demo time');
+// OUTPUT: demo time: 9762.74 ms
+Count: See how many times a block of code is called
+console.count('a');
+// OUTPUT: a: 1
+console.count('a');
+// OUTPUT: a: 2
+
+Adding JavaScript to HTML
+either put js directly into script element or just use src attribute of script to reference JS file.
+<head>
+  <script src="javascript.js"></script>
+</head>
+<body>
+  <button onclick="sayHello()">Say Hello</button> //using function from 
+  <button onclick="sayGoodbye()">Say Goodbye</button>
+  <script>
+    function sayGoodbye() {
+      alert('Goodbye');
+    }
+  </script>
+</body>
+
+<button onclick="let i=1;i++;console.log(i)">press me</button>
+//do this code when clicked
+
+Types, operators, conditionals, and loops, 
+let x = 1; //you can change the value of this variable
+const y = 2; //you cannot change the value
+**avoid keyword var
+
+PRIMITIVES
+[primitives](notes/primitives.png)
+you don’t have to declare a variable before using it so it could have type undefined
+
+Object Types
+[object](notes/object.png)
+
+weakly typed. A variable always has a type but it can change when assigned to a new value. Or might be automatically converted
+2 + ‘3’ = ‘23’ //addition makes it string
+2 * ‘3’ = 6 //multiplication makes it number
+[2] + [3] = ‘23’
+true + null = 1
+true + undefined = NaN
+
+weird stuff with equality operator so JS has strict equality operators that do not do type conversion when converting equality
+1 === ‘1’ is false, null ===undefined is false, ‘’ === false
+
+Conditionals
+if(){}
+else if(){}
+else{}
+
+a === 1 ? console.log(1) : console.log('not 1');
+|| ! &&
+do{} while()
+for(let i = 0…){}
+while(){}
+for(const name in obj){} //if obj is array it will be the index, dictionaries its keys
+for(const val of arr){} //array values
+break, continue
+
+String
+‘’ or “”
+` mean string literal that may contain js that is evaluated and concatenated to string. Or create multiline strings
+console.log(`string ${l + (1 + 1)} text`); //eval l+ (1=1) and concat with the rest of string
+
+JS supports unicode. string is 16-bit unsigned integer
+
+String functions
+[string](notes/string.png)
+s.length(), s.split(‘:’)
 
 
