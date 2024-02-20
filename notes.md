@@ -916,5 +916,210 @@ class Employee extends Person {
 const e = new Employee('Eich', 'programmer');
 console.log(e.print());
 
+**2/14: Regular expressions, Rest and spread, Exceptions, Destructuring**
+
+Regular expressions
+create with class constructor of regex literal
+const objRegex = new RegExp('ab*', 'i');
+const literalRegex = /ab*/i;
+the string class has functions that accept regex: match/replace/search/split
+const petRegex = /(dog)|(cat)|(bird)/gim;
+const text = 'Both cats and dogs are pets, but not rocks.';
+text.match(petRegex); // RETURNS: ['cat', 'dog']
+
+Rest and spread
+Rest: Pass in as many parameters as you want. **only on last parameter
+function hasNumber(test, ...numbers) {
+  return numbers.some((i) => i === test);
+}
+hasNumber(2, 1, 2, 3);
+
+Spread: The opposite of rest. Takes an iterable and expands it into a functions parameters
+function person(firstName, lastName) {
+  return { first: firstName, last: lastName };
+}
+const p = person(...['Ryan', 'Dahl']);
+
+Exceptions
+try {
+  // normal execution code
+} catch (err) {
+  // exception handling code
+} finally {
+  // always called code
+}
+only throw exceptions in exceptional circumstances
+Fallbacks: alternative thing to do when something isn’t available.
+
+Destructuring
+Descructuring: pulling individual items out of an existing one, removing structures. 
+const a = [1, 2, 4, 5];
+// destructure the first two items from a, into the new variables b and c
+const [b, c] = a; //set b to the first item of a, c to the second item of a
+
+const [b, c, ...others] = a; //1, 2, [4,5]
+
+Destructuring objects: Specify the properties to pull.
+const o = { a: 1, b: 'animals', c: ['fish', 'cats'] };
+const { a, c } = o;
+
+const o = { a: 1, b: 'animals', c: ['fish', 'cats'] };
+const { a: count, b: type } = o; //pull out a & b but rename them
+
+const { a, b = 22 } = {}; //trying to pull a & b from empty object. a will be undefined but b has a default value so it will be 22.
+const [c = 44] = []; //try to take c from list oh not in there so just take default value.
+
+[a] = [1, 2, 3]; //take 1st element from list and put it in a (a is not a list)
+
+**2/16: Scope, Modules, Document object model (DOM), LocalStorage**
+https://codepen.io/kgg511/pen/oNVdWLQ
+
+Scope
+4 Types of Scope
+Global: visible to all
+Module: visible to all code in module
+Function: visible within function
+Block: visible within {}
+
+var ignores block scope. (don’t use var use let or const)
+this: a variable that points to an object that contains the context within the scope of the currently executing line of code. You can reference anywhere in a program, so that value depends on context.
+Global (outside function/object): runtime environment
+Function (inside function): Refers to object that owns function (either object you defined or globalThis). In strict mode global function is undefined
+Object (inside object): Refers to the object (ex: inside class)
+// global scope
+console.log('global:', this);
+console.log('globalThis:', globalThis);
+
+// function scope for a global function
+function globalFunc() {
+  console.log('globalFunctionThis:', this);
+}
+globalFunc();
+
+// object scope
+class ScopeTest {
+  constructor() {
+    console.log('objectThis:', this);
+  }
+
+  // function scope for an object function
+  objectFunc() {
+    console.log('objectFunctionThis:', this);
+  }
+}
+
+Closure: Includes a function and its surrounding state. Whatever variables are accessible when are function is created are available inside the function even if you pass the function in a different scope.
+However, in arrow functions they inherit the this pointer of the context in which they were CREATED (called). arrow functions do not have their own this context. They just capture this from the surrounding scope when the function is created.
+globalThis.x = 'global';
+const obj = {
+  x: 'object',
+  f: () => console.log(this.x), //created in the global context so has global this
+//Arrow functions capture this at time of creation
+};
+obj.f();
+
+if the function instead returns an arrow function then the this pointer is back to the objects this pointer. 
+const obj = {
+  x: 'object',
+  make: function () { //created inside a function so it takes this from there which is obj
+    return () => console.log(this.x);},
+};
+const f = obj.make();
+f(); //function is called here
+// OUTPUT: object
+
+JS Modules
+Node.js modules: CommonJS modules
+JavaScript modules: ES modules
+
+ES modules
+file 1
+export function alertDisplay(msg) { //export keyword so it can be imported elsewhere
+  alert(msg);}
+
+file2
+import { alertDisplay } from './alert.js';
+alertDisplay('called from main.js');
+
+Modules can only be called from other modules. You can’t access JS in a module from global scope of non-module JS
+ES Modules in browser:
+index.html
+<script type="module">
+  import { alertDisplay } from './alert.js';
+  alertDisplay('module loaded');
+</script>
+
+To use module in the global scope that our HTML/non-module JS executes in, must leak into global scope. Either attach event handler or add function to global window object.
+<html>
+  <body>
+    <script type="module">
+      import { alertDisplay } from './alert.js';
+      window.btnClick = alertDisplay;
+
+      document.body.addEventListener('keypress', function (event) {
+        alertDisplay('Key pressed');
+      });
+    </script>
+    <button onclick="btnClick('button clicked')">Press me</button>
+  </body>
+</html>
+
+if you use web framework bundler you don’t have to worry about differentiating global scope & ES scope.
+
+☑ Document object model (DOM)
+DOM: object representation of the HTML elements that the browser uses to render display
+browser gives access to DOM through global variable document that points to root element of DOM
+everything in HTML document gets a node in DOM. Form big tree with <img src="dom.jpg"/> node at top
+
+Accessing DOM
+All HTML elements use DOM element interface
+interface provides ability to iterate over child elements, access parent, manip child
+const listElements = document.querySelectorAll('p'); //select all p elements
+for (const el of listElements) {  // Output the text content of each <p> element to the console
+  console.log(el.textContent);
+}
+
+Modify DOM
+create new element: create element, insert into tree by appending to existing element
+function insertChild(parentSelector, text) {
+  const newChild = document.createElement('div'); //create
+  newChild.textContent = text;
+  const parentElement = document.querySelector(parentSelector); //append
+  parentElement.appendChild(newChild);
+}
+insertChild('#courses', 'new course');
+
+delete:
+const el = document.querySelector(elementSelector); 
+  el.parentElement.removeChild(el); //we ask its parent to delete its child
+
+Inject HTML
+el.innerHTML = '<div class="injected"><b>Hello</b>!</div>';
+→ HUGE hack risk, they can basically run whatever code that they want. So make sure that HTML cannot be manipulated. Don’t use .innerHTML, use DOM manipulation functions.
+
+Event Listeners
+All DOM elements can attach function that gets called when event occurs on element.
+Clipboard(cut/copy/paste), focus, keyboard, mouse, text selection
+const submitDataEl = document.querySelector('#submitData');
+submitDataEl.addEventListener('click', function (event) {
+  console.log(event.type);
+});
+add directly in HTML
+​​<button onclick='alert("clicked")'>click me</button>
+
+document.styleSheets[0].insertRule("#output table {border-collapse: collapse;}");
+//insert a rule on a selector for all tables which is ‘border-collapse..’
+
+
+LocalStorage
+browser’s localStorage API allows you to persistently store/retrieve data across different pages.
+it is also a cache for when data can’t be obtained from server
+
+Main Functions
+![storage1](notes/localStorage.png)
+local storage value must be string/number/boolean. To store object convert to JSON string and just JSON.parse() when retrieve
+
+![storage2](notes/localStorage2.png)
+
 
 
