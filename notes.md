@@ -138,7 +138,167 @@ ctrl -wq -> close current window
 :w -> write file (save)
 :q -> quit, :q! to not save
 
+**1/26: codePen, HTML intro, structure, input, media**
+CodePen: immediately renders code in preview window
 
+To submit assignments that use codpen
+create new pen or fork existing example
+do stuff, saving occasionally
+submit pen URL in canvas w something you learned
+
+HTML introduction    MDN HTML
+Text is valid in html. HTML is mostly about structure
+elements have open/close tags
+each HTML element has attributes
+class: designates the element as classified into name group of elements
+<p id="hello" class="greeting">Hello world</p>
+
+hyperlink: anchor a with attribute href
+<a href="https://byu.edu">Go to the Y</a>
+
+doctype at the top to tell browser the type and version of the document
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <main>
+      <h1>Hello world</h1>
+      <p class="introduction">
+        HTML welcomes you to the amazing world of
+        <span class="topic">web programming</span>.
+      </p>
+      <p class="question">What will this mean to you?</p>
+      <p class="assignment">Learn more <a href="instruction.html">here</a>.</p>
+    </main>
+  </body>
+</html>
+<!-- commented text -->
+
+list of HTML elements HTML introduction
+| Element | Meaning                                      |
+| ------- | -------------------------------------------- |
+| html    | page container                              |
+| head    | header info                                 |
+| title   | title of page                               |
+| meta    | metadata for page like character set or viewport settings |
+| script  | javascript reference. External reference or inline |
+| include | external content reference                  |
+| body    | entire content body of the page             |
+| header  | header of main content                      |
+| footer  | footer of main content                      |
+| nav     | navigational inputs                         |
+| main    | main content                                |
+| section | section of main content                     |
+| aside   | aside content from main content             |
+| div     | block division of content                   |
+| span    | inline span of content                      |
+| h<1-9>  | text heading, h1 is largest size           |
+| p       | paragraph of text                           |
+| b       | bring attention                             |
+| table   | Table                                       |
+| tr      | table row                                   |
+| th      | table header                                |
+| td      | table data                                  |
+| ol, ul  | ordered/unordered                          |
+| li      | list item                                   |
+| a       | anchor text to hyperlink                    |
+| img     | image                                       |
+| dialog  | interactive component like confirmation    |
+| form    | collection of user input                    |
+| input   | user input field                            |
+| audio   | audio                                       |
+| video   | video                                       |
+| svg     | scalable vector graphic content             |
+| iframe  | inline frame of another HTML page           |
+
+EXAMPLE TABLE 
+<table border="1">
+    <tr>
+        <th>Header 1</th>
+        <th>Header 2</th>
+        <th>Header 3</th>
+    </tr>
+    <tr>
+        <td>Data 1</td>
+        <td>Data 2</td>
+        <td>Data 3</td>
+    </tr>
+</table>
+canIUse
+Special characters
+if request https://google.com you get index.html
+
+Special characters
+& -> &amp;
+< -> &lt;
+> -> &gt;
+“ -> &quot;
+‘ -> &apos;
+emoji -> &#128512;
+
+☑ Structure
+common structure elements: body, header, footer, main, section aside, p, table, ol/ul, div, and span
+block element: distinct block in flow of structure
+inline element: do not disrupt flow. Might just be in the middle of a line.
+
+☑ Input
+form: input container and submission <form action=”form.html” method=”post>
+fieldset: labeled input group
+input: multiple types of user input <input type = “” />
+select: selection drop down <select><option>1</option></select>
+optgroup: grouped selection dropdown: <optgroup><option>1</option></optgroup>
+option: selection option <option selected>option2</option>
+textarea: multiline: <textarea></textarea>
+label: individual input label: <label for = “range”>Range: </label>
+output: output of input: <output for = “range”>0</output>
+meter: display value w known range <meter min = “0” max=”100” value=”50”></meter>
+
+-form: 
+<form action="submission.html" method="post">
+  <label for="ta">TextArea: </label>
+  <textarea id="ta" name="ta-id">
+Some text
+  </textarea>
+  <button type="submit">Submit</button>
+</form>
+
+-input element: set it using the type attribute
+<label for="checkbox1">Check me</label> <input type="checkbox" name="varCheckbox" value="checkbox1" checked />
+
+EXAMPLE input
+<input type="text" name="username" placeholder="Enter your username">
+
+![input][(https://github.com/kgg511/RecipeStartup260/edit/main/notes/a.png)]
+
+some input elements have built-in validation.
+required attribute to say that there has to be value inside
+pattern attribute for text/search/url/tel/email/password to provide regex for input
+☑ Media
+img, audio, video, svg, canvas
+media tags referencing external media have url as attribute. Keep link as relative as possible (not full link) 
+Audio, controls attribute to let user able to control playback, autoplay, loop
+<audio controls src="testAudio.mp3"></audio>
+video: video element, src controls autoplay
+<video controls width="300" crossorigin="anonymous">
+  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" />
+</video>
+
+internal media: svg, canvas
+svg: scalable vector graphics
+<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" stroke="red" fill="red" style="border: 1px solid #000000">
+  <circle cx="150" cy="100" r="50" />
+</svg>
+
+canvas: draw/animate
+<canvas id="canvasDemo" width="300" height="200" style="border: 1px solid #000000"></canvas>
+<script>
+  const ctx = document.getElementById('canvasDemo').getContext('2d');
+  ctx.beginPath();
+  ctx.arc(150, 100, 50, 0, 2 * Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.strokeStyle = 'red';
+  ctx.fill();
+  ctx.stroke();
+</script>
 
 
 
