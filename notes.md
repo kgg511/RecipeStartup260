@@ -271,7 +271,7 @@ Some text
 EXAMPLE input
 <input type="text" name="username" placeholder="Enter your username">
 
-![input](https://github.com/kgg511/RecipeStartup260/main/notes/a.png)
+![input](notes/a.png)
 
 some input elements have built-in validation.
 required attribute to say that there has to be value inside
@@ -341,7 +341,7 @@ CSS introduction
 CSS focused on defining rulesets
 A rule is a selector (selects elements to apply rule to) and one or more declarations representing the property to style with the given property rule
 
-![selector](https://github.com/kgg511/RecipeStartup260/main/notes/b.png)
+![selector](notes/b.png)
 EX: select all paragraph elements, 4 declarations (sans-serif font, font size twice as big, navy text, gray shadow)
 
 Three ways to associate CSS to with HTML
