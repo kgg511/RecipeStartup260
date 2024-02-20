@@ -211,6 +211,7 @@ list of HTML elements HTML introduction
 | iframe  | inline frame of another HTML page           |
 
 EXAMPLE TABLE 
+<!--
 <table border="1">
     <tr>
         <th>Header 1</th>
@@ -223,6 +224,7 @@ EXAMPLE TABLE
         <td>Data 3</td>
     </tr>
 </table>
+-->
 canIUse
 Special characters
 if request https://google.com you get index.html
@@ -299,6 +301,160 @@ canvas: draw/animate
   ctx.fill();
   ctx.stroke();
 </script>
+
+1/29: 
+Simon HTML ☑ 
+4 html pages
+main level should be index.html
+index.html, play, scores, about
+
+**make sure to be in project directory
+./deployFiles.sh -k <yourpemkey> -h <yourdomain> -s simon
+./deployFiles.sh -k ~/keys/cs260/cs260.pem -h cs260.click -s simon-html
+
+ssh -i ~/cs260/Lofthouse260.pem ubuntu@tastetrove.click
+./deployFiles.sh -k ~/cs260/Lofthouse260.pem -h tastetrove.click -s startup
+
+ sudo systemctl restart caddy.service 
+ps -ef | grep index.js
+lsof -i :4000
+lsof -i :3000 //processes running on port 3000
+ 
+
+Startup HTML
+all pages/footers/images/content to represent everything the application does
+
+PARTS
+application data: rendering of application data
+authentication: input for account/login, display user’s name
+database: rendering of data in the database ex: high scores
+hard code some recipes in there
+websocket
+number of makes on a recipe
+wild recipe
+./deployFiles.sh -k ~/keys/production.pem -h yourdomain.click -s startup
+
+1/31: CSS
+CSS introduction 
+CSS focused on defining rulesets
+A rule is a selector (selects elements to apply rule to) and one or more declarations representing the property to style with the given property rule
+
+![input][(https://github.com/kgg511/RecipeStartup260/edit/main/notes/b.png)]
+EX: select all paragraph elements, 4 declarations (sans-serif font, font size twice as big, navy text, gray shadow)
+
+Three ways to associate CSS to with HTML
+style attribute of HTML element to assign declarations: <p style="color:green">CSS</p>
+style element to define CSS rules. Should be in the head element to make the rules apply to all elements in doc.
+<head>
+  <style>
+    p {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <p>CSS</p>
+</body>
+
+Create a hyperlink reference to an external file containing CSS rules. Must be in head element.
+<link rel="stylesheet" href="styles.css" />
+
+elements inherit the rules applied to their parents. If an element has a different property than their parent, the lower level will override the parent.
+<body>
+  <p><span style="color:black">CSS</span></p>
+</body>
+body {
+  color: red;
+}
+p {
+  color: green;
+}
+span {
+  color: blue;
+}
+
+box model: a box of nested boxes
+ORDER: content, padding, border, margin
+
+
+Selectors
+
+Element type selector
+
+body { //all children of the body will have this ond
+  font-family: sans-serif;
+}
+section {
+  background: #eeeeee;
+  padding: 0.25em;
+  margin-bottom: 0.5em;
+}
+Combinators
+section h2 { //apply this to h2 which are descendents of section elements
+  color: #004400;
+}
+Descendant: body section {}: Any section that is a descendant of a body
+Child: section > p{}: Any p that is a direct child of a section
+General Sibling: p ~ div{}: Any p that has a div sibling
+Adjacent sibling: p + div{}: Any p that has adjacent div sibling
+
+h2 ~ p {//paragraphs that are siblings of a level two heading
+  padding-left: 0.5em;
+}
+
+Class selector
+.summary { //do this to things in the summary class
+  font-weight: bold;
+}
+p.summary { //select element within summary class
+  font-weight: bold;
+}
+//<p class="summary">Summary</p>
+
+ID selector
+#physics { //apply to all w physics id
+  border-left: solid 1em purple;
+}
+
+Attribute selector
+select based on attributes
+p[class='summary'] {
+  color: red;
+}
+
+Pseudo selector MDN.
+select based on positional relationships, mouse interaction, hyperlink, attributes
+section:hover { //when mouse hover over the text
+  border-left: solid 1em purple;
+}
+
+ Declarations
+specify property and value to assign when rule selector matches 1+ elements
+BIG table of stuff
+Units
+px: pixels
+pt: points
+in: inches
+cm: centimeters
+%: percentage of parent element
+em: multiplier of width of the letter m in the parent’s font.
+rem: multiplier of width of letter m in root’s font
+ex: multiplier of height of element’s font
+vw: percentage of viewport’s width
+vh: percentage of viewport’s height
+vmin: percentage of viewport’s smaller dimension
+vmax: percentage of viewport’s larger dimension
+
+p {
+  width: 25%;
+  height: 30vh;
+}
+
+Color
+keyword
+RGB hex: #00FFAA22
+RGB function: rgb(128, 255, 128, .5)
+HSL: hsl(180, 30%, 90%, .5)
 
 
 
