@@ -1125,15 +1125,15 @@ local storage value must be string/number/boolean. To store object convert to JS
 https://codepen.io/kgg511/pen/ExMLRqG
 
 Promises
-JS is single threaded, meaning it only executes one piece of code at the same time
-Asynchronously execute code using Promise
+-JS is single threaded, meaning it only executes one piece of code at the same time
+-Asynchronously execute code using Promise
 Promise object States
-Pending: Running asynchronously
-Fulfilled: Successfully completed
-Rejected: Failed to complete
+-Pending: Running asynchronously
+-Fulfilled: Successfully completed
+-Rejected: Failed to complete
 
 Create
-new Promise(executor function that runs asynch op)
+new Promise(executor function that runs asynch op) //executor called automatically
 
 EXAMPLE
 const delay = (msg, wait) => {
@@ -1144,7 +1144,7 @@ const delay = (msg, wait) => {
 
 new Promise((resolve, reject) => {
   for (let i = 0; i < 3; i++) {
-    delay('In promise', i); //calls this function 3 times in succession but schedules log messages after delays (whatever i is)
+    delay('In promise', i); //calls this function 3 times in succession but schedule messages after delay
   }
 });
 
