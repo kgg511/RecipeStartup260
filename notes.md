@@ -345,8 +345,8 @@ A rule is a selector (selects elements to apply rule to) and one or more declara
 EX: select all paragraph elements, 4 declarations (sans-serif font, font size twice as big, navy text, gray shadow)
 
 Three ways to associate CSS to with HTML
-style attribute of HTML element to assign declarations: <p style="color:green">CSS</p>
-style element to define CSS rules. Should be in the head element to make the rules apply to all elements in doc.
+-style attribute inside HTML element to assign declarations: <p style="color:green">CSS</p>
+-style element to define CSS rules. Should be in the head element to make the rules apply to all elements in doc.
 <head>
   <style>
     p {
@@ -358,7 +358,7 @@ style element to define CSS rules. Should be in the head element to make the rul
   <p>CSS</p>
 </body>
 
-Create a hyperlink reference to an external file containing CSS rules. Must be in head element.
+-Create a hyperlink reference to an external file containing CSS rules. Must be in head element.
 <link rel="stylesheet" href="styles.css" />
 
 elements inherit the rules applied to their parents. If an element has a different property than their parent, the lower level will override the parent.
@@ -403,18 +403,20 @@ h2 ~ p {//paragraphs that are siblings of a level two heading
 }
 
 Class selector
-.summary { //do this to things in the summary class
+.summary { //do this to things that have class="summary"
   font-weight: bold;
 }
-p.summary { //select element within summary class
+p.summary { //all p elements with class = "summary"
   font-weight: bold;
 }
 //<p class="summary">Summary</p>
 
 ID selector
-#physics { //apply to all w physics id
+#physics { //apply to all w id=physics
   border-left: solid 1em purple;
 }
+
+p[id="6"]{}
 
 Attribute selector
 select based on attributes
