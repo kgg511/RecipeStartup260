@@ -817,7 +817,7 @@ function debounce(windowMs, windowFunc) {
 
 Arrays
 const a = [1, 2, 3];
-![arrays](notes/string.png)
+![arrays](notes/arrays.png)
 
 JSON
 easily convertible to and from JS objects
