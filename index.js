@@ -13,6 +13,12 @@ async function login() { //TODO: must have correct username and password
 
 async function update_usernames(username){
   const usernames = JSON.parse(localStorage.getItem("Usernames")) || [];
-  usernames.push(username);
-  localStorage.setItem("Usernames", JSON.stringify(usernames));
+
+  const inUsernames = usernames.some(item => item === username);
+  if(!inUsernames){
+    console.log("hello you new");
+    usernames.push(username);
+    localStorage.setItem("Usernames", JSON.stringify(usernames));
+  }
+  console.log("username already in teh list fool");
 }
