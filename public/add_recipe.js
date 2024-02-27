@@ -37,11 +37,13 @@ async function submit_recipe(){
       window.location.href = "my_recipes.html";
       return;
     }
+
     //update recipe list for this person
     const username = localStorage.getItem("UserName");
     console.log("start submit_recipe");
-    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || {}; //one person's recipes
+    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || {}; //fetch one person's recipes
 
+    //code to unpack the form and turn it into an object
     const recipe_form = document.querySelector("#recipeForm");
     const ingredients = []; //list of objects
     const ingredientRows = Array.from(document.querySelectorAll("#ingredientList .row"));
@@ -63,6 +65,20 @@ async function submit_recipe(){
         RecipeID: RecipeID,
         UserName: username
     };
+
+    //
+    try{
+      const response = await fetch('/api/recipes', {
+          method: 'POST',
+          headers: {'content-type': 'application/json'},
+          body: JSON.stringify(recipe),
+      });
+      const recipes = await response.json(); 
+      await delete_local(Recipe, RecipeID);
+    }
+    catch{
+        await delete_local(Recipe, RecipeID);
+    }
 
     RecipesDict[RecipeID] = recipe; //update map
     console.log(recipe);

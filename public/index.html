@@ -14,6 +14,16 @@
     <link rel="stylesheet" href="index.css">
   </head>
   <body>
+
+    <script>
+      // Define your function that loads the page
+      // Call the function to load the page
+      document.addEventListener("DOMContentLoaded", (event) => {
+      console.log("DOM fully loaded and parsed");
+      //displayPhoto(); 
+      });
+  </script>
+
     <!-- Use header, main, and footer elements to give semantic structure -->
     <header>
       <h1>TasteTrove <i class="fa-solid fa-utensils"></i>
@@ -38,7 +48,7 @@
         </div>
 
         <div class = "login_image">
-          <img src="media/chicken.JPG" alt="Random baking photo" width="50%">
+          <img id = "image" src="media/chicken.JPG" alt="Random baking photo" width="50%">
         </div>
         
 

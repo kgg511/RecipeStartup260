@@ -16,13 +16,24 @@ async function press_make(RecipeID, username){ //
 async function delete_recipe(RecipeID, username){
     const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
     const recipe = RecipesDict[RecipeID];
+    try{
+        const response = await fetch('/api/recipes', {
+            method: 'DELETE',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify(recipe),
+          });
+        const recipes = await response.json(); //uhhh i no use it though
+        await delete_local(Recipe, RecipeID);
+    }
+    catch{
+        await delete_local(Recipe, RecipeID);
+    }
+}
+async function delete_local(Recipe, RecipeID){
     delete RecipesDict[RecipeID];
     await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
-
-    //remove old card from html and replace with updated card
-    const elementToDelete = document.getElementById(RecipeID)
+    const elementToDelete = document.getElementById(RecipeID);
     elementToDelete.remove();
-
 }
 
 async function fetch_db(name){

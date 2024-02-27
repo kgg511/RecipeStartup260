@@ -1,24 +1,70 @@
-async function login() { //TODO: must have correct username and password
-    const nameEl = document.querySelector("#exampleUsername");
-    localStorage.setItem("UserName", nameEl.value);
 
-    await update_usernames(nameEl.value);
+import express from 'express'
+//const express = require('express');
+const app = express();
 
-    console.log(`your username is ${nameEl.value}`);
-    window.location.href = "all_recipes.html";
-    
+// The service port. In production the frontend code is statically hosted by the service on the same port.
+const port = process.argv.length > 2 ? process.argv[2] : 3000;
+
+// JSON body parsing using built-in middleware
+app.use(express.json());
+
+// Serve up the frontend static content hosting
+app.use(express.static('public'));
+
+// Router for service endpoints
+const apiRouter = express.Router();
+
+
+ app.use(`/api`, apiRouter);
+
+// DeleteRecipes
+apiRouter.delete('/recipes', (_req, res) => {
+  //send the updated recipes
+  recipes = deleteRecipe(_req.body, recipes)
+  res.send(recipes);
+});
+
+// AddRecipe
+apiRouter.post('/recipes', (_req, res) => {
+  //send the updated recipes
+  recipes = addRecipe(_req.body, recipes)
+  res.send(recipes);
+});
+
+// apiRouter.get('/scores', (_req, res) => {
+//   res.send(scores);
+// });
+
+// // SubmitScore
+// apiRouter.post('/score', (req, res) => {
+//   scores = updateScores(req.body, scores);
+//   res.send(scores);
+// });
+
+// Return the application's default page if the path is unknown
+app.use((_req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
+
+ app.listen(port, () => {
+   console.log(`Listening on port ${port}`);
+ });
+
+
+ let recipes = [];
+ function deleteRecipe(recipe, recipes){
+  let index = recipes.indexOf(recipe);
+  if (index !== -1) { // Delete the element at the found index
+    recipes.splice(index, 1);
+    console.log(`Recipe deleted successfully.`);
+  } else {
+      console.log(`Recipe not found in the array.`);
   }
-//Login: username and password must be in the database
-//Register: they can't use a username that is already in use
+  return recipes
+ }
 
-async function update_usernames(username){
-  const usernames = JSON.parse(localStorage.getItem("Usernames")) || [];
-
-  const inUsernames = usernames.some(item => item === username);
-  if(!inUsernames){
-    console.log("hello you new");
-    usernames.push(username);
-    localStorage.setItem("Usernames", JSON.stringify(usernames));
-  }
-  console.log("username already in teh list fool");
-}
+ function addRecipe(recipe){
+  recipes.push(recipe)
+  return recipes
+ }
