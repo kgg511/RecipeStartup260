@@ -28,7 +28,7 @@ apiRouter.delete('/recipes', (_req, res) => {
 // AddRecipe
 apiRouter.post('/recipes', (_req, res) => {
   //send the updated recipes
-  recipes = addRecipe(_req.body, recipes)
+  recipes = addRecipe(_req.body);
   res.send(recipes);
 });
 
@@ -52,12 +52,14 @@ app.use((_req, res) => {
  });
 
 
- let recipes = [];
- function deleteRecipe(recipe, recipes){
-  let index = recipes.indexOf(recipe);
-  if (index !== -1) { // Delete the element at the found index
-    recipes.splice(index, 1);
-    console.log(`Recipe deleted successfully.`);
+ let recipes = {}; //recipes_username: {id:recipe, id:recipe}
+ function deleteRecipe(recipe, recipes){ //find the person, find the recipe delete from dictionary
+  if (recipes.hasOwnProperty(`recipes_${recipe.UserName}`)) {
+    userRecipes = recipes[recipe.UserName] || {};
+    if(userRecipes.hasOwnProperty(recipe.RecipeID)){
+      delete userRecipes[recipe.RecipeID];
+      console.log(`Recipe deleted successfully.`);
+    }
   } else {
       console.log(`Recipe not found in the array.`);
   }
@@ -65,6 +67,8 @@ app.use((_req, res) => {
  }
 
  function addRecipe(recipe){
-  recipes.push(recipe)
+  userRecipes = recipes[`recipes_${recipe.UserName}`] || {};
+  userRecipes[recipe.RecipeID] = recipe;
+  console.log("addRecipe");
   return recipes
  }

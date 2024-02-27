@@ -23,15 +23,16 @@ async function delete_recipe(RecipeID, username){
             body: JSON.stringify(recipe),
           });
         const recipes = await response.json(); //uhhh i no use it though
-        await delete_local(Recipe, RecipeID);
+        await delete_local(recipe, RecipeID);
     }
     catch{
-        await delete_local(Recipe, RecipeID);
+        await delete_local(recipe, RecipeID);
     }
 }
 async function delete_local(Recipe, RecipeID){
+    const RecipesDict = await fetch_db(`recipes_${Recipe.UserName}`);
     delete RecipesDict[RecipeID];
-    await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
+    await alter_db(`recipes_${Recipe.UserName}`, JSON.stringify(RecipesDict));
     const elementToDelete = document.getElementById(RecipeID);
     elementToDelete.remove();
 }

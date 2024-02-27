@@ -37,11 +37,11 @@ async function submit_recipe(){
       window.location.href = "my_recipes.html";
       return;
     }
-
-    //update recipe list for this person
-    const username = localStorage.getItem("UserName");
-    console.log("start submit_recipe");
-    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || {}; //fetch one person's recipes
+    
+    // //update recipe list for this person
+     const username = localStorage.getItem("UserName");
+    // console.log("start submit_recipe");
+    // const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || {}; //fetch one person's recipes
 
     //code to unpack the form and turn it into an object
     const recipe_form = document.querySelector("#recipeForm");
@@ -66,27 +66,40 @@ async function submit_recipe(){
         UserName: username
     };
 
-    //
+    //add recipe to db and return all recipes
     try{
       const response = await fetch('/api/recipes', {
           method: 'POST',
           headers: {'content-type': 'application/json'},
           body: JSON.stringify(recipe),
       });
-      const recipes = await response.json(); 
-      await delete_local(Recipe, RecipeID);
+      
+      const recipeDict = await response.json(); 
+      const username = localStorage.getItem("UserName");
+      localStorage.setItem(`recipes_${username}`, JSON.stringify(recipeDict));
+      console.log("recipe submitted!");
     }
     catch{
-        await delete_local(Recipe, RecipeID);
+      console.log("recipe submitted!");
+      await addRecipeLocal(recipe);
+    }
+    finally{
+      console.log("finally");
+      //window.location.href = "my_recipes.html";
     }
 
-    RecipesDict[RecipeID] = recipe; //update map
-    console.log(recipe);
-    localStorage.setItem(`recipes_${username}`, JSON.stringify(RecipesDict));
+}
+async function addRecipeLocal(recipe){
+  //update recipe list for this person
+  const username = localStorage.getItem("UserName");
+  console.log("start submit_recipe");
+  const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || {}; //fetch one person's recipes
+  RecipesDict[recipe.RecipeID] = recipe; //update map
+  console.log(recipe);
+  localStorage.setItem(`recipes_${username}`, JSON.stringify(RecipesDict));
 
-    
-    console.log("recipe submitted!");
-    window.location.href = "my_recipes.html";
+  console.log("recipe submitted!");
+  window.location.href = "my_recipes.html";
 
 }
 
