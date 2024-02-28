@@ -22,31 +22,62 @@ async function update_usernames(username){
 }
 //const axios = require('axios');
 
-function displayPhoto(data) {
-  const headers = {
-    Authorization: "PCbQxLsxaK0ESo8IK85zRNhwIYW9OlViBOeO5hHdqmjMHH2JbCHo7jB8",
-  };
-  const endpoint = 'https://api.pexels.com/v1/search/food%20collection/';
-  //fetch('https://api.quotable.io/random')
-  fetch(endpoint, {headers})
+
+async function displayImaged() {
+  fetch('https://foodish-api.com/images/samosa/samosa20.jpg')
     .then((response) => response.json())
     .then((data) => {
-
-      //class = "login_image">
+      console.log("i got the data");
       const containerEl = document.querySelector('#image');
+      image_url = data['image']
+      containerEl.src = image_url
+    });
+}
+//{"image":"https://foodish-api.com/images/burger/burger101.jpg"}
+//https://foodish-api.herokuapp.com/api/'
 
-      containerEl.src = data.content
+//this works 'https://foodish-api.com/images/samosa/samosa20.jpg'
+function displayImage() {
+  fetch('https://foodish-api.com')
+  //src="/images/samosa/samosa21.jpg"
+    .then((response) => {
+      // Check if the response is OK
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.blob(); // Get the response as a Blob
+    })
+    .then((blob) => {
+      // Convert the Blob to a URL
+      const imageUrl = URL.createObjectURL(blob);
+      console.log(`the image url is ${imageURL}`);
       
+      // Set the image URL to the container's src attribute
+      const containerEl = document.querySelector('#image');
+      containerEl.src = imageUrl;
+    })
+    .catch((error) => {
+      console.error('Error fetching or parsing data:', error);
     });
 }
 
-function photo(){
+function displayPicture() {
+  const random = Math.floor(Math.random() * 1000);
+  fetch(`https://picsum.photos/v2/list?page=${random}&limit=1`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("i got the data");
+      const containerEl = document.querySelector('#image');
+      //image_url = data['image']
+      //containerEl.src = data.content
+      //containerEl.src = image_url
+      const imgUrl = `https://picsum.photos/id/${data[0].id}/${width}/${height}?grayscale`;
+      //const imgEl = document.createElement('img');
+      containerEl.src = imgUrl
+      //imgEl.setAttribute('src', imgUrl);
+      //containerEl.appendChild(imgEl);
+    });
+}
 
-    //import { createClient } from 'pexels';
-
-  const client = createClient('PCbQxLsxaK0ESo8IK85zRNhwIYW9OlViBOeO5hHdqmjMHH2JbCHo7jB8');
-
-  //client.photos.show({ id: 2014422 }).then(photo => {...});
-
-
-};
+//displayPicture();
+//displayImage();

@@ -54,7 +54,7 @@ async function submit_recipe(){
         let amount = row.querySelector("#ingredientAmount").value;
         ingredients.push({Name: name, Amount: amount});
     })
-
+    console.log("about to print recipe!");
     let RecipeID = await generateUniqueRandomID();
     const recipe = {
         RecipeName: document.getElementById('exampleName').value,
@@ -65,8 +65,10 @@ async function submit_recipe(){
         RecipeID: RecipeID,
         UserName: username
     };
-
+    
+    console.log(recipe);
     //add recipe to db and return all recipes
+
     try{
       const response = await fetch('/api/recipes', {
           method: 'POST',
@@ -85,7 +87,7 @@ async function submit_recipe(){
     }
     finally{
       console.log("finally");
-      //window.location.href = "my_recipes.html";
+      window.location.href = "my_recipes.html";
     }
 
 }

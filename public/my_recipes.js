@@ -2,16 +2,33 @@ async function press_make(RecipeID, username){ //
     //update recipe in the database
     const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
     const recipe = RecipesDict[RecipeID];
+    try{
+        console.log(`the make recipe is ${recipe}`);
+        const response = await fetch(`/api/make?recipe=${recipe}`, {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+        });
+        const recipes = await response.json();
+        await alter_db(`recipes_${username}`, JSON.stringify(recipes));
+        const elementToReplace = document.getElementById(RecipeID)
+        const makes = elementToReplace.querySelector(".makes");
+        makes.textContent = recipe.RecipeMakes;
+    }
+    catch{
+        console.log("press_make local fallback");
+        make_local(RecipesDict, recipe);
+    }
+};
+async function make_local(RecipesDict, recipe){
     recipe.RecipeMakes += 1;
-    RecipesDict[RecipeID] = recipe;
-    await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
+    RecipesDict[recipe.RecipeID] = recipe;
+    await alter_db(`recipes_${recipe.username}`, JSON.stringify(RecipesDict));
 
     //update makes
-    const elementToReplace = document.getElementById(RecipeID)
+    const elementToReplace = document.getElementById(recipe.RecipeID)
     const makes = elementToReplace.querySelector(".makes");
     makes.textContent = recipe.RecipeMakes;
-
-};
+}
 
 async function delete_recipe(RecipeID, username){
     const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
@@ -198,14 +215,33 @@ async function generate_recipes(){
     //window.location.href = "my_recipes.html";
     const username = localStorage.getItem("UserName"); //get this persons recipes
     document.querySelector("#title").textContent = `My Recipes: ${username}`; //display username
+
+    try{//?username=${username}
+        const response = await fetch(`/api/myRecipes?username=${username}`, {
+            method: 'GET',
+            headers: {'content-type': 'application/json'},
+        });
+        console.log("about to make request generate_recipes");
+        const recipes = await response.json()
+
+        console.log("received about to make cards");
+        for (const recipe of recipes){
+            const result = await makeCard(recipe);
+            document.querySelector("div.grid").appendChild(result);
+        }        
+    }
+    catch (e){
+        console.error(e);
+        console.log("generate_recipes for my_recipes local fallback");
+        await generateMyRecipesLocal(username);
+    }
+  }
+  async function generateMyRecipesLocal(username){
+    //fetches it from local storage instead
     const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || {};
-
-    //for each person get their recipes and call makeCard on all of them
     for(let key in RecipesDict){
-
-      const card = await makeCard(RecipesDict[key]);
-      document.querySelector("div.grid").appendChild(card);
-  
+        const card = await makeCard(RecipesDict[key]);
+        document.querySelector("div.grid").appendChild(card);
     } 
   }
 

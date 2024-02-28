@@ -1,9 +1,9 @@
 async function generate_recipes(){
     try{
-        const response = await fetch('/api/recipes', {
+        const usernames = JSON.parse(localStorage.getItem("Usernames"));
+        const response = await fetch(`/api/recipes?usernames=${usernames}`, {
             method: 'GET',
             headers: {'content-type': 'application/json'},
-            body: JSON.stringify(recipe),
         });
         const recipes = await response.json();
         for (const recipe of recipes){
@@ -159,15 +159,32 @@ async function press_make(RecipeID, username){ //
     //update recipe in the database
     const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
     const recipe = RecipesDict[RecipeID];
+    try{
+        const response = await fetch(`/api/make?recipe=${recipe}`, {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+        });
+        const recipes = await response.json();
+        await alter_db(`recipes_${username}`, JSON.stringify(recipes));
+        const elementToReplace = document.getElementById(RecipeID)
+        const makes = elementToReplace.querySelector(".makes");
+        makes.textContent = recipe.RecipeMakes;
+    }
+    catch{
+        console.log("press_make local fallback");
+        make_local(RecipesDict, recipe);
+    }
+};
+async function make_local(RecipesDict, recipe){
     recipe.RecipeMakes += 1;
-    RecipesDict[RecipeID] = recipe;
-    await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
+    RecipesDict[recipe.RecipeID] = recipe;
+    await alter_db(`recipes_${recipe.username}`, JSON.stringify(RecipesDict));
 
     //update makes
-    const elementToReplace = document.getElementById(RecipeID)
+    const elementToReplace = document.getElementById(recipe.RecipeID)
     const makes = elementToReplace.querySelector(".makes");
     makes.textContent = recipe.RecipeMakes;
-};
+}
 
 async function fetch_db(name){
     return JSON.parse(localStorage.getItem(name));

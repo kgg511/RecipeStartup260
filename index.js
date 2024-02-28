@@ -13,41 +13,50 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Router for service endpoints
-const apiRouter = express.Router();
-
-
- app.use(`/api`, apiRouter);
+var apiRouter = express.Router();
+app.use(`/api`, apiRouter);
 
 // DeleteRecipes
-apiRouter.delete('/recipes', (_req, res) => {
+apiRouter.delete('/recipes', (req, res) => {
   //send the updated recipes
-  recipes = deleteRecipe(_req.body, recipes)
+  recipes = deleteRecipe(req.body, recipes);
   res.send(recipes);
 });
 
 // AddRecipe
-apiRouter.post('/recipes', (_req, res) => {
+apiRouter.post('/recipes', (req, res) => {
   //send the updated recipes
-  recipes = addRecipe(_req.body);
+  recipes = addRecipe(req.body);
   res.send(recipes);
 });
 
 // GetAllRecipes
-apiRouter.get('/recipes', (_req, res) => {
+apiRouter.get('/recipes', (req, res) => {
   //send the updated recipes
-  recipes = getAllRecipes();
+  const usernames = req.query.usernames;
+  const recipesList = getAllRecipes(usernames);
+  //console.log(`recipes is ${typeof recipes}`); 
+  res.send(recipesList);
+});
+
+// GetMyRecipes (one user's recipes)
+apiRouter.get('/myRecipes', (req, res) => {
+  //send the user's recipes
+  const username = req.query.username;
+  console.log("about to call get my recipes");
+  const recipesList = getMyRecipes(username); //body stores the username
+  res.send(recipesList);
+});
+
+// makeRecipe ('make' the specified recipe, send RECIPE)
+apiRouter.post('/make', (req, res) => {
+  //send the user's recipes
+  const recipeToMake = req.query.recipe;
+  console.log("about to call updatemake");
+  recipes = updateMake(recipeToMake); //body stores the username
   res.send(recipes);
 });
 
-// apiRouter.get('/scores', (_req, res) => {
-//   res.send(scores);
-// });
-
-// // SubmitScore
-// apiRouter.post('/score', (req, res) => {
-//   scores = updateScores(req.body, scores);
-//   res.send(scores);
-// });
 
 // Return the application's default page if the path is unknown
 app.use((_req, res) => {
@@ -62,7 +71,7 @@ app.use((_req, res) => {
  let recipes = {}; //recipes_username: {id:recipe, id:recipe}
  function deleteRecipe(recipe, recipes){ //find the person, find the recipe delete from dictionary
   if (recipes.hasOwnProperty(`recipes_${recipe.UserName}`)) {
-    userRecipes = recipes[recipe.UserName] || {};
+    userRecipes = recipes[recipe.UserName];
     if(userRecipes.hasOwnProperty(recipe.RecipeID)){
       delete userRecipes[recipe.RecipeID];
       console.log(`Recipe deleted successfully.`);
@@ -74,18 +83,57 @@ app.use((_req, res) => {
  }
 
  function addRecipe(recipe){
-  userRecipes = recipes[`recipes_${recipe.UserName}`] || {};
-  userRecipes[recipe.RecipeID] = recipe;
+  if(typeof recipes === 'undefined'){
+    recipes = {};
+  }
+  const a = recipe;
+  const b = recipes;
+  //mainDict.nestedDict.key1 = 'new value';
+  console.log(`recipe passed in ${recipe}`)
+  console.log('here are the keys')
+  const keys = Object.keys(recipes);
+  keys.forEach(key => {
+      console.log(key);
+  });
+  if(!recipes.hasOwnProperty(`recipes_${recipe.UserName}`)){
+    console.log(`${recipe.UserName} has nothing time reset`);
+    recipes[`recipes_${recipe.UserName}`] = {}; 
+  }
+  recipes[`recipes_${recipe.UserName}`][recipe.RecipeID] = recipe;
+  
   console.log("addRecipe");
   return recipes;
  }
-
- function getAllRecipes(){
-  const usernames = JSON.parse(localStorage.getItem("Usernames"));
+//recipes_username
+ function getAllRecipes(usernames){
+  const n = usernames.split(",");
   const recipeList = [];
-    for(let user of usernames){
-        for(let key in recipes){
-          recipeList.push(recipes[key])
+  //console.log(recipes);
+  const recipesExample = recipes;
+    for(let user of n){
+      const userDict = recipes[`recipes_${user}`]
+        for(let key in userDict){
+          recipeList.push(userDict[key])
         }
     };
+    return recipeList;
+    //key: recipes_username, value: another dictionary where key = recipeid, value=recipe
+ }
+
+ function getMyRecipes(username){
+  console.log("in get my recipes");
+  const userRecipes = recipes[`recipes_${username}`] || {};
+  const recipeList = [];
+  console.log("about");
+  for(let key in userRecipes){
+    recipeList.push(userRecipes[key])
+  }
+  return recipeList;
+ }
+
+ function updateMake(recipeToMake){
+  const username = recipeToMake.UserName;
+  recipeToMake.RecipeMakes += 1;
+  recipes[`recipes_${recipeToMake.username}`][recipeToMake.RecipeID] = recipeToMake;
+  return recipes;
  }
