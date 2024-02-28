@@ -32,6 +32,13 @@ apiRouter.post('/recipes', (_req, res) => {
   res.send(recipes);
 });
 
+// GetAllRecipes
+apiRouter.get('/recipes', (_req, res) => {
+  //send the updated recipes
+  recipes = getAllRecipes();
+  res.send(recipes);
+});
+
 // apiRouter.get('/scores', (_req, res) => {
 //   res.send(scores);
 // });
@@ -70,5 +77,15 @@ app.use((_req, res) => {
   userRecipes = recipes[`recipes_${recipe.UserName}`] || {};
   userRecipes[recipe.RecipeID] = recipe;
   console.log("addRecipe");
-  return recipes
+  return recipes;
+ }
+
+ function getAllRecipes(){
+  const usernames = JSON.parse(localStorage.getItem("Usernames"));
+  const recipeList = [];
+    for(let user of usernames){
+        for(let key in recipes){
+          recipeList.push(recipes[key])
+        }
+    };
  }

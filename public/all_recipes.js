@@ -1,4 +1,22 @@
 async function generate_recipes(){
+    try{
+        const response = await fetch('/api/recipes', {
+            method: 'GET',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify(recipe),
+        });
+        const recipes = await response.json();
+        for (const recipe of recipes){
+            const result = await makeCard(recipe);
+            document.querySelector("div.grid").appendChild(result);
+        }        
+    }
+    catch{
+        console.log("generate_recipes local fallback");
+        await generateLocal();
+    }
+  }
+async function generateLocal(){
     const usernames = JSON.parse(localStorage.getItem("Usernames"));
     for(let user of usernames) 
     {
@@ -8,7 +26,7 @@ async function generate_recipes(){
             document.querySelector("div.grid").appendChild(result);
         }
     };
-  }
+}
 
 function makeCard(Recipe){ //pass in recipe OBJECT
     const RecipeName = Recipe.RecipeName; //add this one
