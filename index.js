@@ -19,7 +19,7 @@ app.use(`/api`, apiRouter);
 // DeleteRecipes
 apiRouter.delete('/recipes', (req, res) => {
   //send the updated recipes
-  recipes = deleteRecipe(req.body, recipes);
+  recipes = deleteRecipe(req.body, recipes); //delete Request object contains id & username
   res.send(recipes);
 });
 
@@ -51,9 +51,9 @@ apiRouter.get('/myRecipes', (req, res) => {
 // makeRecipe ('make' the specified recipe, send RECIPE)
 apiRouter.post('/make', (req, res) => {
   //send the user's recipes
-  const recipeToMake = req.query.recipe;
+  //const recipeToMake = req.query.recipe;
   console.log("about to call updatemake");
-  recipes = updateMake(recipeToMake); //body stores the username
+  recipes = updateMake(req.body); //body stores the username
   res.send(recipes);
 });
 
@@ -69,13 +69,14 @@ app.use((_req, res) => {
 
 
  let recipes = {}; //recipes_username: {id:recipe, id:recipe}
- function deleteRecipe(recipe, recipes){ //find the person, find the recipe delete from dictionary
-  if (recipes.hasOwnProperty(`recipes_${recipe.UserName}`)) {
-    userRecipes = recipes[recipe.UserName];
-    if(userRecipes.hasOwnProperty(recipe.RecipeID)){
-      delete userRecipes[recipe.RecipeID];
-      console.log(`Recipe deleted successfully.`);
-    }
+ //p
+ function deleteRecipe(deleteObject){ //find the person, find the recipe delete from dictionary
+  const RecipeID = deleteObject.id
+  const username = deleteObject.username
+
+  if (recipes.hasOwnProperty(`recipes_${username}`) && recipes[`recipes_${username}`].hasOwnProperty(RecipeID)) {
+    delete recipes[`recipes_${username}`][RecipeID];
+    console.log(`Recipe deleted successfully.`);
   } else {
       console.log(`Recipe not found in the array.`);
   }
@@ -131,9 +132,13 @@ app.use((_req, res) => {
   return recipeList;
  }
 
- function updateMake(recipeToMake){
-  const username = recipeToMake.UserName;
-  recipeToMake.RecipeMakes += 1;
-  recipes[`recipes_${recipeToMake.username}`][recipeToMake.RecipeID] = recipeToMake;
+ function updateMake(makeRequestObject){
+  const RecipeID = makeRequestObject.id
+  const username = makeRequestObject.username
+
+  if(recipes[`recipes_${username}`] && recipes[`recipes_${username}`][RecipeID]){
+    recipes[`recipes_${username}`][RecipeID].RecipeMakes += 1
+  }
+  
   return recipes;
  }

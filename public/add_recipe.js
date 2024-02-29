@@ -78,7 +78,7 @@ async function submit_recipe(){
       
       const recipeDict = await response.json(); 
       const username = localStorage.getItem("UserName");
-      localStorage.setItem(`recipes_${username}`, JSON.stringify(recipeDict));
+      localStorage.setItem(`recipes_${username}`, JSON.stringify(recipeDict[`recipes_${username}`]));
       console.log("recipe submitted!");
     }
     catch{

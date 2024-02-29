@@ -1,57 +1,58 @@
-async function press_make(RecipeID, username){ //
+async function press_make(RecipeID, username){
     //update recipe in the database
-    const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
-    const recipe = RecipesDict[RecipeID];
     try{
-        console.log(`the make recipe is ${recipe}`);
-        const response = await fetch(`/api/make?recipe=${recipe}`, {
+        const makeRequestObject = {"id": RecipeID, "username": username};
+        const response = await fetch(`/api/make`, {
             method: 'POST',
             headers: {'content-type': 'application/json'},
+            body: JSON.stringify(makeRequestObject),
         });
         const recipes = await response.json();
-        await alter_db(`recipes_${username}`, JSON.stringify(recipes));
-        const elementToReplace = document.getElementById(RecipeID)
+        await alter_db(`recipes_${username}`, JSON.stringify(recipes[`recipes_${username}`]));
+        const elementToReplace = document.getElementById(RecipeID);
         const makes = elementToReplace.querySelector(".makes");
-        makes.textContent = recipe.RecipeMakes;
+        makes.textContent = recipes[`recipes_${username}`][RecipeID].RecipeMakes;
     }
     catch{
+        const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
         console.log("press_make local fallback");
-        make_local(RecipesDict, recipe);
+        make_local(RecipesDict, RecipeID, username);
     }
 };
-async function make_local(RecipesDict, recipe){
-    recipe.RecipeMakes += 1;
-    RecipesDict[recipe.RecipeID] = recipe;
-    await alter_db(`recipes_${recipe.username}`, JSON.stringify(RecipesDict));
-
-    //update makes
-    const elementToReplace = document.getElementById(recipe.RecipeID)
+async function make_local(RecipesDict, RecipeID, username){
+    //recipesDict is for ONE user
+    RecipesDict[RecipeID].RecipeMakes += 1;
+    await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
+    const elementToReplace = document.getElementById(RecipeID);
     const makes = elementToReplace.querySelector(".makes");
-    makes.textContent = recipe.RecipeMakes;
+    makes.textContent = RecipesDict[RecipeID].RecipeMakes;
 }
 
 async function delete_recipe(RecipeID, username){
-    const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
-    const recipe = RecipesDict[RecipeID];
+    //const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
+    //const recipe = RecipesDict[RecipeID];
+    const deleteRequestObject = {"id": RecipeID, "username": username};
     try{
         const response = await fetch('/api/recipes', {
             method: 'DELETE',
             headers: {'content-type': 'application/json'},
-            body: JSON.stringify(recipe),
+            body: JSON.stringify(deleteRequestObject),
           });
-        const recipes = await response.json(); //uhhh i no use it though
-        await delete_local(recipe, RecipeID);
+        const recipes = await response.json(); //returns the dictionary recipes for specific user
+        await alter_db(`recipes_${username}`, JSON.stringify(recipes[`recipes_${username}`]));
     }
     catch{
-        await delete_local(recipe, RecipeID);
+        await delete_local(username, RecipeID);
+    }
+    finally{
+        const elementToDelete = document.getElementById(RecipeID);
+        elementToDelete.remove();
     }
 }
-async function delete_local(Recipe, RecipeID){
-    const RecipesDict = await fetch_db(`recipes_${Recipe.UserName}`);
+async function delete_local(username, RecipeID){
+    const RecipesDict = await fetch_db(`recipes_${username}`);
     delete RecipesDict[RecipeID];
-    await alter_db(`recipes_${Recipe.UserName}`, JSON.stringify(RecipesDict));
-    const elementToDelete = document.getElementById(RecipeID);
-    elementToDelete.remove();
+    await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
 }
 
 async function fetch_db(name){
