@@ -1,7 +1,10 @@
 
-import express from 'express'
-//const express = require('express');
+import express from 'express' //const express = require('express');
+import multer from 'multer'
+import path from 'path'
+
 const app = express();
+const upload = multer({ dest: 'uploads/' }); //configure for file uploads
 
 // The service port. In production the frontend code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 3000;
@@ -15,6 +18,18 @@ app.use(express.static('public'));
 // Router for service endpoints
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
+
+//uploadImages to server
+app.post('/upload', upload.single('image'), (req, res) => {
+  const file = req.file;
+  if (!file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+  res.send({
+    filename: file.filename,
+    path: file.path
+  });
+});
 
 // DeleteRecipes
 apiRouter.delete('/recipes', (req, res) => {

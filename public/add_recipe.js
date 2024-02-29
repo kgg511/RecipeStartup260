@@ -31,66 +31,82 @@ function add_ingredient_line(){
 }
 
 //submit the recipe to the database when they hit submit
-async function submit_recipe(){
-    if(!filled_form()){ //do nothing
-      console.log("form not filled so recipe not submitted!")
-      window.location.href = "my_recipes.html";
-      return;
+async function submit_recipe() {
+  if (!filled_form()) { // Do nothing
+    console.log("Form not filled so recipe not submitted!");
+    window.location.href = "my_recipes.html";
+    return;
+  }
+  
+  // Update recipe list for this person
+  const username = localStorage.getItem("UserName");
+
+  // Code to unpack the form and turn it into an object
+  const recipe_form = document.querySelector("#recipeForm");
+  const ingredients = []; // List of objects
+  const ingredientRows = Array.from(document.querySelectorAll("#ingredientList .row"));
+
+  // Selects elements with class "row" that are descendants of element with ID "ingredientList"
+  ingredientRows.forEach(row => { 
+    // Fill ingredients list with objects
+    let name = row.querySelector("#ingredientName").value;
+    let amount = row.querySelector("#ingredientAmount").value;
+    ingredients.push({ Name: name, Amount: amount });
+  });
+
+  console.log("About to print recipe!");
+  let RecipeID = await generateUniqueRandomID();
+
+  const formData = new FormData();
+  const fileInput = document.getElementById('imageFile').files[0]; // Take first image file
+  formData.append('image', fileInput);
+
+  // Upload the image to the server
+  try {
+    const response = await fetch('/upload', {
+      method: 'POST',
+      body: formData
+    });
+    if (!response.ok) {
+      throw new Error('Failed to upload image');
     }
-    
-    // //update recipe list for this person
-     const username = localStorage.getItem("UserName");
-    // console.log("start submit_recipe");
-    // const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || {}; //fetch one person's recipes
 
-    //code to unpack the form and turn it into an object
-    const recipe_form = document.querySelector("#recipeForm");
-    const ingredients = []; //list of objects
-    const ingredientRows = Array.from(document.querySelectorAll("#ingredientList .row"));
-    //selects elements with class "row" that are descendants of element with ID "ingredientList
+    const data = await response.json();
+    console.log('File uploaded successfully:', data);
+    const filename = data.filename;
+    const path = data.path;
 
-    ingredientRows.forEach(row =>{ //fill ingredients list with objects
-        let name = row.querySelector("#ingredientName").value;
-        let amount = row.querySelector("#ingredientAmount").value;
-        ingredients.push({Name: name, Amount: amount});
-    })
-    console.log("about to print recipe!");
-    let RecipeID = await generateUniqueRandomID();
     const recipe = {
-        RecipeName: document.getElementById('exampleName').value,
-        RecipeImage: document.getElementById('imageFile').value, //hmm its optional
-        RecipeIngredients: ingredients,
-        RecipeInstructions: document.getElementById('formInstructions').value,
-        RecipeMakes: 0,
-        RecipeID: RecipeID,
-        UserName: username
+      RecipeName: document.getElementById('exampleName').value,
+      RecipeImage: path,
+      RecipeIngredients: ingredients,
+      RecipeInstructions: document.getElementById('formInstructions').value,
+      RecipeMakes: 0,
+      RecipeID: RecipeID,
+      UserName: username
     };
-    
-    console.log(recipe);
-    //add recipe to db and return all recipes
 
-    try{
-      const response = await fetch('/api/recipes', {
-          method: 'POST',
-          headers: {'content-type': 'application/json'},
-          body: JSON.stringify(recipe),
-      });
-      
-      const recipeDict = await response.json(); 
-      const username = localStorage.getItem("UserName");
-      localStorage.setItem(`recipes_${username}`, JSON.stringify(recipeDict[`recipes_${username}`]));
-      console.log("recipe submitted!");
-    }
-    catch{
-      console.log("recipe submitted!");
-      await addRecipeLocal(recipe);
-    }
-    finally{
-      console.log("finally");
-      window.location.href = "my_recipes.html";
-    }
+    const recipeResponse = await fetch('/api/recipes', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(recipe),
+    });
 
+    const recipeDict = await recipeResponse.json();
+    // Process data from second fetch
+    localStorage.setItem(`recipes_${username}`, JSON.stringify(recipeDict[`recipes_${username}`]));
+    console.log("Recipe submitted!");
+    window.location.href = "my_recipes.html";
+  } catch (error) {
+    console.error('Error:', error.message);
+    // Handle errors gracefully, e.g., display an error message to the user
+    if (recipe) {
+      addRecipeLocal(recipe);
+    }
+  }
 }
+ 
+
 async function addRecipeLocal(recipe){
   //update recipe list for this person
   const username = localStorage.getItem("UserName");

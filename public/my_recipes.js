@@ -66,7 +66,7 @@ async function alter_db(name, value){
 
 function makeCard(Recipe){ //pass in recipe OBJECT
     const RecipeName = Recipe.RecipeName; //add this one
-    const RecipeImage = Recipe.RecipeImage;
+    const RecipeImage = Recipe.RecipeImage; //this is path name
     const UserName = Recipe.UserName;
     const ingredients = Recipe.RecipeIngredients;
     const RecipeInstructions = Recipe.RecipeInstructions;
@@ -109,7 +109,8 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     // Create the image element
     const imgElement = document.createElement("img");
     imgElement.className = "card-img-top";
-    imgElement.src = "media/cookie.png"; //filler
+    //imgElement.src = "media/cookie.png"; //filler
+    imgElement.src = RecipeImage
     imgElement.alt = "Recipe Image";
 
     // Create the card-body container for front
