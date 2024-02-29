@@ -155,35 +155,34 @@ function makeCard(Recipe){ //pass in recipe OBJECT
 }
 
 
-async function press_make(RecipeID, username){ //
+async function press_make(RecipeID, username){
     //update recipe in the database
-    const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
-    const recipe = RecipesDict[RecipeID];
     try{
-        const response = await fetch(`/api/make?recipe=${recipe}`, {
+        const makeRequestObject = {"id": RecipeID, "username": username};
+        const response = await fetch(`/api/make`, {
             method: 'POST',
             headers: {'content-type': 'application/json'},
+            body: JSON.stringify(makeRequestObject),
         });
         const recipes = await response.json();
-        await alter_db(`recipes_${username}`, JSON.stringify(recipes));
-        const elementToReplace = document.getElementById(RecipeID)
+        await alter_db(`recipes_${username}`, JSON.stringify(recipes[`recipes_${username}`]));
+        const elementToReplace = document.getElementById(RecipeID);
         const makes = elementToReplace.querySelector(".makes");
-        makes.textContent = recipe.RecipeMakes;
+        makes.textContent = recipes[`recipes_${username}`][RecipeID].RecipeMakes;
     }
     catch{
+        const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
         console.log("press_make local fallback");
-        make_local(RecipesDict, recipe);
+        make_local(RecipesDict, RecipeID, username);
     }
 };
-async function make_local(RecipesDict, recipe){
-    recipe.RecipeMakes += 1;
-    RecipesDict[recipe.RecipeID] = recipe;
-    await alter_db(`recipes_${recipe.username}`, JSON.stringify(RecipesDict));
-
-    //update makes
-    const elementToReplace = document.getElementById(recipe.RecipeID)
+async function make_local(RecipesDict, RecipeID, username){
+    //recipesDict is for ONE user
+    RecipesDict[RecipeID].RecipeMakes += 1;
+    await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
+    const elementToReplace = document.getElementById(RecipeID);
     const makes = elementToReplace.querySelector(".makes");
-    makes.textContent = recipe.RecipeMakes;
+    makes.textContent = RecipesDict[RecipeID].RecipeMakes;
 }
 
 async function fetch_db(name){
