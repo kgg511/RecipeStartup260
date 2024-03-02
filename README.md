@@ -84,3 +84,13 @@ For this deliverable I added JavaScript to my application so that it works for a
   - users can ‘make’ recipes.
   - users can delete their own recipes.
   - users can see recipes made by all users.
+ 
+## Service Deliverable ##
+For this deliverable I added backend endpoints that receive recipe makes, new recipe posts, and images.
+
+- Node.js/Express HTTP service: done.
+- Static middleware for frontend: done.
+- Calls to third party endpoints: On the login page it displays a random food image. (takes a second to show up, might have to return back to page later)
+- Backend service endpoints: Endpoints for uploading images to the server, deleting/adding/updating recipes, and fetching recipes.
+- Frontend calls service endpoints: The frontend calls the endpoints using fetch.
+
