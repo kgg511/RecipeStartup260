@@ -75,10 +75,11 @@ async function submit_recipe() {
     console.log('File uploaded successfully:', data);
     const filename = data.filename;
     const path = data.path;
+    let choppedStr = path.replace(/^public\//, '');
 
     const recipe = {
       RecipeName: document.getElementById('exampleName').value,
-      RecipeImage: path,
+      RecipeImage: choppedStr,
       RecipeIngredients: ingredients,
       RecipeInstructions: document.getElementById('formInstructions').value,
       RecipeMakes: 0,
@@ -97,7 +98,8 @@ async function submit_recipe() {
     localStorage.setItem(`recipes_${username}`, JSON.stringify(recipeDict[`recipes_${username}`]));
     console.log("Recipe submitted!");
     window.location.href = "my_recipes.html";
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error:', error.message);
     // Handle errors gracefully, e.g., display an error message to the user
     if (recipe) {

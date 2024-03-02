@@ -21,13 +21,10 @@ async function update_usernames(username){
   }
 }
 
-//{"image":"https://foodish-api.com/images/burger/burger101.jpg"}
-//this works 'https://foodish-api.com/images/samosa/samosa20.jpg'
 function displayImage() {
   fetch('https://foodish-api.com/api/')
     .then((response) => {
-      // Check if the response is OK
-      if (!response.ok) {
+      if (!response.ok) { // Check if the response is OK
         throw new Error('Network response was not ok');
       }
       return response.json();
@@ -46,6 +43,4 @@ function displayImage() {
 }
 
 
-
-//displayPicture();
 displayImage();

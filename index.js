@@ -4,7 +4,7 @@ import multer from 'multer'
 import path from 'path'
 
 const app = express();
-const upload = multer({ dest: 'uploads/' }); //configure for file uploads
+const upload = multer({ dest: 'public/uploads/' }); //configure for file uploads
 
 // The service port. In production the frontend code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 3000;
