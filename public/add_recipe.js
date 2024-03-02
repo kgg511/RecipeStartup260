@@ -30,6 +30,24 @@ function add_ingredient_line(){
 //<Section class = "ingredients">
 }
 
+//<label for="imageFile">size too big! (Must be under 400 bytes)</label>
+
+function image_warning(){
+  if(document.querySelector("#warning")){ //if warning already there
+    return;
+  }
+  //create label to add
+  const warningLabel = document.createElement("label");
+  warningLabel.setAttribute("for", "imageFile");
+  warningLabel.setAttribute("id", "warning");
+  warningLabel.textContent = 'size too big! (Must be under 20 megabytes)';
+
+  const div = document.querySelector("#imageDiv");
+  const imageFile = document.querySelector("#imageFile"); //insert before this
+
+  div.insertBefore(warningLabel, imageFile);
+}
+
 //submit the recipe to the database when they hit submit
 async function submit_recipe() {
   if (!filled_form()) { // Do nothing
@@ -54,11 +72,15 @@ async function submit_recipe() {
     ingredients.push({ Name: name, Amount: amount });
   });
 
-  console.log("About to print recipe!");
   let RecipeID = await generateUniqueRandomID();
 
   const formData = new FormData();
   const fileInput = document.getElementById('imageFile').files[0]; // Take first image file
+  const fileSizeMB = fileInput.size/ 1048576;
+  if(fileSizeMB > 20){ //file
+    image_warning();
+    return;
+  }
   formData.append('image', fileInput);
 
   // Upload the image to the server
