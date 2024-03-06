@@ -1,15 +1,39 @@
-async function login() { //TODO: must have correct username and password
-    const nameEl = document.querySelector("#exampleUsername");
-    localStorage.setItem("UserName", nameEl.value);
+async function login() {
+  loginCreate('/auth/login');
+}
 
-    await update_usernames(nameEl.value);
+async function register() {
+  loginCreate('/auth/create');
+}
 
-    console.log(`your username is ${nameEl.value}`);
+async function loginCreate(endpoint){
+  const username = document.querySelector("#exampleUsername").value;
+  const password = document.querySelector("#examplePassword").value;
+
+  const makeRequestObject = {"username": username, "password": password};
+  const request = await fetch(endpoint, {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(makeRequestObject),
+  });
+  const response = await request.json(); //returns userid in body, authToken in header
+
+  if(response.ok){
+    localStorage.setItem("UserName", username);
+    await update_usernames(username);
+    console.log(`your username is ${username}`);
     window.location.href = "all_recipes.html";
-    
   }
-//Login: username and password must be in the database
-//Register: they can't use a username that is already in use
+  else{ //you're not going anywhere if you couldn't log in or create correctly
+    console.log("it failed");
+    const div = document.querySelector("div.Login");
+    const p = document.createElement("p");
+    const type = endpoint.slice(6);
+    p.textContent = `${type} failed. Please try again.`;
+    div.appendChild(p);
+  }
+}
+
 
 async function update_usernames(username){
   const usernames = JSON.parse(localStorage.getItem("Usernames")) || [];

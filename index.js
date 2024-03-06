@@ -8,7 +8,7 @@ const DB = require('./database.js');
 
 const app = express();
 const upload = multer({ dest: 'public/uploads/' }); //configure for file uploads
-
+const authCookieName = 'token';
 // The service port. In production the frontend code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 3000;
 
@@ -25,8 +25,8 @@ app.use(express.static('public'));
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
-// CreateAuth token for a new user
-// put username & password in the body of the request
+
+// Create User: add to database, set the cookie header, send the user id
 apiRouter.post('/auth/create', async (req, res) => {
   if (await DB.getUser(req.body.username)) {
     res.status(409).send({ msg: 'Existing user' });
@@ -41,6 +41,20 @@ apiRouter.post('/auth/create', async (req, res) => {
     });
   }
 });
+
+//Login existing user
+apiRouter.post('/auth/login', async (req, res) => {
+  const user = await DB.getUser(req.body.username);
+  if (user) {
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      setAuthCookie(res, user.token); //authToken in header
+      res.send({ id: user._id }); // put user id in the body
+      return;
+    }
+  }
+  res.status(401).send({ msg: 'Unauthorized' });
+});
+
 
 //uploadImages to server
 app.post('/upload', upload.single('image'), (req, res) => {
@@ -106,7 +120,6 @@ app.use((_req, res) => {
  });
 
 
- let recipes = {}; //recipes_username: {id:recipe, id:recipe}
  // setAuthCookie in the HTTP response
 function setAuthCookie(res, authToken) {
   res.cookie(authCookieName, authToken, {
@@ -116,7 +129,8 @@ function setAuthCookie(res, authToken) {
   });
 }
 
-
+////////////////////////////////////////OLD FUNCTIONS////////////////////////////////////////
+let recipes = {}; //recipes_username: {id:recipe, id:recipe}
  function deleteRecipe(deleteObject){ //find the person, find the recipe delete from dictionary
   const RecipeID = deleteObject.id
   const username = deleteObject.username

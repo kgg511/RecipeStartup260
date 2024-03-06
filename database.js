@@ -73,4 +73,7 @@ module.exports = {
   createUser,
   addRecipe,
   getRecipes,
+  deleteRecipe,
+  getAllRecipes,
+  updateMake
 };
