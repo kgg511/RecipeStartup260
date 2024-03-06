@@ -1,7 +1,10 @@
 
 import express from 'express' //const express = require('express');
 import multer from 'multer'
-import path from 'path'
+
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
+const DB = require('./database.js');
 
 const app = express();
 const upload = multer({ dest: 'public/uploads/' }); //configure for file uploads
@@ -12,12 +15,32 @@ const port = process.argv.length > 2 ? process.argv[2] : 3000;
 // JSON body parsing using built-in middleware
 app.use(express.json());
 
+// Use the cookie parser middleware for tracking authentication tokens
+app.use(cookieParser());
+
 // Serve up the frontend static content hosting
 app.use(express.static('public'));
 
 // Router for service endpoints
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
+
+// CreateAuth token for a new user
+// put username & password in the body of the request
+apiRouter.post('/auth/create', async (req, res) => {
+  if (await DB.getUser(req.body.username)) {
+    res.status(409).send({ msg: 'Existing user' });
+  } else {
+    const user = await DB.createUser(req.body.username, req.body.password);
+
+    // Set the cookie
+    setAuthCookie(res, user.token);
+
+    res.send({
+      id: user._id,
+    });
+  }
+});
 
 //uploadImages to server
 app.post('/upload', upload.single('image'), (req, res) => {
@@ -84,7 +107,16 @@ app.use((_req, res) => {
 
 
  let recipes = {}; //recipes_username: {id:recipe, id:recipe}
- //p
+ // setAuthCookie in the HTTP response
+function setAuthCookie(res, authToken) {
+  res.cookie(authCookieName, authToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
+  });
+}
+
+
  function deleteRecipe(deleteObject){ //find the person, find the recipe delete from dictionary
   const RecipeID = deleteObject.id
   const username = deleteObject.username
