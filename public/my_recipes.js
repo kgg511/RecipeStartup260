@@ -31,6 +31,7 @@ async function make_local(RecipesDict, RecipeID, username){
 async function delete_recipe(RecipeID, username){
     //const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
     //const recipe = RecipesDict[RecipeID];
+
     const deleteRequestObject = {"id": RecipeID};
     try{
         const response = await fetch('/api/recipes', {

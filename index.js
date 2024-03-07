@@ -1,4 +1,3 @@
-
 const express = require('express');
 const multer = require('multer');
 
@@ -86,9 +85,10 @@ app.post('/upload', upload.single('image'), (req, res) => {
 });
 
 // DeleteRecipes
-apiRouter.delete('/recipes', (req, res) => {
+apiRouter.delete('/recipes', async (req, res) => {
   //send the updated recipes
-  DB.deleteRecipe(req.body); //expecting a recipe
+  const recipeID = req.body;
+  await DB.deleteRecipe(recipeID); //RECIPEID
   const recipes = DB.getAllRecipes();
   res.send(recipes);
   //recipes = deleteRecipe(req.body, recipes); //delete Request object contains id & username

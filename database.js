@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { ObjectId, MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const config = require('./dbConfig.json');
@@ -51,9 +51,13 @@ function getRecipes(username) { //get the list of recipes for one user
   return cursor.toArray();
 }
 
-function deleteRecipe(Recipe){
+async function deleteRecipe(recipeID){
   // Delete a recipe from the database
-  recipeCollection.deleteOne(Recipe);
+  //_id: new ObjectId(recipeID)}
+  //db.myCol.find({_id : ObjectId("60f532903ded77001064ae92")});
+  const result = await recipeCollection.deleteOne({"_id": new ObjectId(recipeID)});
+  //await recipeCollection.deleteOne({_id: new ObjectId(recipeID)});
+  console.log(`${result.deletedCount} document(s) deleted`);
 }
 
 function getAllRecipes(){
@@ -68,8 +72,6 @@ function updateMake(Recipe){
   recipeToUpdate.makes += 1;
   recipeCollection.updateOne(query, recipeToUpdate);
 }
-
-
 
 module.exports = {
   getUser,
