@@ -106,7 +106,7 @@ async function submit_recipe() {
       RecipeInstructions: document.getElementById('formInstructions').value,
       RecipeMakes: 0,
       RecipeID: RecipeID,
-      UserName: username
+      Username: username
     };
 
     const recipeResponse = await fetch('/api/recipes', {

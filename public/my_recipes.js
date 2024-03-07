@@ -67,7 +67,7 @@ async function alter_db(name, value){
 function makeCard(Recipe){ //pass in recipe OBJECT
     const RecipeName = Recipe.RecipeName; //add this one
     const RecipeImage = Recipe.RecipeImage; //this is path name
-    const UserName = Recipe.UserName;
+    const UserName = Recipe.Username;
     const ingredients = Recipe.RecipeIngredients;
     const RecipeInstructions = Recipe.RecipeInstructions;
     const RecipeMakes = Recipe.RecipeMakes;
@@ -224,7 +224,8 @@ async function generate_recipes(){
         // });
         console.log("about to make request generate_recipes");
         const recipes = await response.json(); // extracts body
-        username = response.user;
+        username = response.headers.get('username');
+        
         document.querySelector("#title").textContent = `My Recipes: ${username}`; //display username
 
         console.log("received about to make cards");
@@ -235,7 +236,7 @@ async function generate_recipes(){
     }
     catch (e){
         console.error(e);
-        let username = localStorage.getItem("UserName"); //get this persons recipes
+        username = localStorage.getItem("UserName"); //get this persons recipes
         document.querySelector("#title").textContent = `My Recipes: ${username}`; //display username
 
         console.log("generate_recipes for my_recipes local fallback");

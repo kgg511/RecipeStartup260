@@ -140,6 +140,7 @@ secureApiRouter.get('/myRecipes', async (req, res) => {
   //send the user's recipes
   const username = req.user.username;
   console.log("about to call get my recipes");
+  res.set("username", username);
   const recipesList = await DB.getRecipes(username);
   // const recipesList = getMyRecipes(username); //body stores the username
   res.send(recipesList);

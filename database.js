@@ -45,7 +45,7 @@ function addRecipe(recipe) {
 }
 
 function getRecipes(username) { //get the list of recipes for one user
-  const query = { username: username };
+  const query = { Username: username };
   //const options = { sort: { name: 1 } };
   const cursor = recipeCollection.find(query);
   return cursor.toArray();

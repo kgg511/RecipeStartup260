@@ -46,7 +46,7 @@ async function signOut(){
 function makeCard(Recipe){ //pass in recipe OBJECT
     const RecipeName = Recipe.RecipeName; //add this one
     const RecipeImage = Recipe.RecipeImage;
-    const UserName = Recipe.UserName;
+    const UserName = Recipe.Username;
     const ingredients = Recipe.RecipeIngredients;
     const RecipeInstructions = Recipe.RecipeInstructions;
     const RecipeMakes = Recipe.RecipeMakes;
