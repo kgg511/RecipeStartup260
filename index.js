@@ -104,12 +104,19 @@ apiRouter.post('/recipes', (req, res) => {
 });
 
 // GetAllRecipes
-apiRouter.get('/recipes', (req, res) => { //no need to send stuff
+apiRouter.get('/recipes', async (req, res) => { //no need to send stuff
   //send the updated recipes 
-  const recipesList = DB.getAllRecipes();
+  const recipesList = await DB.getAllRecipes();
   //const recipesList = getAllRecipes(usernames);
   //console.log(`recipes is ${typeof recipes}`); 
+  res.status(200);
   res.send(recipesList);
+});
+
+// DeleteAuth token if stored in cookie
+apiRouter.delete('/auth/logout', (_req, res) => {
+  res.clearCookie(authCookieName);
+  res.status(204).end();
 });
 
 

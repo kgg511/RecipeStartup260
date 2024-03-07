@@ -1,7 +1,7 @@
 async function generate_recipes(){
     try{
         const usernames = JSON.parse(localStorage.getItem("Usernames"));
-        const response = await fetch(`/api/recipes?usernames=${usernames}`, {
+        const response = await fetch(`/api/recipes`, {
             method: 'GET',
             headers: {'content-type': 'application/json'},
         });
@@ -27,6 +27,21 @@ async function generateLocal(){
         }
     };
 }
+
+async function signOut(){
+    //make fetch request to the sign out endpoint 
+    // if successful, change the page
+    const response = await fetch(`/api/recipes`, {
+        method: 'GET',
+        headers: {'content-type': 'application/json'},
+    });
+    await response.json();
+
+    response.status === 204 ? window.location.href = "index.html" : console.log("sign out failed");
+
+
+
+};
 
 function makeCard(Recipe){ //pass in recipe OBJECT
     const RecipeName = Recipe.RecipeName; //add this one
