@@ -60,9 +60,10 @@ async function deleteRecipe(recipeID){
   console.log(`${result.deletedCount} document(s) deleted`);
 }
 
-function getAllRecipes(){
+async function getAllRecipes(){
   const cursor = recipeCollection.find({});
-  return cursor.toArray();
+  const recipes = await cursor.toArray();
+  return recipes;
 }
 
 function updateMake(Recipe){

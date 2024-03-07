@@ -56,7 +56,7 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     const cardDiv = document.createElement("div");
     cardDiv.className = "card";
     cardDiv.style.width = "18rem";
-    cardDiv.id = Recipe.RecipeID;
+    cardDiv.id = RecipeID;
 
     // Create the flip-card container
     const flipCardDiv = document.createElement("div");

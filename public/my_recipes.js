@@ -31,7 +31,8 @@ async function make_local(RecipesDict, RecipeID, username){
 async function delete_recipe(RecipeID, username){
     //const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
     //const recipe = RecipesDict[RecipeID];
-
+    const elementToDelete = document.getElementById(RecipeID);
+    elementToDelete.remove();
     const deleteRequestObject = {"id": RecipeID};
     try{
         const response = await fetch('/api/recipes', {
@@ -40,15 +41,13 @@ async function delete_recipe(RecipeID, username){
             body: JSON.stringify(deleteRequestObject),
           });
         const recipes = await response.json(); //returns the dictionary recipes for specific user
-        await alter_db(`recipes_${username}`, JSON.stringify(recipes[`recipes_${username}`]));
+        //await alter_db(`recipes_${username}`, JSON.stringify(recipes[`recipes_${username}`]));
     }
     catch{
-        await delete_local(username, RecipeID);
+        //await delete_local(username, RecipeID);
+        console.log("deleting error");
     }
-    finally{
-        const elementToDelete = document.getElementById(RecipeID);
-        elementToDelete.remove();
-    }
+    
 }
 async function delete_local(username, RecipeID){
     const RecipesDict = await fetch_db(`recipes_${username}`);
@@ -78,7 +77,7 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     const cardDiv = document.createElement("div");
     cardDiv.className = "card";
     cardDiv.style.width = "18rem";
-    cardDiv.id = Recipe.RecipeID;
+    cardDiv.id = RecipeID;
 
     // Create the flip-card container
     const flipCardDiv = document.createElement("div");
