@@ -72,7 +72,7 @@ async function submit_recipe() {
     ingredients.push({ Name: name, Amount: amount });
   });
 
-  let RecipeID = await generateUniqueRandomID();
+  //let RecipeID = await generateUniqueRandomID();
 
   const formData = new FormData();
   const fileInput = document.getElementById('imageFile').files[0]; // Take first image file
@@ -105,7 +105,6 @@ async function submit_recipe() {
       RecipeIngredients: ingredients,
       RecipeInstructions: document.getElementById('formInstructions').value,
       RecipeMakes: 0,
-      RecipeID: RecipeID,
       Username: username
     };
 
@@ -131,7 +130,7 @@ async function submit_recipe() {
 }
  
 
-async function addRecipeLocal(recipe){
+async function addRecipeLocal(recipe){ //deprecated function still using recipeID
   //update recipe list for this person
   const username = localStorage.getItem("UserName");
   console.log("start submit_recipe");

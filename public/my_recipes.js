@@ -31,7 +31,7 @@ async function make_local(RecipesDict, RecipeID, username){
 async function delete_recipe(RecipeID, username){
     //const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
     //const recipe = RecipesDict[RecipeID];
-    const deleteRequestObject = {"id": RecipeID, "username": username};
+    const deleteRequestObject = {"id": RecipeID};
     try{
         const response = await fetch('/api/recipes', {
             method: 'DELETE',
@@ -71,7 +71,7 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     const ingredients = Recipe.RecipeIngredients;
     const RecipeInstructions = Recipe.RecipeInstructions;
     const RecipeMakes = Recipe.RecipeMakes;
-    const RecipeID = Recipe.RecipeID;
+    const RecipeID = Recipe._id;
 
     // Create the main container div
     const cardDiv = document.createElement("div");

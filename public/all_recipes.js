@@ -50,7 +50,7 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     const ingredients = Recipe.RecipeIngredients;
     const RecipeInstructions = Recipe.RecipeInstructions;
     const RecipeMakes = Recipe.RecipeMakes;
-    const RecipeID = Recipe.RecipeID;
+    const RecipeID = Recipe._id;
 
     // Create the main container div
     const cardDiv = document.createElement("div");
