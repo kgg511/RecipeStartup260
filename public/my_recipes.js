@@ -215,16 +215,17 @@ function makeCard(Recipe){ //pass in recipe OBJECT
 
 async function generate_recipes(){
     //window.location.href = "my_recipes.html";
-    const username = localStorage.getItem("UserName"); //get this persons recipes
-    document.querySelector("#title").textContent = `My Recipes: ${username}`; //display username
-
-    try{//?username=${username}
-        const response = await fetch(`/api/myRecipes?username=${username}`, {
-            method: 'GET',
-            headers: {'content-type': 'application/json'},
-        });
+    let username = "default";
+    try{
+        const response = await fetch('/api/myRecipes');
+        // const response = await fetch(`/api/myRecipes?username=${username}`, {
+        //     method: 'GET',
+        //     headers: {'content-type': 'application/json'},
+        // });
         console.log("about to make request generate_recipes");
-        const recipes = await response.json()
+        const recipes = await response.json(); // extracts body
+        username = response.user;
+        document.querySelector("#title").textContent = `My Recipes: ${username}`; //display username
 
         console.log("received about to make cards");
         for (const recipe of recipes){
@@ -234,6 +235,9 @@ async function generate_recipes(){
     }
     catch (e){
         console.error(e);
+        let username = localStorage.getItem("UserName"); //get this persons recipes
+        document.querySelector("#title").textContent = `My Recipes: ${username}`; //display username
+
         console.log("generate_recipes for my_recipes local fallback");
         await generateMyRecipesLocal(username);
     }

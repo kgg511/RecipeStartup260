@@ -21,9 +21,6 @@ async function loginCreate(endpoint){
     body: JSON.stringify(makeRequestObject),
     });
 
-    
-    //.json(); //returns userid in body, authToken in header
-
     if(response.ok){
       localStorage.setItem("UserName", username);
       await update_usernames(username);

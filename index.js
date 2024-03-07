@@ -96,12 +96,29 @@ apiRouter.get('/recipes', (req, res) => {
   res.send(recipesList);
 });
 
+
+// secureApiRouter verifies credentials for endpoints
+var secureApiRouter = express.Router();
+apiRouter.use(secureApiRouter);
+
+secureApiRouter.use(async (req, res, next) => {
+  authToken = req.cookies[authCookieName]; //verify that there is a user with the authToken
+  const user = await DB.getUserByToken(authToken);
+  if (user) {
+    req.user = user; //send the user to myRecipes
+    next(); //call myRecipes endpoint, etc
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
+
 // GetMyRecipes (one user's recipes)
-apiRouter.get('/myRecipes', (req, res) => {
+secureApiRouter.get('/myRecipes', async (req, res) => {
   //send the user's recipes
-  const username = req.query.username;
+  const username = req.user.username;
   console.log("about to call get my recipes");
-  const recipesList = getMyRecipes(username); //body stores the username
+  const recipesList = await DB.getRecipes(username);
+  // const recipesList = getMyRecipes(username); //body stores the username
   res.send(recipesList);
 });
 
@@ -187,7 +204,7 @@ let recipes = {}; //recipes_username: {id:recipe, id:recipe}
     //key: recipes_username, value: another dictionary where key = recipeid, value=recipe
  }
 
- function getMyRecipes(username){
+ function getMyRecipes(username){ //instead, fetch from the database
   console.log("in get my recipes");
   const userRecipes = recipes[`recipes_${username}`] || {};
   const recipeList = [];
