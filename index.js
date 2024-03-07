@@ -31,6 +31,8 @@ app.use(`/api`, apiRouter);
 
 // Create User: add to database, set the cookie header, send the user id
 apiRouter.post('/auth/create', async (req, res) => {
+  try{
+    
   console.log("in create user");
   if (await DB.getUser(req.body.username)) {
     res.status(409).send({ msg: 'Existing user' });
@@ -40,10 +42,19 @@ apiRouter.post('/auth/create', async (req, res) => {
     // Set the cookie
     setAuthCookie(res, user.token);
 
+    res.status(200);
     res.send({
       id: user._id,
     });
   }
+
+}
+
+
+  catch{
+    res.status(409).send({ msg: 'Existing user' });
+  }
+  
 });
 
 
@@ -53,11 +64,12 @@ apiRouter.post('/auth/login', async (req, res) => {
   if (user) {
     if (await bcrypt.compare(req.body.password, user.password)) {
       setAuthCookie(res, user.token); //authToken in header
+      res.status(200);
       res.send({ id: user._id }); // put user id in the body
       return;
     }
   }
-  res.status(401).send({ msg: 'Unauthorized' });
+  res.status(401).send({ msg: 'Unauthorized'});
 });
 
 
@@ -76,22 +88,26 @@ app.post('/upload', upload.single('image'), (req, res) => {
 // DeleteRecipes
 apiRouter.delete('/recipes', (req, res) => {
   //send the updated recipes
-  recipes = deleteRecipe(req.body, recipes); //delete Request object contains id & username
+  DB.deleteRecipe(req.body); //expecting a recipe
+  const recipes = DB.getAllRecipes();
   res.send(recipes);
+  //recipes = deleteRecipe(req.body, recipes); //delete Request object contains id & username
 });
 
 // AddRecipe
 apiRouter.post('/recipes', (req, res) => {
   //send the updated recipes
-  recipes = addRecipe(req.body);
+  DB.addRecipe(req.body); //expecting a recipe
+  //recipes = addRecipe(req.body);
+  const recipes = DB.getAllRecipes();
   res.send(recipes);
 });
 
 // GetAllRecipes
-apiRouter.get('/recipes', (req, res) => {
-  //send the updated recipes
-  const usernames = req.query.usernames;
-  const recipesList = getAllRecipes(usernames);
+apiRouter.get('/recipes', (req, res) => { //no need to send stuff
+  //send the updated recipes 
+  const recipesList = DB.getAllRecipes();
+  //const recipesList = getAllRecipes(usernames);
   //console.log(`recipes is ${typeof recipes}`); 
   res.send(recipesList);
 });
