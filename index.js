@@ -1,10 +1,13 @@
 
-import express from 'express' //const express = require('express');
-import multer from 'multer'
+const express = require('express');
+const multer = require('multer');
 
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const DB = require('./database.js');
+//const DB = require('./database.js');
+// Importing specific functions from the database module
+
 
 const app = express();
 const upload = multer({ dest: 'public/uploads/' }); //configure for file uploads
@@ -28,6 +31,7 @@ app.use(`/api`, apiRouter);
 
 // Create User: add to database, set the cookie header, send the user id
 apiRouter.post('/auth/create', async (req, res) => {
+  console.log("in create user");
   if (await DB.getUser(req.body.username)) {
     res.status(409).send({ msg: 'Existing user' });
   } else {
@@ -41,6 +45,7 @@ apiRouter.post('/auth/create', async (req, res) => {
     });
   }
 });
+
 
 //Login existing user
 apiRouter.post('/auth/login', async (req, res) => {

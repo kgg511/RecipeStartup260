@@ -5,7 +5,7 @@ const config = require('./dbConfig.json');
 
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
-const db = client.db('simon');
+const db = client.db('tastetrove');
 const userCollection = db.collection('user'); //user, authToken
 const recipeCollection = db.collection('recipe'); //recipe info (it will all be inside a recipe object)
 
@@ -17,6 +17,10 @@ const recipeCollection = db.collection('recipe'); //recipe info (it will all be 
   console.log(`Unable to connect to database with ${url} because ${ex.message}`);
   process.exit(1);
 });
+
+function getUser(username){
+  return userCollection.findOne({ username: username });
+}
 
 
 function getUserByToken(token) {
@@ -77,3 +81,4 @@ module.exports = {
   getAllRecipes,
   updateMake
 };
+
