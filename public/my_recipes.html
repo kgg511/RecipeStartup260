@@ -23,6 +23,11 @@
       // Call the function to load the page
       document.addEventListener("DOMContentLoaded", (event) => {
       console.log("DOM fully loaded and parsed");
+      document.getElementById("SignOut").addEventListener("click", function(event) {
+        // Prevent the default behavior of the anchor tag
+        event.preventDefault();
+        signOut();
+      });
       generate_recipes();
       });
   </script>
@@ -32,7 +37,8 @@
       <nav>
         <ul><h1>TasteTrove <i class="fa-solid fa-utensils"></i></h1> </ul>
         <ul><h5><button class = "headerLink" id="SignOut" onclick="signOut()">Sign out</button></h5></ul> 
-        <ul><h5><button class = "headerLink" onclick = "window.location.href='all_recipes.html'">All Recipes</button></h5></ul>       
+        <ul><h5><button class = "headerLink" onclick = "window.location.href='all_recipes.html'">All Recipes</button></h5></ul>  
+        <ul><h5><button class = "headerLink" onclick = "window.location.href='add_recipe.html'">Add Recipe</button></h5></ul>     
       </nav>
     </header>
 

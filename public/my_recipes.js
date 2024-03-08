@@ -33,6 +33,16 @@ async function delete_recipe(RecipeID){
     }
 }
 
+async function signOut(){
+    //make fetch request to the sign out endpoint 
+    // if successful, change the page
+    const response = await fetch(`/api/auth/logout`, {
+        method: 'DELETE',
+        headers: {'content-type': 'application/json'},
+    });
+    response.status === 204 ? window.location.href = "index.html" : console.log("sign out failed");
+};
+
 async function generate_recipes(){
     let username = "default";
     try{
@@ -52,7 +62,6 @@ async function generate_recipes(){
         console.log("Error generating recipes in my_recipes.js");
     }
   }
-
 
 function makeCard(Recipe){ //pass in recipe OBJECT
     const RecipeName = Recipe.RecipeName; //add this one

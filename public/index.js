@@ -26,10 +26,14 @@ async function loginCreate(endpoint){
       window.location.href = "all_recipes.html";
     }
     else{ //you're not going anywhere if you couldn't log in or create correctly
+      if(document.querySelector("#wrong")){ //if warning already there
+        document.querySelector("#wrong").remove();
+      }
       console.log("it failed");
       const div = document.querySelector("div.Login");
       const p = document.createElement("p");
-      const type = endpoint.slice(6);
+      const type = endpoint.slice(10);
+      p.setAttribute("id", "wrong");
       p.textContent = `${type} failed. Please try again.`;
       div.appendChild(p);
     }
