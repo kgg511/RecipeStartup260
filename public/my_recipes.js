@@ -17,10 +17,7 @@ async function press_make(RecipeID){
     }
 };
 
-
 async function delete_recipe(RecipeID){
-    //const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
-    //const recipe = RecipesDict[RecipeID];
     const elementToDelete = document.getElementById(RecipeID);
     elementToDelete.remove();
     const deleteRequestObject = {"id": RecipeID};
@@ -30,28 +27,31 @@ async function delete_recipe(RecipeID){
             headers: {'content-type': 'application/json'},
             body: JSON.stringify(deleteRequestObject),
           });
-        const recipes = await response.json(); //returns the dictionary recipes for specific user
-        //await alter_db(`recipes_${username}`, JSON.stringify(recipes[`recipes_${username}`]));
     }
     catch{
-        //await delete_local(username, RecipeID);
         console.log("deleting error");
     }
-    
-}
-async function delete_local(username, RecipeID){
-    const RecipesDict = await fetch_db(`recipes_${username}`);
-    delete RecipesDict[RecipeID];
-    await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
 }
 
-async function fetch_db(name){
-    return JSON.parse(localStorage.getItem(name));
-}
- 
-async function alter_db(name, value){
-    localStorage.setItem(name, value);
-}
+async function generate_recipes(){
+    let username = "default";
+    try{
+        const response = await fetch('/api/myRecipes');
+        console.log("about to make request generate_recipes");
+        const recipes = await response.json(); // extracts body
+        username = response.headers.get('username');
+        document.querySelector("#title").textContent = `My Recipes: ${username}`; //display username
+        console.log("received about to make cards");
+        for (const recipe of recipes){
+            const result = await makeCard(recipe);
+            document.querySelector("div.grid").appendChild(result);
+        }        
+    }
+    catch (e){
+        console.error(e);
+        console.log("Error generating recipes in my_recipes.js");
+    }
+  }
 
 
 function makeCard(Recipe){ //pass in recipe OBJECT
@@ -200,60 +200,4 @@ function makeCard(Recipe){ //pass in recipe OBJECT
 
     // Append the card to grid
     return cardDiv;
-
 }
-
-async function generate_recipes(){
-    //window.location.href = "my_recipes.html";
-    let username = "default";
-    try{
-        const response = await fetch('/api/myRecipes');
-        // const response = await fetch(`/api/myRecipes?username=${username}`, {
-        //     method: 'GET',
-        //     headers: {'content-type': 'application/json'},
-        // });
-        console.log("about to make request generate_recipes");
-        const recipes = await response.json(); // extracts body
-        username = response.headers.get('username');
-        
-        document.querySelector("#title").textContent = `My Recipes: ${username}`; //display username
-
-        console.log("received about to make cards");
-        for (const recipe of recipes){
-            const result = await makeCard(recipe);
-            document.querySelector("div.grid").appendChild(result);
-        }        
-    }
-    catch (e){
-        console.error(e);
-        username = localStorage.getItem("UserName"); //get this persons recipes
-        document.querySelector("#title").textContent = `My Recipes: ${username}`; //display username
-
-        console.log("generate_recipes for my_recipes local fallback");
-        await generateMyRecipesLocal(username);
-    }
-  }
-  async function generateMyRecipesLocal(username){
-    //fetches it from local storage instead
-    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || {};
-    for(let key in RecipesDict){
-        const card = await makeCard(RecipesDict[key]);
-        document.querySelector("div.grid").appendChild(card);
-    } 
-  }
-
-
-  async function update_recipe(RecipeID, username){
-    //update recipe in the database
-    const recipes = localStorage.getItem(`recipes_${username}`, JSON.stringify(RecipesDict));
-    const recipe = recipes[RecipeID];
-    recipe.RecipeMakes += 1;
-    localStorage.setItem(`recipes_${username}`, JSON.stringify(RecipesDict));
-
-    //remove card from html
-    document.querySelector(`#${RecipeID}`).remove();
-
-    //add updated card to html
-    document.querySelector("div.grid").appendChild(makeCard(recipe));
-
-  }

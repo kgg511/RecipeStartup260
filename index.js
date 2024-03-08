@@ -71,13 +71,11 @@ app.post('/upload', upload.single('image'), (req, res) => {
   });
 });
 
-// DeleteRecipes
+// DeleteRecipes: receives a recipe id, deletes the recipe, sends nothing
 apiRouter.delete('/recipes', async (req, res) => {
-  //send the updated recipes
   const recipeID = req.body.id;
-  await DB.deleteRecipe(recipeID); //RECIPEID
-  const recipes = DB.getAllRecipes();
-  res.send(recipes);
+  await DB.deleteRecipe(recipeID);
+  res.status(200);
 });
 
 // AddRecipe
@@ -92,8 +90,6 @@ apiRouter.post('/recipes', (req, res) => {
 apiRouter.get('/recipes', async (req, res) => { //no need to send stuff
   //send the updated recipes 
   const recipesList = await DB.getAllRecipes();
-  //const recipesList = getAllRecipes(usernames);
-  //console.log(`recipes is ${typeof recipes}`); 
   res.status(200);
   res.send(recipesList);
 });
@@ -103,7 +99,6 @@ apiRouter.delete('/auth/logout', (_req, res) => {
   res.clearCookie(authCookieName);
   res.status(204).end();
 });
-
 
 // secureApiRouter verifies credentials for endpoints
 var secureApiRouter = express.Router();

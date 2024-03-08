@@ -1,32 +1,19 @@
 async function generate_recipes(){
     try{
-        const usernames = JSON.parse(localStorage.getItem("Usernames"));
         const response = await fetch(`/api/recipes`, {
             method: 'GET',
             headers: {'content-type': 'application/json'},
         });
         const recipes = await response.json();
         for (const recipe of recipes){
-            const result = await makeCard(recipe);
+            const result = makeCard(recipe);
             document.querySelector("div.grid").appendChild(result);
         }        
     }
     catch{
-        console.log("generate_recipes local fallback");
-        await generateLocal();
+        console.log("Error generating recipes in my_recipes.js");
     }
   }
-async function generateLocal(){
-    const usernames = JSON.parse(localStorage.getItem("Usernames"));
-    for(let user of usernames) 
-    {
-        const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${user}`)) || {}
-        for(let key in RecipesDict){
-            const result = await makeCard(RecipesDict[key]);
-            document.querySelector("div.grid").appendChild(result);
-        }
-    };
-}
 
 async function signOut(){
     //make fetch request to the sign out endpoint 
@@ -39,9 +26,49 @@ async function signOut(){
 
     response.status === 204 ? window.location.href = "index.html" : console.log("sign out failed");
 
-
-
 };
+
+
+async function press_make(RecipeID){
+    //update recipe in the database
+    try{
+        const makeRequestObject = {"id": RecipeID};
+        const response = await fetch(`/api/make`, {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify(makeRequestObject),
+        });
+        const result = await response.json();
+        const elementToReplace = document.getElementById(RecipeID);
+        const makes = elementToReplace.querySelector(".makes");
+        makes.textContent = result.makes;
+    }
+    catch{
+        console.log("press_make error");
+    }
+};
+
+function runRandomlyEvery6Seconds() {
+    // Function to be called every 6 seconds
+    setInterval(alterRandomRecipe, 6000); // 6000 milliseconds = 6 seconds
+}
+
+async function alterRandomRecipe(){
+    //possibly later on add the stand in websocket code using mongodb if necessary
+    //random username
+    const currentUser = localStorage.getItem("UserName");
+    const usernames = JSON.parse(localStorage.getItem("Usernames"));
+    const randomIndex = Math.floor(Math.random() * usernames.length);
+    const randomUsername = usernames[randomIndex];
+
+    //pick a random recipe and press_make on it
+    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${randomUsername}`)) || {};
+    if(Object.keys(RecipesDict).length > 0){
+        const randomRecipeID = Object.keys(RecipesDict)[Math.floor(Math.random() * Object.keys(RecipesDict).length)];
+        await press_make(randomRecipeID);
+    }
+}
+
 
 function makeCard(Recipe){ //pass in recipe OBJECT
     const RecipeName = Recipe.RecipeName; //add this one
@@ -167,52 +194,4 @@ function makeCard(Recipe){ //pass in recipe OBJECT
 
     // Append the card to grid
     return cardDiv;
-}
-
-async function press_make(RecipeID){
-    //update recipe in the database
-    try{
-        const makeRequestObject = {"id": RecipeID};
-        const response = await fetch(`/api/make`, {
-            method: 'POST',
-            headers: {'content-type': 'application/json'},
-            body: JSON.stringify(makeRequestObject),
-        });
-        const result = await response.json();
-        const elementToReplace = document.getElementById(RecipeID);
-        const makes = elementToReplace.querySelector(".makes");
-        makes.textContent = result.makes;
-    }
-    catch{
-        console.log("press_make error");
-    }
-};
-
-async function fetch_db(name){
-    return JSON.parse(localStorage.getItem(name));
-}
- 
-async function alter_db(name, value){
-    localStorage.setItem(name, value);
-}
-
-
-function runRandomlyEvery6Seconds() {
-    // Function to be called every 6 seconds
-    setInterval(alterRandomRecipe, 6000); // 6000 milliseconds = 6 seconds
-}
-
-async function alterRandomRecipe(){
-    //random username
-    const currentUser = localStorage.getItem("UserName");
-    const usernames = JSON.parse(localStorage.getItem("Usernames"));
-    const randomIndex = Math.floor(Math.random() * usernames.length);
-    const randomUsername = usernames[randomIndex];
-
-    //pick a random recipe and press_make on it
-    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${randomUsername}`)) || {};
-    if(Object.keys(RecipesDict).length > 0){
-        const randomRecipeID = Object.keys(RecipesDict)[Math.floor(Math.random() * Object.keys(RecipesDict).length)];
-        await press_make(randomRecipeID);
-    }
 }

@@ -22,8 +22,6 @@ async function loginCreate(endpoint){
     });
 
     if(response.ok){
-      localStorage.setItem("UserName", username);
-      await update_usernames(username);
       console.log(`your username is ${username}`);
       window.location.href = "all_recipes.html";
     }
@@ -39,17 +37,6 @@ async function loginCreate(endpoint){
   catch (error) {
     console.error('Error:', error.message);
     // Handle errors gracefully, e.g., display an error message to the user
-  }
-}
-
-
-async function update_usernames(username){
-  const usernames = JSON.parse(localStorage.getItem("Usernames")) || [];
-
-  const inUsernames = usernames.some(item => item === username);
-  if(!inUsernames){
-    usernames.push(username);
-    localStorage.setItem("Usernames", JSON.stringify(usernames));
   }
 }
 

@@ -53,7 +53,6 @@ function getRecipes(username) { //get the list of recipes for one user
 
 async function deleteRecipe(recipeID){
   const result = await recipeCollection.deleteOne({"_id": new ObjectId(recipeID)});
-  console.log(`${result.deletedCount} document(s) deleted`);
 }
 
 async function getAllRecipes(){

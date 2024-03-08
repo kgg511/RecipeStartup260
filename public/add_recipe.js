@@ -27,10 +27,7 @@ function add_ingredient_line(){
 
     const ingredientList = document.querySelector("#ingredientList");
     ingredientList.appendChild(rowElement);
-//<Section class = "ingredients">
 }
-
-//<label for="imageFile">size too big! (Must be under 400 bytes)</label>
 
 function image_warning(){
   if(document.querySelector("#warning")){ //if warning already there
@@ -55,9 +52,6 @@ async function submit_recipe() {
     window.location.href = "my_recipes.html";
     return;
   }
-  
-  // Update recipe list for this person
-  const username = localStorage.getItem("UserName");
 
   // Code to unpack the form and turn it into an object
   const recipe_form = document.querySelector("#recipeForm");
@@ -71,8 +65,6 @@ async function submit_recipe() {
     let amount = row.querySelector("#ingredientAmount").value;
     ingredients.push({ Name: name, Amount: amount });
   });
-
-  //let RecipeID = await generateUniqueRandomID();
 
   const formData = new FormData();
   const fileInput = document.getElementById('imageFile').files[0]; // Take first image file
@@ -107,41 +99,21 @@ async function submit_recipe() {
       RecipeMakes: 0,
       Username: username
     };
-
+     // Send to add recipe endpoint
     const recipeResponse = await fetch('/api/recipes', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(recipe),
     });
 
-    const recipeDict = await recipeResponse.json();
     // Process data from second fetch
-    localStorage.setItem(`recipes_${username}`, JSON.stringify(recipeDict[`recipes_${username}`]));
     console.log("Recipe submitted!");
     window.location.href = "my_recipes.html";
   } 
   catch (error) {
     console.error('Error:', error.message);
-    // Handle errors gracefully, e.g., display an error message to the user
-    if (recipe) {
-      addRecipeLocal(recipe);
-    }
+    console.log("Error submitting recipe");
   }
-}
- 
-
-async function addRecipeLocal(recipe){ //deprecated function still using recipeID
-  //update recipe list for this person
-  const username = localStorage.getItem("UserName");
-  console.log("start submit_recipe");
-  const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${username}`)) || {}; //fetch one person's recipes
-  RecipesDict[recipe.RecipeID] = recipe; //update map
-  console.log(recipe);
-  localStorage.setItem(`recipes_${username}`, JSON.stringify(RecipesDict));
-
-  console.log("recipe submitted!");
-  window.location.href = "my_recipes.html";
-
 }
 
 function filled_form(){
@@ -167,20 +139,6 @@ function filled_form(){
   });
 
   return true;
-}
-
-async function generateUniqueRandomID() { //database also stores a list of IDs
-  const existingIDs = JSON.parse(localStorage.getItem("existingRecipeIDs")) || []; 
-  //woops gotta turn it in 
-  const max = 1000000;
-  const min = 1;
-  let newID;
-  do {
-    newID = parseInt(Math.random() * (max - min) + min);
-  } while (existingIDs.includes(newID));
-  existingIDs.push(newID)
-  localStorage.setItem("existingRecipeIDs", JSON.stringify(existingIDs)); //add new id
-  return newID;
 }
 
 
