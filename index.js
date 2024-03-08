@@ -4,9 +4,6 @@ const multer = require('multer');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const DB = require('./database.js');
-//const DB = require('./database.js');
-// Importing specific functions from the database module
-
 
 const app = express();
 const upload = multer({ dest: 'public/uploads/' }); //configure for file uploads
@@ -27,35 +24,26 @@ app.use(express.static('public'));
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
-
 // Create User: add to database, set the cookie header, send the user id
 apiRouter.post('/auth/create', async (req, res) => {
   try{
-    
-  console.log("in create user");
-  if (await DB.getUser(req.body.username)) {
-    res.status(409).send({ msg: 'Existing user' });
-  } else {
-    const user = await DB.createUser(req.body.username, req.body.password);
-
-    // Set the cookie
-    setAuthCookie(res, user.token);
-
-    res.status(200);
-    res.send({
-      id: user._id,
-    });
+    if (await DB.getUser(req.body.username)) {
+      res.status(409).send({ msg: 'Existing user' });
+    } 
+    else {
+      const user = await DB.createUser(req.body.username, req.body.password);
+      // Set the cookie
+      setAuthCookie(res, user.token);
+      res.status(200);
+      res.send({
+        id: user._id,
+      });
+    }
   }
-
-}
-
-
   catch{
-    res.status(409).send({ msg: 'Existing user' });
+    console.log("error in create user endpoint");
   }
-  
 });
-
 
 //Login existing user
 apiRouter.post('/auth/login', async (req, res) => {
@@ -71,7 +59,6 @@ apiRouter.post('/auth/login', async (req, res) => {
   res.status(401).send({ msg: 'Unauthorized'});
 });
 
-
 //uploadImages to server
 app.post('/upload', upload.single('image'), (req, res) => {
   const file = req.file;
@@ -84,7 +71,6 @@ app.post('/upload', upload.single('image'), (req, res) => {
   });
 });
 
-
 // DeleteRecipes
 apiRouter.delete('/recipes', async (req, res) => {
   //send the updated recipes
@@ -92,14 +78,12 @@ apiRouter.delete('/recipes', async (req, res) => {
   await DB.deleteRecipe(recipeID); //RECIPEID
   const recipes = DB.getAllRecipes();
   res.send(recipes);
-  //recipes = deleteRecipe(req.body, recipes); //delete Request object contains id & username
 });
 
 // AddRecipe
 apiRouter.post('/recipes', (req, res) => {
   //send the updated recipes
   DB.addRecipe(req.body); //expecting a recipe
-  //recipes = addRecipe(req.body);
   const recipes = DB.getAllRecipes();
   res.send(recipes);
 });
@@ -175,78 +159,3 @@ function setAuthCookie(res, authToken) {
     sameSite: 'strict',
   });
 }
-
-////////////////////////////////////////OLD FUNCTIONS////////////////////////////////////////
-let recipes = {}; //recipes_username: {id:recipe, id:recipe}
- function deleteRecipe(deleteObject){ //find the person, find the recipe delete from dictionary
-  const RecipeID = deleteObject.id
-  const username = deleteObject.username
-
-  if (recipes.hasOwnProperty(`recipes_${username}`) && recipes[`recipes_${username}`].hasOwnProperty(RecipeID)) {
-    delete recipes[`recipes_${username}`][RecipeID];
-    console.log(`Recipe deleted successfully.`);
-  } else {
-      console.log(`Recipe not found in the array.`);
-  }
-  return recipes
- }
-
- function addRecipe(recipe){
-  if(typeof recipes === 'undefined'){
-    recipes = {};
-  }
-  const a = recipe;
-  const b = recipes;
-  //mainDict.nestedDict.key1 = 'new value';
-  console.log(`recipe passed in ${recipe}`)
-  console.log('here are the keys')
-  const keys = Object.keys(recipes);
-  keys.forEach(key => {
-      console.log(key);
-  });
-  if(!recipes.hasOwnProperty(`recipes_${recipe.UserName}`)){
-    console.log(`${recipe.UserName} has nothing time reset`);
-    recipes[`recipes_${recipe.UserName}`] = {}; 
-  }
-  recipes[`recipes_${recipe.UserName}`][recipe.RecipeID] = recipe;
-  
-  console.log("addRecipe");
-  return recipes;
- }
-//recipes_username
- function getAllRecipes(usernames){
-  const n = usernames.split(",");
-  const recipeList = [];
-  //console.log(recipes);
-  const recipesExample = recipes;
-    for(let user of n){
-      const userDict = recipes[`recipes_${user}`]
-        for(let key in userDict){
-          recipeList.push(userDict[key])
-        }
-    };
-    return recipeList;
-    //key: recipes_username, value: another dictionary where key = recipeid, value=recipe
- }
-
- function getMyRecipes(username){ //instead, fetch from the database
-  console.log("in get my recipes");
-  const userRecipes = recipes[`recipes_${username}`] || {};
-  const recipeList = [];
-  console.log("about");
-  for(let key in userRecipes){
-    recipeList.push(userRecipes[key])
-  }
-  return recipeList;
- }
-
- function updateMake(makeRequestObject){
-  const RecipeID = makeRequestObject.id
-  const username = makeRequestObject.username
-
-  if(recipes[`recipes_${username}`] && recipes[`recipes_${username}`][RecipeID]){
-    recipes[`recipes_${username}`][RecipeID].RecipeMakes += 1
-  }
-  
-  return recipes;
- }
