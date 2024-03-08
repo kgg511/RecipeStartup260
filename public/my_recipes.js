@@ -1,17 +1,16 @@
 async function press_make(RecipeID, username){
     //update recipe in the database
     try{
-        const makeRequestObject = {"id": RecipeID, "username": username};
+        const makeRequestObject = {"id": RecipeID};
         const response = await fetch(`/api/make`, {
             method: 'POST',
             headers: {'content-type': 'application/json'},
             body: JSON.stringify(makeRequestObject),
         });
-        const recipes = await response.json();
-        await alter_db(`recipes_${username}`, JSON.stringify(recipes[`recipes_${username}`]));
+        const result = await response.json();
         const elementToReplace = document.getElementById(RecipeID);
         const makes = elementToReplace.querySelector(".makes");
-        makes.textContent = recipes[`recipes_${username}`][RecipeID].RecipeMakes;
+        makes.textContent = result.makes;
     }
     catch{
         const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
@@ -28,7 +27,7 @@ async function make_local(RecipesDict, RecipeID, username){
     makes.textContent = RecipesDict[RecipeID].RecipeMakes;
 }
 
-async function delete_recipe(RecipeID, username){
+async function delete_recipe(RecipeID){
     //const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
     //const recipe = RecipesDict[RecipeID];
     const elementToDelete = document.getElementById(RecipeID);
@@ -88,7 +87,7 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     const a = document.createElement("a");
     a.className = "delete";
     a.addEventListener("click", async () => {
-        await delete_recipe(RecipeID, UserName);
+        await delete_recipe(RecipeID);
     });
 
     const i = document.createElement("i");

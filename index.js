@@ -84,10 +84,11 @@ app.post('/upload', upload.single('image'), (req, res) => {
   });
 });
 
+
 // DeleteRecipes
 apiRouter.delete('/recipes', async (req, res) => {
   //send the updated recipes
-  const recipeID = req.body;
+  const recipeID = req.body.id;
   await DB.deleteRecipe(recipeID); //RECIPEID
   const recipes = DB.getAllRecipes();
   res.send(recipes);
@@ -147,12 +148,16 @@ secureApiRouter.get('/myRecipes', async (req, res) => {
 });
 
 // makeRecipe ('make' the specified recipe, send RECIPE)
-apiRouter.post('/make', (req, res) => {
+apiRouter.post('/make', async (req, res) => {
   //send the user's recipes
   //const recipeToMake = req.query.recipe;
   console.log("about to call updatemake");
-  recipes = updateMake(req.body); //body stores the username
-  res.send(recipes);
+
+  const makes = await DB.updateMake(req.body.id);
+  console.log(`makes is ${makes}`);
+  console.log(typeof makes); // Output: object
+  res.status(200);
+  res.send({makes: makes});
 });
 
 

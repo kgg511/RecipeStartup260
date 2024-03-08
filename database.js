@@ -52,11 +52,7 @@ function getRecipes(username) { //get the list of recipes for one user
 }
 
 async function deleteRecipe(recipeID){
-  // Delete a recipe from the database
-  //_id: new ObjectId(recipeID)}
-  //db.myCol.find({_id : ObjectId("60f532903ded77001064ae92")});
   const result = await recipeCollection.deleteOne({"_id": new ObjectId(recipeID)});
-  //await recipeCollection.deleteOne({_id: new ObjectId(recipeID)});
   console.log(`${result.deletedCount} document(s) deleted`);
 }
 
@@ -66,12 +62,17 @@ async function getAllRecipes(){
   return recipes;
 }
 
-function updateMake(Recipe){
+async function updateMake(recipeId){
   //find the recipe, add one to the makes field, update the recipe
-  const query = { _id: Recipe._id};
-  const recipeToUpdate = recipeCollection.find(query);
-  recipeToUpdate.makes += 1;
-  recipeCollection.updateOne(query, recipeToUpdate);
+  const query = {"_id": new ObjectId(recipeId)};
+  
+  const updateOperation = { $inc: { RecipeMakes: 1 } };
+  await recipeCollection.updateOne(query, updateOperation);
+
+  const cursor = recipeCollection.find(query);
+  const updatedRecipe = await cursor.next();
+  //return the number of makes
+  return updatedRecipe.RecipeMakes;
 }
 
 module.exports = {
