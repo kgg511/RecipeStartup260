@@ -53,6 +53,13 @@ async function submit_recipe() {
     return;
   }
 
+  const data = await fetch("/api/getUsername",{
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  })
+  const userObject = await data.json();
+  const username = userObject.username;
+
   // Code to unpack the form and turn it into an object
   const recipe_form = document.querySelector("#recipeForm");
   const ingredients = []; // List of objects
@@ -105,6 +112,7 @@ async function submit_recipe() {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(recipe),
     });
+
 
     // Process data from second fetch
     console.log("Recipe submitted!");

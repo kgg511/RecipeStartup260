@@ -18,12 +18,10 @@ async function generate_recipes(){
 async function signOut(){
     //make fetch request to the sign out endpoint 
     // if successful, change the page
-    const response = await fetch(`/api/recipes`, {
+    const response = await fetch(`/api/auth/logout`, {
         method: 'GET',
         headers: {'content-type': 'application/json'},
     });
-    await response.json();
-
     response.status === 204 ? window.location.href = "index.html" : console.log("sign out failed");
 
 };

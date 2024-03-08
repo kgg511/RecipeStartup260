@@ -86,6 +86,7 @@ apiRouter.post('/recipes', (req, res) => {
   res.send(recipes);
 });
 
+
 // GetAllRecipes
 apiRouter.get('/recipes', async (req, res) => { //no need to send stuff
   //send the updated recipes 
@@ -98,6 +99,15 @@ apiRouter.get('/recipes', async (req, res) => { //no need to send stuff
 apiRouter.delete('/auth/logout', (_req, res) => {
   res.clearCookie(authCookieName);
   res.status(204).end();
+});
+
+apiRouter.get('/getUsername', async (req, res) => {
+  // Retrieve the cookie value
+  const authToken = req.cookies[authCookieName];
+  const user = await DB.getUserByToken(authToken);
+  const username = user.username;
+  // Send the username
+  res.send({ username });
 });
 
 // secureApiRouter verifies credentials for endpoints

@@ -50,6 +50,14 @@ nav{
 
 }
 
+.headerLink {
+  /* Your CSS rules here */
+  color: Black;
+  text-decoration: none;
+  background-color: transparent;
+  border: 2px solid transparent;
+  
+}
 
 a {
   color: white;
