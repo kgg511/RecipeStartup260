@@ -149,10 +149,6 @@ secureApiRouter.get('/myRecipes', async (req, res) => {
 
 // makeRecipe ('make' the specified recipe, send RECIPE)
 apiRouter.post('/make', async (req, res) => {
-  //send the user's recipes
-  //const recipeToMake = req.query.recipe;
-  console.log("about to call updatemake");
-
   const makes = await DB.updateMake(req.body.id);
   console.log(`makes is ${makes}`);
   console.log(typeof makes); // Output: object

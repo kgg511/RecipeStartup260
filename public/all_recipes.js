@@ -153,7 +153,7 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     buttonElement.className = "btn btn-primary";
     buttonElement.innerHTML = '<i class="fa-solid fa-cookie"></i>';
     buttonElement.addEventListener("click", async () => {
-        await press_make(RecipeID, UserName);
+        await press_make(RecipeID);
     });
 
     const pElement = document.createElement("p");
@@ -169,36 +169,24 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     return cardDiv;
 }
 
-
-async function press_make(RecipeID, username){
+async function press_make(RecipeID){
     //update recipe in the database
     try{
-        const makeRequestObject = {"id": RecipeID, "username": username};
+        const makeRequestObject = {"id": RecipeID};
         const response = await fetch(`/api/make`, {
             method: 'POST',
             headers: {'content-type': 'application/json'},
             body: JSON.stringify(makeRequestObject),
         });
-        const recipes = await response.json();
-        await alter_db(`recipes_${username}`, JSON.stringify(recipes[`recipes_${username}`]));
+        const result = await response.json();
         const elementToReplace = document.getElementById(RecipeID);
         const makes = elementToReplace.querySelector(".makes");
-        makes.textContent = recipes[`recipes_${username}`][RecipeID].RecipeMakes;
+        makes.textContent = result.makes;
     }
     catch{
-        const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
-        console.log("press_make local fallback");
-        make_local(RecipesDict, RecipeID, username);
+        console.log("press_make error");
     }
 };
-async function make_local(RecipesDict, RecipeID, username){
-    //recipesDict is for ONE user
-    RecipesDict[RecipeID].RecipeMakes += 1;
-    await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
-    const elementToReplace = document.getElementById(RecipeID);
-    const makes = elementToReplace.querySelector(".makes");
-    makes.textContent = RecipesDict[RecipeID].RecipeMakes;
-}
 
 async function fetch_db(name){
     return JSON.parse(localStorage.getItem(name));
@@ -225,6 +213,6 @@ async function alterRandomRecipe(){
     const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${randomUsername}`)) || {};
     if(Object.keys(RecipesDict).length > 0){
         const randomRecipeID = Object.keys(RecipesDict)[Math.floor(Math.random() * Object.keys(RecipesDict).length)];
-        await press_make(randomRecipeID, randomUsername);
+        await press_make(randomRecipeID);
     }
 }

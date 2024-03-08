@@ -1,4 +1,4 @@
-async function press_make(RecipeID, username){
+async function press_make(RecipeID){
     //update recipe in the database
     try{
         const makeRequestObject = {"id": RecipeID};
@@ -13,19 +13,10 @@ async function press_make(RecipeID, username){
         makes.textContent = result.makes;
     }
     catch{
-        const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
-        console.log("press_make local fallback");
-        make_local(RecipesDict, RecipeID, username);
+        console.log("press_make error");
     }
 };
-async function make_local(RecipesDict, RecipeID, username){
-    //recipesDict is for ONE user
-    RecipesDict[RecipeID].RecipeMakes += 1;
-    await alter_db(`recipes_${username}`, JSON.stringify(RecipesDict));
-    const elementToReplace = document.getElementById(RecipeID);
-    const makes = elementToReplace.querySelector(".makes");
-    makes.textContent = RecipesDict[RecipeID].RecipeMakes;
-}
+
 
 async function delete_recipe(RecipeID){
     //const RecipesDict = await fetch_db(`recipes_${username}`); //get the recipes
