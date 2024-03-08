@@ -94,3 +94,15 @@ For this deliverable I added backend endpoints that receive recipe makes, new re
 - Backend service endpoints: Endpoints for uploading images to the server, deleting/adding/updating recipes, and fetching recipes.
 - Frontend calls service endpoints: The frontend calls the endpoints using fetch.
 
+## Login Deliverable ##
+For this deliverable I associate the recipes being added with the logged in user.
+
+- MongoDB database created: done.
+- Stores recipes and username/password data in MongoDB: done.
+- User registration: Creates a new account in the database.
+- Existing user: When recipes are added they are associated with the user that created them in the database.
+- Use MongoDB to store credentials and recipes: Stores user data in one table (username, password, authtoken) and recipe data in another table (recipe info, which includes username).
+- Fetches data: Uses recipes from database to load pages. Uses credential data to authenticate users before fetching user recipes.
+- Restricts functionality: It will not load the user's recipes until the cookie is authenticated. On the frontend you cannot see or add recipes unless logged in. You must login with an existing username/password or create an account with a username that is not in the database.
+
+
