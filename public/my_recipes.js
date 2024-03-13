@@ -1,3 +1,4 @@
+let socket;
 async function press_make(RecipeID){
     //update recipe in the database
     try{
@@ -11,11 +12,44 @@ async function press_make(RecipeID){
         const elementToReplace = document.getElementById(RecipeID);
         const makes = elementToReplace.querySelector(".makes");
         makes.textContent = result.makes;
+        broadcast_makes(RecipeID, result.makes);
     }
     catch{
         console.log("press_make error");
     }
 };
+
+function update_makes(RecipeID, makes){
+    //updates the UI when receive weboscket message
+    const recipeCard = document.getElementById(RecipeID);
+    const makesElement = recipeCard.querySelector('.makes');
+    makesElement.textContent = makes;
+}
+
+function broadcast_makes(RecipeID, makes){
+    message = {
+        "RecipeID": RecipeID,
+        "makes": makes
+    };
+    socket.send(JSON.stringify(message));
+}
+
+async function configureWebSocket() {
+    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+    socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+    socket.onopen = (event) => {
+        console.log("connected to websocket");
+    };
+    socket.onclose = (event) => {
+        console.log("disconnected from websocket");
+    };
+    socket.onmessage = async (event) => {
+        //the only message are makes. Take out the RecipeID and makes
+        console.log(event);
+        const msg = JSON.parse(await event.data.text());
+        update_makes(msg.RecipeID, msg.makes);
+    };
+  }
 
 async function delete_recipe(RecipeID){
     const elementToDelete = document.getElementById(RecipeID);
@@ -55,7 +89,8 @@ async function generate_recipes(){
         for (const recipe of recipes){
             const result = await makeCard(recipe);
             document.querySelector("div.grid").appendChild(result);
-        }        
+        }
+        await configureWebSocket(); //create websocket whenever page is loaded         
     }
     catch (e){
         console.error(e);
