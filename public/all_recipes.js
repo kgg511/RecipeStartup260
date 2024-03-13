@@ -1,3 +1,4 @@
+let socket;
 async function generate_recipes(){
     try{
         const response = await fetch(`/api/recipes`, {
@@ -40,6 +41,8 @@ async function press_make(RecipeID){
         const elementToReplace = document.getElementById(RecipeID);
         const makes = elementToReplace.querySelector(".makes");
         makes.textContent = result.makes;
+
+        broadcast_makes(RecipeID, result.makes);
     }
     catch{
         console.log("press_make error");
@@ -58,7 +61,7 @@ function broadcast_makes(RecipeID, makes){
         "RecipeID": RecipeID,
         "makes": makes
     };
-    ws.send(JSON.stringify(message));
+    socket.send(JSON.stringify(message));
 }
 
 async function configureWebSocket() {
@@ -72,8 +75,9 @@ async function configureWebSocket() {
     };
     socket.onmessage = async (event) => {
         //the only message are makes. Take out the RecipeID and makes
-      const msg = JSON.parse(event.data);
-      update_makes(msg.RecipeID, msg.makes);
+        console.log(event);
+        const msg = JSON.parse(await event.data.text());
+        update_makes(msg.RecipeID, msg.makes);
     };
   }
 

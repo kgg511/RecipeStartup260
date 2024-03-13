@@ -4,6 +4,7 @@ const multer = require('multer');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const DB = require('./database.js');
+const { peerProxy } = require('./peerProxy.js');
 
 const app = express();
 const upload = multer({ dest: 'public/uploads/' }); //configure for file uploads
