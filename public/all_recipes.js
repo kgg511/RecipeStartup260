@@ -8,7 +8,8 @@ async function generate_recipes(){
         for (const recipe of recipes){
             const result = makeCard(recipe);
             document.querySelector("div.grid").appendChild(result);
-        }        
+        } 
+        await configureWebSocket(); //create websocket whenever page is loaded     
     }
     catch{
         console.log("Error generating recipes in my_recipes.js");
@@ -45,34 +46,36 @@ async function press_make(RecipeID){
     }
 };
 
-async function update_makes(RecipeID, makes){
+function update_makes(RecipeID, makes){
     //updates the UI when receive weboscket message
     const recipeCard = document.getElementById(RecipeID);
     const makesElement = recipeCard.querySelector('.makes');
     makesElement.textContent = makes;
 }
 
-function runRandomlyEvery6Seconds() {
-    // Function to be called every 6 seconds
-    setInterval(alterRandomRecipe, 6000); // 6000 milliseconds = 6 seconds
+function broadcast_makes(RecipeID, makes){
+    message = {
+        "RecipeID": RecipeID,
+        "makes": makes
+    };
+    ws.send(JSON.stringify(message));
 }
 
-async function alterRandomRecipe(){
-    //possibly later on add the stand in websocket code using mongodb if necessary
-    //random username
-    const currentUser = localStorage.getItem("UserName");
-    const usernames = JSON.parse(localStorage.getItem("Usernames"));
-    const randomIndex = Math.floor(Math.random() * usernames.length);
-    const randomUsername = usernames[randomIndex];
-
-    //pick a random recipe and press_make on it
-    const RecipesDict = JSON.parse(localStorage.getItem(`recipes_${randomUsername}`)) || {};
-    if(Object.keys(RecipesDict).length > 0){
-        const randomRecipeID = Object.keys(RecipesDict)[Math.floor(Math.random() * Object.keys(RecipesDict).length)];
-        await press_make(randomRecipeID);
-    }
-}
-
+async function configureWebSocket() {
+    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+    socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+    socket.onopen = (event) => {
+        console.log("connected to websocket");
+    };
+    socket.onclose = (event) => {
+        console.log("disconnected from websocket");
+    };
+    socket.onmessage = async (event) => {
+        //the only message are makes. Take out the RecipeID and makes
+      const msg = JSON.parse(event.data);
+      update_makes(msg.RecipeID, msg.makes);
+    };
+  }
 
 function makeCard(Recipe){ //pass in recipe OBJECT
     const RecipeName = Recipe.RecipeName; //add this one
