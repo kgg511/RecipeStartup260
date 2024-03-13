@@ -45,6 +45,13 @@ async function press_make(RecipeID){
     }
 };
 
+async function update_makes(RecipeID, makes){
+    //updates the UI when receive weboscket message
+    const recipeCard = document.getElementById(RecipeID);
+    const makesElement = recipeCard.querySelector('.makes');
+    makesElement.textContent = makes;
+}
+
 function runRandomlyEvery6Seconds() {
     // Function to be called every 6 seconds
     setInterval(alterRandomRecipe, 6000); // 6000 milliseconds = 6 seconds
