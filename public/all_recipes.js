@@ -1,5 +1,21 @@
 let socket;
 async function generate_recipes(){
+    // document.getElementById("SignOut").addEventListener("click", function(event) {
+    //     // Prevent the default behavior of the anchor tag
+    //     event.preventDefault();
+    //     signOut();
+    //   });
+
+
+      document.addEventListener("DOMContentLoaded", (event) => {
+        console.log("DOM fully loaded and parsed");
+        document.getElementById("SignOut").addEventListener("click", function(event) {
+          // Prevent the default behavior of the anchor tag
+          event.preventDefault();
+          signOut();
+        });
+    });
+
     try{
         const response = await fetch(`/api/recipes`, {
             method: 'GET',
@@ -15,7 +31,7 @@ async function generate_recipes(){
     catch{
         console.log("Error generating recipes in my_recipes.js");
     }
-  }
+}
 
 async function signOut(){
     //make fetch request to the sign out endpoint 
@@ -206,3 +222,5 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     // Append the card to grid
     return cardDiv;
 }
+
+generate_recipes();

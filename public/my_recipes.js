@@ -78,6 +78,15 @@ async function signOut(){
 };
 
 async function generate_recipes(){
+    document.addEventListener("DOMContentLoaded", (event) => {
+        console.log("DOM fully loaded and parsed");
+        document.getElementById("SignOut").addEventListener("click", function(event) {
+          // Prevent the default behavior of the anchor tag
+          event.preventDefault();
+          signOut();
+        });
+    });
+
     let username = "default";
     try{
         const response = await fetch('/api/myRecipes');
@@ -245,3 +254,5 @@ function makeCard(Recipe){ //pass in recipe OBJECT
     // Append the card to grid
     return cardDiv;
 }
+
+generate_recipes();
