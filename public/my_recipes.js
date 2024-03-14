@@ -18,7 +18,6 @@ async function press_make(RecipeID){
         console.log("press_make error");
     }
 };
-
 function update_makes(RecipeID, makes){
     //updates the UI when receive weboscket message
     const recipeCard = document.getElementById(RecipeID);

@@ -1,12 +1,5 @@
 let socket;
 async function generate_recipes(){
-    // document.getElementById("SignOut").addEventListener("click", function(event) {
-    //     // Prevent the default behavior of the anchor tag
-    //     event.preventDefault();
-    //     signOut();
-    //   });
-
-
       document.addEventListener("DOMContentLoaded", (event) => {
         console.log("DOM fully loaded and parsed");
         document.getElementById("SignOut").addEventListener("click", function(event) {
@@ -15,7 +8,6 @@ async function generate_recipes(){
           signOut();
         });
     });
-
     try{
         const response = await fetch(`/api/recipes`, {
             method: 'GET',
@@ -42,8 +34,6 @@ async function signOut(){
     });
     response.status === 204 ? window.location.href = "index.html" : console.log("sign out failed");
 };
-
-
 async function press_make(RecipeID){
     //update recipe in the database
     try{
@@ -59,7 +49,6 @@ async function press_make(RecipeID){
             const elementToReplace = document.getElementById(RecipeID);
             const makes = elementToReplace.querySelector(".makes");
             makes.textContent = result.makes;
-
             broadcast_makes(RecipeID, result.makes);
         }
         

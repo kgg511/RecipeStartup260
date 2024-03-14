@@ -21,12 +21,9 @@ const recipeCollection = db.collection('recipe'); //recipe info (it will all be 
 function getUser(username){
   return userCollection.findOne({ username: username });
 }
-
-
 function getUserByToken(token) {
   return userCollection.findOne({ token: token });
 }
-
 async function createUser(username, password) {
   // Hash the password before we insert it into the database
   const passwordHash = await bcrypt.hash(password, 10);
@@ -68,16 +65,13 @@ async function updateMake(recipeId){
   if (documents.length == 0) {
     return 0;
   }
-
   const updateOperation = { $inc: { RecipeMakes: 1 } };
   await recipeCollection.updateOne(query, updateOperation);
-
   const cursor = recipeCollection.find(query);
   const updatedRecipe = await cursor.next();
   //return the number of makes
   return updatedRecipe.RecipeMakes;
 }
-
 module.exports = {
   getUser,
   getUserByToken,
