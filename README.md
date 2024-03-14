@@ -105,4 +105,11 @@ For this deliverable I associate the recipes being added with the logged in user
 - Fetches data: Uses recipes from database to load pages. Uses credential data to authenticate users before fetching user recipes.
 - Restricts functionality: It will not load the user's recipes until the cookie is authenticated. On the frontend you cannot see or add recipes unless logged in. You must login with an existing username/password or create an account with a username that is not in the database.
 
+## WebSocket Deliverable ##
+For this deliverable I used webSocket to update the ‘makes’ on the recipes in realtime.
+- Backend listens for WebSocket connection: done.
+- Frontend makes WebSocket connection: done.
+- Data sent over WebSocket connection: done.
+- WebSocket data displayed - All recipe ‘makes’ display in real time.
+
 

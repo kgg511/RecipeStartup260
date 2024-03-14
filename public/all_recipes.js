@@ -74,7 +74,6 @@ function deleted_message(RecipeID){
     //create p element to tell them it deleted
 }
 
-
 function update_makes(RecipeID, makes){
     //updates the UI when receive weboscket message
     const recipeCard = document.getElementById(RecipeID);
