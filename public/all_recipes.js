@@ -51,12 +51,29 @@ async function press_make(RecipeID){
             makes.textContent = result.makes;
             broadcast_makes(RecipeID, result.makes);
         }
+        else{
+            deleted_message(RecipeID);
+        }
         
     }
     catch{
         console.log("press_make error");
     }
 };
+
+function deleted_message(RecipeID){
+    //delete the recipe from the UI
+    const elementToDelete = document.getElementById(RecipeID);
+    //check if p was already added
+    if (elementToDelete.querySelector("#deletedMessage") === null){
+        const p = document.createElement("p");
+        p.id = "deletedMessage";
+        p.textContent = "Recipe Deleted. Refresh page.";
+        elementToDelete.appendChild(p);
+    }
+    //create p element to tell them it deleted
+}
+
 
 function update_makes(RecipeID, makes){
     //updates the UI when receive weboscket message
