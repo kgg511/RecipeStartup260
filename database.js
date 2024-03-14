@@ -64,7 +64,11 @@ async function getAllRecipes(){
 async function updateMake(recipeId){
   //find the recipe, add one to the makes field, update the recipe
   const query = {"_id": new ObjectId(recipeId)};
-  
+  const documents = await recipeCollection.find(query).toArray();
+  if (documents.length == 0) {
+    return 0;
+  }
+
   const updateOperation = { $inc: { RecipeMakes: 1 } };
   await recipeCollection.updateOne(query, updateOperation);
 

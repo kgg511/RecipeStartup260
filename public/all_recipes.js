@@ -54,11 +54,15 @@ async function press_make(RecipeID){
             body: JSON.stringify(makeRequestObject),
         });
         const result = await response.json();
-        const elementToReplace = document.getElementById(RecipeID);
-        const makes = elementToReplace.querySelector(".makes");
-        makes.textContent = result.makes;
 
-        broadcast_makes(RecipeID, result.makes);
+        if(result.makes != 0){ //0 is error case (deleted recipe)
+            const elementToReplace = document.getElementById(RecipeID);
+            const makes = elementToReplace.querySelector(".makes");
+            makes.textContent = result.makes;
+
+            broadcast_makes(RecipeID, result.makes);
+        }
+        
     }
     catch{
         console.log("press_make error");
