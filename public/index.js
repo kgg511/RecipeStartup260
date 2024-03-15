@@ -9,10 +9,9 @@ async function register() {
 async function loginCreate(endpoint){
   const username = document.querySelector("#exampleUsername")?.value;
   const password = document.querySelector("#examplePassword")?.value;
-
   const makeRequestObject = {username: username, password: password};
-
   try{
+    if(username === "" || password === ""){loginRegisterError(endpoint); return;}
     const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
@@ -26,22 +25,27 @@ async function loginCreate(endpoint){
       window.location.href = "all_recipes.html";
     }
     else{ //you're not going anywhere if you couldn't log in or create correctly
-      if(document.querySelector("#wrong")){ //if warning already there
-        document.querySelector("#wrong").remove();
-      }
-      console.log("it failed");
-      const div = document.querySelector("div.Login");
-      const p = document.createElement("p");
-      const type = endpoint.slice(10);
-      p.setAttribute("id", "wrong");
-      p.textContent = `${type} failed. Please try again.`;
-      div.appendChild(p);
+      loginRegisterError(endpoint);
     }
 }
   catch (error) {
     console.error('Error:', error.message);
     // Handle errors gracefully, e.g., display an error message to the user
   }
+}
+
+function loginRegisterError(endpoint){
+  if(document.querySelector("#wrong")){ //if warning already there
+    document.querySelector("#wrong").remove();
+  }
+  //updates UI to display error message for incorrect username/password/blank fields
+  console.log("it failed");
+  const div = document.querySelector("div.Login");
+  const p = document.createElement("p");
+  const type = endpoint.slice(10);
+  p.setAttribute("id", "wrong");
+  p.textContent = `${type} failed. Please try again.`;
+  div.appendChild(p);
 }
 
 function displayImage() {

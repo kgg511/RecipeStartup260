@@ -28,11 +28,13 @@ app.use(`/api`, apiRouter);
 // Create User: add to database, set the cookie header, send the user id
 apiRouter.post('/auth/create', async (req, res) => {
   try{
-    if (await DB.getUser(req.body.username)) {
+    theName = req.body.username;
+    pass = req.body.password;
+    if (await DB.getUser(theName)) {
       res.status(409).send({ msg: 'Existing user' });
-    } 
+    }
     else {
-      const user = await DB.createUser(req.body.username, req.body.password);
+      const user = await DB.createUser(theName, pass);
       // Set the cookie
       setAuthCookie(res, user.token);
       res.status(200);
