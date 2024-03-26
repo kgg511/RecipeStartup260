@@ -1,178 +1,73 @@
-const express = require('express');
-const multer = require('multer');
-
-const cookieParser = require('cookie-parser');
-const bcrypt = require('bcrypt');
-const DB = require('./database.js');
-const { peerProxy } = require('./peerProxy.js');
-
-const app = express();
-const upload = multer({ dest: 'public/uploads/' }); //configure for file uploads
-const authCookieName = 'token';
-// The service port. In production the frontend code is statically hosted by the service on the same port.
-const port = process.argv.length > 2 ? process.argv[2] : 3000;
-
-// JSON body parsing using built-in middleware
-app.use(express.json());
-
-// Use the cookie parser middleware for tracking authentication tokens
-app.use(cookieParser());
-
-// Serve up the frontend static content hosting
-app.use(express.static('public'));
-
-// Router for service endpoints
-var apiRouter = express.Router();
-app.use(`/api`, apiRouter);
-
-// Create User: add to database, set the cookie header, send the user id
-apiRouter.post('/auth/create', async (req, res) => {
-  try{
-    theName = req.body.username;
-    pass = req.body.password;
-    if (await DB.getUser(theName)) {
-      res.status(409).send({ msg: 'Existing user' });
-    }
-    else {
-      const user = await DB.createUser(theName, pass);
-      // Set the cookie
-      setAuthCookie(res, user.token);
-      res.status(200);
-      res.send({
-        id: user._id,
-      });
-    }
-  }
-  catch{
-    console.log("error in create user endpoint");
-  }
-});
-
-//Login existing user
-apiRouter.post('/auth/login', async (req, res) => {
-  const user = await DB.getUser(req.body.username);
-  if (user) {
-    if (await bcrypt.compare(req.body.password, user.password)) {
-      setAuthCookie(res, user.token); //authToken in header
-      res.status(200);
-      res.send({ id: user._id }); // put user id in the body
-      return;
-    }
-  }
-  res.status(401).send({ msg: 'Unauthorized'});
-});
-
-//uploadImages to server
-app.post('/upload', upload.single('image'), (req, res) => {
-  const file = req.file;
-  if (!file) {
-    return res.status(400).json({ error: 'No file uploaded' });
-  }
-  res.send({
-    filename: file.filename,
-    path: file.path
-  });
-});
-
-// DeleteRecipes: receives a recipe id, deletes the recipe, sends nothing
-apiRouter.delete('/recipes', async (req, res) => {
-  const recipeID = req.body.id;
-  await DB.deleteRecipe(recipeID);
-  res.status(200);
-});
-
-// AddRecipe
-apiRouter.post('/recipes', (req, res) => {
-  //send the updated recipes
-  DB.addRecipe(req.body); //expecting a recipe
-  const recipes = DB.getAllRecipes();
-  res.send(recipes);
-});
-
-
-// GetAllRecipes
-apiRouter.get('/recipes', async (req, res) => { //no need to send stuff
-  //send the updated recipes 
-  const recipesList = await DB.getAllRecipes();
-  res.status(200);
-  res.send(recipesList);
-});
-
-// DeleteAuth token if stored in cookie
-apiRouter.delete('/auth/logout', (_req, res) => {
-  res.clearCookie(authCookieName);
-  res.status(204).end();
-});
-
-apiRouter.get('/getUsername', async (req, res) => {
-  // Retrieve the cookie value
-  const authToken = req.cookies[authCookieName];
-  const user = await DB.getUserByToken(authToken);
-  const username = user.username;
-  // Send the username
-  res.send({ username });
-});
-
-// secureApiRouter verifies credentials for endpoints
-var secureApiRouter = express.Router();
-apiRouter.use(secureApiRouter);
-
-secureApiRouter.use(async (req, res, next) => {
-  authToken = req.cookies[authCookieName]; //verify that there is a user with the authToken
-  const user = await DB.getUserByToken(authToken);
-  if (user) {
-    req.user = user; //send the user to myRecipes
-    next(); //call myRecipes endpoint, etc
-  } else {
-    res.status(401).send({ msg: 'Unauthorized' });
-  }
-});
-
-// GetMyRecipes (one user's recipes)
-secureApiRouter.get('/myRecipes', async (req, res) => {
-  //send the user's recipes
-  const username = req.user.username;
-  console.log("about to call get my recipes");
-  res.set("username", username);
-  const recipesList = await DB.getRecipes(username);
-  // const recipesList = getMyRecipes(username); //body stores the username
-  res.send(recipesList);
-});
-
-// makeRecipe ('make' the specified recipe, send RECIPE)
-apiRouter.post('/make', async (req, res) => {
-  const makes = await DB.updateMake(req.body.id);
-  if(makes == 0){
-    res.status(404);
-    res.send({makes: 0});
-  }
-  else{
-    console.log(`makes is ${makes}`);
-    console.log(typeof makes); // Output: object
-    res.status(200);
-    res.send({makes: makes});
-  }
-  
-});
-
-
-// Return the application's default page if the path is unknown
-app.use((_req, res) => {
-  res.sendFile('index.html', { root: 'public' });
-});
-
-const httpService = app.listen(port, () => {
-   console.log(`Listening on port ${port}`);
- });
-
-
- // setAuthCookie in the HTTP response
-function setAuthCookie(res, authToken) {
-  res.cookie(authCookieName, authToken, {
-    secure: true,
-    httpOnly: true,
-    sameSite: 'strict',
-  });
+async function login() {
+  loginCreate('/api/auth/login');
 }
 
-peerProxy(httpService);
+async function register() {
+  loginCreate('/api/auth/create');
+}
+
+async function loginCreate(endpoint){
+  const username = document.querySelector("#exampleUsername")?.value;
+  const password = document.querySelector("#examplePassword")?.value;
+  const makeRequestObject = {username: username, password: password};
+  try{
+    if(username === "" || password === ""){loginRegisterError(endpoint); return;}
+    const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(makeRequestObject),
+    });
+
+    if(response.ok){
+      console.log(`your username is ${username}`);
+      window.location.href = "all_recipes.html";
+    }
+    else{ //you're not going anywhere if you couldn't log in or create correctly
+      loginRegisterError(endpoint);
+    }
+}
+  catch (error) {
+    console.error('Error:', error.message);
+    // Handle errors gracefully, e.g., display an error message to the user
+  }
+}
+
+function loginRegisterError(endpoint){
+  if(document.querySelector("#wrong")){ //if warning already there
+    document.querySelector("#wrong").remove();
+  }
+  //updates UI to display error message for incorrect username/password/blank fields
+  console.log("it failed");
+  const div = document.querySelector("div.Login");
+  const p = document.createElement("p");
+  const type = endpoint.slice(10);
+  p.setAttribute("id", "wrong");
+  p.textContent = `${type} failed. Please try again.`;
+  div.appendChild(p);
+}
+
+function displayImage() {
+  fetch('https://foodish-api.com/api/')
+    .then((response) => {
+      if (!response.ok) { // Check if the response is OK
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      const imageUrl = data["image"];
+      console.log(`the image url is ${imageUrl}`);
+      
+      const containerEl = document.querySelector('#image');
+      containerEl.src = imageUrl;
+    })
+    .catch((error) => {
+      console.error('Error fetching or parsing data:', error);
+    });
+}
+
+
+displayImage();
