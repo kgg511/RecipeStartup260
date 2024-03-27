@@ -1,63 +1,201 @@
-.body {
+
+
+
+header{
     display: flex;
-    flex-direction: column;
-    min-width: 375px;
-    height: 100vh;
-  }
-  
-  header {
-    flex: 0 80px;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
     background-color: #D7C0D0;
   }
   
-  main {
-    flex: 1;
+  ul {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  
+  nav{
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
     justify-content: space-around;
+    align-items: center;
   }
   
-  footer {
-    flex: 0 30px;
-  }
-
- 
-  
-  menu {
-    flex: 1;
-    display: flex;
-    /*  overwrite Bootstrap so the menu does not wrap */
-    flex-direction: row !important;
-    list-style: none;
+  .grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr); /* Three columns */
   }
   
-  .navbar-brand {
-    padding-left: 0.3em;
-    color: black;
-  }
-
+  @media (orientation: portrait) {
+    body {
+      /* Styles for smaller screens */
+      margin: 0 auto; /* Center the content */
+      padding: 0
+    }
+    nav h1, nav h5{
+      font-size: 1.5vh;
+    }
+    h2{
+      font-size: .8em;
+    }
+    ul{
+      padding-left: 1vh;
+    }
   
-  menu .nav-item {
-    padding: 0 0.3em;
+    
+    .grid {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  
+  }
+  
+  .headerLink {
+    /* Your CSS rules here */
+    color: Black;
     text-decoration: none;
     background-color: transparent;
     border: 2px solid transparent;
+    
   }
+  
+  a {
+    color: white;
+  }
+  
   a[href]{
     color: black;
   }
   
-  footer a {
-    float: right;
+  
+  .mt-5 {
+    margin-top: 0px !important;
   }
   
-  @media (max-height: 600px) {
-    header {
-      display: none;
-    }
-    footer {
-      display: none;
-    }
+  nav{
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    flex-direction: row;
+  }
+  main{
+      display: flex;
+      align-items: center;
+      justify-self: center;
+      flex-direction: column;
   }
   
+  .container{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .card{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .flip-card {
+      margin-bottom: 20px; 
+      position: relative;
+      background-color: transparent;
+      perspective: 1000px; /* Remove this if you don't want the 3D effect */
+    }
+    /* This container is needed to position the front and back side */
+    .flip-card-inner {
+      position: relative;
+      text-align: center;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+      width: 100%;
+      height: 100%;
+      width:18rem;
+      display: flex; /* Center children horizontally */
+      justify-content: center; /* Center children horizontally */
+      text-align: center; /* Center text content horizontally */
+    }
+    
+    /* Do an horizontal flip when you move the mouse over the flip box container */
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    
+    /* Position the front and back side */
+    .flip-card-front {
+      position: absolute;
+      height: 100%;
+      -webkit-backface-visibility: hidden; /* Safari */
+      backface-visibility: hidden;
+      
+    }
+  
+  
+  
+    .flip-card-back {
+      position: relative;
+      width: 100%;
+      height: 20rem;
+      -webkit-backface-visibility: hidden; /* Safari */
+      backface-visibility: hidden;
+      overflow-y: scroll; 
+      
+    }
+  
+  
+  
+    img{
+      height: 15rem;
+    }
+    
+    /* Style the front side (fallback if image is missing) */
+    .flip-card-front {
+      color: black;
+    }
+    
+    /* Style the back side */
+    .flip-card-back {
+      color: rgb(21, 8, 8);
+      transform: rotateY(180deg);
+    }
+  
+    .row{
+      display: flex;
+      justify-content: space-around; /* or use 'space-between' for items at the edges */
+      align-items: center;
+      margin: 10px; /* Adjust margin as needed */
+  
+    }
+  
+    .icon-button {
+      color: white; /* Example text color */
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 100px;
+  }
+  
+  .btn-primary{
+    margin-top: 20px;
+    background-color: #BB7B4B;
+    border-color: #BB7B4B;
+  }
+  
+  .btn-primary:hover {
+    background-color: #BB7B4B;; /* New background color on hover */
+  }
+  
+  /* Active state styles for the button (when pressed) */
+  .btn-primary:active {
+    background-color: #432818; /* New background color when pressed */
+  }
+  
+  footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+    
