@@ -18,7 +18,9 @@ header{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    justify-self: center;
     align-items: center;
+
   }
   
   .grid {
@@ -33,7 +35,12 @@ header{
       margin: 0 auto; /* Center the content */
       padding: 0
     }
-    nav h1, nav h5{
+
+    a[href]{
+        font-size: 1.3vh;
+    }
+
+    nav h1{
       font-size: 1.5vh;
     }
     h2{
@@ -42,29 +49,17 @@ header{
     ul{
       padding-left: 1vh;
     }
-  
-    
     .grid {
       grid-template-columns: repeat(1, 1fr);
     }
   
   }
   
-  .headerLink {
-    /* Your CSS rules here */
-    color: Black;
+  a[href]{ 
+    color: black;
     text-decoration: none;
     background-color: transparent;
     border: 2px solid transparent;
-    
-  }
-  
-  a {
-    color: white;
-  }
-  
-  a[href]{
-    color: black;
   }
   
   
@@ -72,12 +67,6 @@ header{
     margin-top: 0px !important;
   }
   
-  nav{
-    display: flex;
-    align-items: center;
-    justify-self: center;
-    flex-direction: row;
-  }
   main{
       display: flex;
       align-items: center;
