@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { RecipeRow } from './recipe_row';
+import { MessageDialog } from '../messageDialogue';
 
 export function AddRecipe() {
 
@@ -8,13 +9,14 @@ export function AddRecipe() {
   const [imageFile, setImageFile] = useState(null);
   const [ingredients, setIngredients] = useState([{ name: '', amount: '' }, { name: '', amount: '' }]);
   const [instructions, setInstructions] = useState('');
+  const [displayError, setDisplayError] = React.useState(null); 
 
   function onChange(event) { 
     if (event.target.id === 'exampleName') { //recipe name
       setRecipeName(event.target.value);
       console.log(`recipe name changed ${recipeName}`);
     } else if (event.target.id === 'imageFile') {
-      setImageFile(event.target.value);
+      setImageFile(event.target.files[0]);
       console.log(`your password has been changed to ${imageFile}`);
     }
     else if (event.target.id === 'formInstructions') {
@@ -26,53 +28,6 @@ export function AddRecipe() {
   const addRow = () => {
     setIngredients([...ingredients, { name: '', amount: '' }]);
   };
-
-
-      // else if (event.target.id === 'ingredientName') {
-    //   setIngredients(event.target.value);
-    //   console.log(`your password has been changed to ${ingredients}`);
-    // }
-    // else if (event.target.id === 'ingredientAmount') {
-    //   setIngredients(event.target.value);
-    //   console.log(`your password has been changed to ${ingredients}`);
-    // }
-
-  //id="addIngredient"
-
-
-
-  //add more ingredient lines when they push the button add_ingredient
-  function add_ingredient_line(){
-    //create a new input element
-    const rowElement = document.createElement("div");
-    rowElement.setAttribute("class", "row");
-
-    const colElement1 = document.createElement("div");
-    colElement1.setAttribute("class", "col");
-    const inputElement1 = document.createElement("input");
-    inputElement1.setAttribute("type", "text");
-    inputElement1.setAttribute("class", "form-control");
-    inputElement1.setAttribute("placeholder", "ingredient (flour)");
-    inputElement1.setAttribute("id", "ingredientName");
-    colElement1.appendChild(inputElement1);
-
-    const colElement2 = document.createElement("div");
-    colElement2.setAttribute("class", "col");
-    const inputElement2 = document.createElement("input");
-    inputElement2.setAttribute("type", "text");
-    inputElement2.setAttribute("class", "form-control");
-    inputElement2.setAttribute("placeholder", "amount (1/2 cups)");
-    inputElement2.setAttribute("id", "ingredientAmount");
-    colElement2.appendChild(inputElement2);
-
-    rowElement.appendChild(colElement1);
-    rowElement.appendChild(colElement2);
-
-    return rowElement;
-
-    //const ingredientList = document.querySelector("#ingredientList");
-    //ingredientList.appendChild(rowElement);
-  }
 
   //<MessageDialog message={displayError} onHide={() => setDisplayError(null)} />
 
@@ -93,7 +48,8 @@ function image_warning(){
 async function submit_recipe() {
 if (!filled_form()) { // Do nothing
   console.log("Form not filled so recipe not submitted!");
-  window.location.href = "my_recipes.html";
+  setDisplayError('Must fill out all fields!');
+  //window.location.href = "my_recipes.html";
   return;
 }
 
@@ -118,10 +74,10 @@ ingredientRows.forEach(row => {
 });
 
 const formData = new FormData();
-const fileInput = document.getElementById('imageFile').files[0]; // Take first image file
-const fileSizeMB = fileInput.size/ 1048576;
+//const fileInput = document.getElementById('imageFile').files[0]; // Take first image file
+const fileSizeMB = imageFile.size/ 1048576;
 if(fileSizeMB > 20){ //file
-  image_warning();
+  setDisplayError('File size too big! (Must be under 20 megabytes)');
   return;
 }
 formData.append('image', fileInput);
@@ -168,21 +124,12 @@ catch (error) {
 }
 }
 
-function filled_form(){
-//confirms that no fields are empty
+function filled_form(){//confirms that no fields are empty
+//Name, image, instructions
+if(recipeName == "" || imageFile == null || instructions == ""){
+  return false;
+}
 
-//Name
-if(document.getElementById('exampleName').value == ""){
-  return false;
-}
-//Image
-else if(document.getElementById('imageFile').value == ""){
-  return false;
-}
-//Instructions
-else if(document.getElementById('formInstructions').value == ""){
-  return false;
-}
 //Ingredients
 Array.from(document.querySelectorAll("#ingredientList .row")).forEach(row => {
   if(row.querySelector("#ingredientName").value == "" || row.querySelector("#ingredientAmount").value == ""){
@@ -224,8 +171,8 @@ return true;
       </div>
 
       <button className="btn btn-primary" onClick={() => submit_recipe()} type="submit">Add Recipe</button>
-      
     </div>
+    <MessageDialog message={displayError} onHide={() => setDisplayError(null)} />
     
   </main>
   );

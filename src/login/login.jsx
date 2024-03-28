@@ -1,6 +1,6 @@
 import React from 'react';
 import './login.css';
-import { MessageDialog } from './messageDialogue';
+import { MessageDialog } from '../messageDialogue';
 import { useNavigate } from 'react-router-dom';
 import { AuthState } from './authState';
 
