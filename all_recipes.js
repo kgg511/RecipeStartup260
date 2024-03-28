@@ -21,7 +21,7 @@ async function generate_recipes(){
         await configureWebSocket(); //create websocket whenever page is loaded     
     }
     catch{
-        console.log("Error generating recipes in my_recipes.js");
+        console.log("Error generating recipes in all_recipes.js");
     }
 }
 
