@@ -5,9 +5,19 @@ import { useNavigate } from 'react-router-dom';
 import { AuthState } from './authState';
 
 export function Login(userName, authState, onAuthChange) {//
-  const [Username, setUsername] = React.useState(userName); 
+  const [Username, setUsername] = React.useState(userName); //what they typed in
   const [Password, setPassword] = React.useState(''); 
   const [displayError, setDisplayError] = React.useState(null); 
+
+  function onChange(event) {
+    if (event.target.id === 'exampleUsername') {
+      setUsername(event.target.value);
+      console.log(`your username is ${Username}`);
+    } else if (event.target.id === 'examplePassword') {
+      setPassword(event.target.value);
+      console.log(`your password has been changed to ${Password}`);
+    }
+  }
 
   const navigate = useNavigate();
 
@@ -35,7 +45,7 @@ export function Login(userName, authState, onAuthChange) {//
   
       if(response.ok){
         console.log(`your username is ${Username}`);
-        navigate('/all_recipes');
+        navigate('/AllRecipes');
       }
       else{ //you're not going anywhere if you couldn't log in or create correctly
         loginRegisterError(endpoint);
@@ -82,26 +92,22 @@ export function Login(userName, authState, onAuthChange) {//
 }, []);
   
   
-
-
-////onAuthChange..when they login we need toset username??
-
   return (
     <main>
-
     <div className = "Login">
       <form method="get">
         <div className="form-group">
           <h3 className="Login">Login</h3>
           <label for="username">Username</label>
-          <input type="text" className="form-control" id="exampleUsername" aria-describedby="emailHelp" placeholder="Username" required/>
+          <input type="text" className="form-control" id="exampleUsername" onChange={(e) => onChange(e)} aria-describedby="emailHelp" placeholder="Username" required/>
         </div>
         <div className="form-group">
           <label for="exampleInputPassword1">Password</label>
-          <input type="password" className="form-control" id="examplePassword" placeholder="Password" required/>
+          <input type="password" className="form-control" id="examplePassword" onChange={(e) => onChange(e)} placeholder="Password" required/>
         </div>
         <button type="button" onClick={() => login()} className="btn btn-primary">Sign in</button>
         <button type="button" onClick={() => register()} className="btn btn-primary">Create</button>
+        
       </form>
     </div>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function RecipeCard() {
+export function RecipeCard(recipe) {
 
     return (
         <div className="card" style={{ width: "18rem" }}>

@@ -4,7 +4,7 @@ import './app.css';
 import { AuthState } from './login/authState';
 import {Login} from './login/login';
 //import {myRecipes} from './myRecipes/m_recipes';
-import {allRecipes} from './myRecipes/all_recipes';
+import {AllRecipes} from './Recipes/all_recipes';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 
 
@@ -45,9 +45,9 @@ function App() {
                   setUserName(userName);
                 }}
             />} exact />
-            <Route path='/AllRecipes' element={<allRecipes />} exact />
-            <Route path='/MyRecipes' element={<allRecipes />} exact />
-            <Route path='/AddRecipe' element={<allRecipes />} exact />
+            <Route path='/AllRecipes' element={<AllRecipes />} exact />
+            <Route path='/MyRecipes' element={<AllRecipes />} exact />
+            <Route path='/AddRecipe' element={<AllRecipes />} exact />
             <Route path='*' element={<NotFound />} />
         </Routes>
 
