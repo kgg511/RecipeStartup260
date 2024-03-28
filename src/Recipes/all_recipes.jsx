@@ -32,7 +32,7 @@ export function AllRecipes() {
       }
   }
 
-  generate_recipes(); //called when page refreshes??
+  
 
       //let data = <p>hi</p>;
 
@@ -49,6 +49,10 @@ export function AllRecipes() {
     React.useEffect(() => { //called when recipes state v changes
         console.log('recipes has changed:');
     }, [recipes]); 
+
+    React.useEffect(() => { 
+        generate_recipes(); //called when page refreshes??
+    }, []);
 
     
     return (
