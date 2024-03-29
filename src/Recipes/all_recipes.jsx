@@ -25,25 +25,13 @@ export function AllRecipes() {
           });
           const theRecipes = await response.json();
           setRecipes(theRecipes);
+          
           //await configureWebSocket(); //create websocket whenever page is loaded     
       }
       catch{
           console.log("Error generating recipes in my_recipes.js");
       }
   }
-
-  
-
-      //let data = <p>hi</p>;
-
-    //   React.useEffect(() => {
-    //     const fetchData = async () => {
-    //         data = await generate_recipes();
-    //         // Do something with the data if needed
-    //     };
-    
-    //     fetchData(); // Call the async function inside useEffect
-    // }, []);
 
 
     React.useEffect(() => { //called when recipes state v changes
@@ -54,11 +42,12 @@ export function AllRecipes() {
         generate_recipes(); //called when page refreshes??
     }, []);
 
-    
+
+
     return (
         <div className="grid">
             {recipes.map((recipe) => (
-                <RecipeCard recipe={recipe} />
+                <RecipeCard recipe={recipe}/>
             ))}
         </div>
     );

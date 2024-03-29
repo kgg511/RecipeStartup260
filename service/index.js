@@ -106,9 +106,6 @@ apiRouter.post('/upload', upload.single('image'), (req, res) => {
       filename: newFilename,
       path: newFilePath
     });
-    
-
-  
 });
 
 // DeleteRecipes: receives a recipe id, deletes the recipe, sends nothing

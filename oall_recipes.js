@@ -106,6 +106,10 @@ async function configureWebSocket() {
     };
   }
 
+
+
+
+/////////////////
 function makeCard(Recipe){ //pass in recipe OBJECT
     const RecipeName = Recipe.RecipeName; //add this one
     const RecipeImage = Recipe.RecipeImage;

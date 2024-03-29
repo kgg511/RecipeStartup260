@@ -13,8 +13,3 @@ export function RecipeRow({onChange}) { //onChange function, when it changes her
     );
 
 }
-
-
-
-
-                                                                    //handleRowEdit(rowIndex, columnName, newValue)
