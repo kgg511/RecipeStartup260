@@ -7,7 +7,7 @@ import './add_recipe.css';
 export function AddRecipe() {
 
   const [recipeName, setRecipeName] = useState('');
-  const [imageFile, setImageFile] = useState("holder");
+  const [imageFile, setImageFile] = useState(null);
   const [ingredients, setIngredients] = useState([{name: '', amount: '' }, {name: '', amount: '' }]);
   const [instructions, setInstructions] = useState('');
   const [displayError, setDisplayError] = React.useState(null); 
@@ -18,7 +18,6 @@ export function AddRecipe() {
       console.log(`recipe name changed ${recipeName}`);
     } else if (event.target.id === 'imageFile') {
       setImageFile(event.target.files[0]);
-      console.log(`your password has been changed to ${imageFile}`);
     }
     else if (event.target.id === 'formInstructions') {
       setInstructions(event.target.value);
@@ -33,6 +32,7 @@ export function AddRecipe() {
         [columnName]: newValue // Update the specific column value
       };
     setIngredients(newData); // update state variable
+    console.log("ALERT: " + ingredients[rowIndex].name + " " + ingredients[rowIndex].amount)
   };
 
   const addRow = () => {
@@ -57,34 +57,36 @@ async function submit_recipe() {
   const username = userObject.username;
 
 
-  // const formData = new FormData();
-  
-  // const fileSizeMB = imageFile.size/ 1048576;
-  // if(fileSizeMB > 20){ //file
-  //   setDisplayError('File size too big! (Must be under 20 megabytes)');
-  //   return;
-  // }
-  // formData.append('image', imageFile);
+  const formData = new FormData();
+  const fileSizeMB = imageFile.size/ 1048576;
+  if(fileSizeMB > 20){ //file
+    setDisplayError('File size too big! (Must be under 20 megabytes)');
+    return;
+  }
+  formData.append('image', imageFile);
 
-  // // Upload the image to the server
+  // Upload the image to the server
   try {
-  //   const response = await fetch('/upload', {
-  //     method: 'POST',
-  //     body: formData
-  //   });
-  //   if (!response.ok) {
-  //     throw new Error('Failed to upload image');
-  //   }
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    });
+    if (!response.ok) {
+      throw new Error('Failed to upload image');
+    }
 
-  //   const data = await response.json();
-  //   console.log('File uploaded successfully:', data);
-  //   const filename = data.filename;
-  //   const path = data.path;
-  //   let choppedStr = path.replace(/^public\//, '');
-  let choppedStr = "image filler";
+    const data = await response.json();
+    console.log('File uploaded successfully:', data);
+    const filename = data.filename;
+    const path = data.path;
+
+    //remove everything before service, add .png to end
+    const serviceNameIndex = path.indexOf("service");
+    const noService = path.slice(serviceNameIndex); 
+    const realPath = noService;
     const recipe = {
       RecipeName: recipeName,
-      RecipeImage: choppedStr,
+      RecipeImage: realPath,
       RecipeIngredients: ingredients,
       RecipeInstructions: instructions,
       RecipeMakes: 0,
@@ -137,13 +139,13 @@ function filled_form(){//confirms that no fields are empty
 
       <div className="form-group" id = "imageDiv">
         <label>Image</label>
-        <input type="file" className="form-control-file" id="imageFile" onChange={(e) => onUpdate(e)} required/>
+        <input type="file" name="image" className="form-control-file" id="imageFile" onChange={(e) => onUpdate(e)} required/>
       </div>
 
       <div className = "ingredients">
         <div id = "ingredientList"> Ingredients
           {ingredients.map((ingredient, index) => (
-                  <RecipeRow key={index} onChange={(index, columnName, newValue) => handleRowEdit(index, columnName, newValue)}/>
+                  <RecipeRow onChange={(columnName, newValue) => handleRowEdit(index, columnName, newValue)}/>
               ))}
         </div>
         <button className="btn btn-primary" id="addIngredient" onClick={() => addRow()}>Add More Ingredients</button>

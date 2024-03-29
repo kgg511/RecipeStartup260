@@ -98,11 +98,11 @@ export function Login(userName, authState, onAuthChange) {//
       <form method="get">
         <div className="form-group">
           <h3 className="Login">Login</h3>
-          <label for="username">Username</label>
+          <label htmlFor="username">Username</label>
           <input type="text" className="form-control" id="exampleUsername" onChange={(e) => onChange(e)} aria-describedby="emailHelp" placeholder="Username" required/>
         </div>
         <div className="form-group">
-          <label for="exampleInputPassword1">Password</label>
+          <label htmlFor="exampleInputPassword1">Password</label>
           <input type="password" className="form-control" id="examplePassword" onChange={(e) => onChange(e)} placeholder="Password" required/>
         </div>
         <button type="button" onClick={() => login()} className="btn btn-primary">Sign in</button>
@@ -111,7 +111,7 @@ export function Login(userName, authState, onAuthChange) {//
       </form>
     </div>
 
-    <div class = "login_image">
+    <div className = "login_image">
       <img id = "image" src="" alt="Random baking photo" width="50%"/>
     </div>
 

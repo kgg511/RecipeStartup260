@@ -5,9 +5,25 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const DB = require('./database.js');
 const { peerProxy } = require('./peerProxy.js');
-
+const path = require('path');
+const fs = require('fs');
 const app = express();
-const upload = multer({ dest: 'public/uploads/' }); //configure for file uploads
+
+// // Define storage settings
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, path.join(__dirname, 'uploads/'));
+//   },
+//   filename: function (req, file, cb) {
+//     const fileExtension = path.extname(file.originalname);
+//     cb(null, file.fieldname + fileExtension);
+//   }
+// });
+
+// const upload = multer({ storage: storage });
+
+const upload = multer({ dest: path.join(__dirname, 'uploads/') });
+
 const authCookieName = 'token';
 // The service port. In production the frontend code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 3000;
@@ -62,16 +78,37 @@ apiRouter.post('/auth/login', async (req, res) => {
   res.status(401).send({ msg: 'Unauthorized'});
 });
 
+
 //uploadImages to server
-app.post('/upload', upload.single('image'), (req, res) => {
+apiRouter.post('/upload', upload.single('image'), (req, res) => {
   const file = req.file;
   if (!file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
-  res.send({
-    filename: file.filename,
-    path: file.path
+
+  const uploadedFilePath = file.path; // Get the current path of the uploaded file
+  const newFilename = file.filename + ".png"; //new name
+  const directoryPath = path.dirname(uploadedFilePath); //directory path of file
+  const newFilePath = path.join(directoryPath, newFilename); //define new path
+
+  console.log(`New file path: ${newFilePath}`);
+
+  // Rename the file
+  fs.rename(uploadedFilePath, newFilePath, (err) => {
+    if (err) {
+      console.error('Error renaming file:', err);
+      return res.status(500).json({ error: 'Error renaming file' });
+    }
+    console.log('File renamed successfully');
   });
+
+    res.send({
+      filename: newFilename,
+      path: newFilePath
+    });
+    
+
+  
 });
 
 // DeleteRecipes: receives a recipe id, deletes the recipe, sends nothing
