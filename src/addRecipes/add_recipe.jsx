@@ -32,7 +32,7 @@ export function AddRecipe() {
         [columnName]: newValue // Update the specific column value
       };
     setIngredients(newData); // update state variable
-    console.log("ALERT: " + ingredients[rowIndex].name + " " + ingredients[rowIndex].amount)
+    console.log("ALERT: ingredient" + ingredients[rowIndex].name + " amount:" + ingredients[rowIndex].amount)
   };
 
   const addRow = () => {
@@ -45,7 +45,6 @@ async function submit_recipe() {
   if (!filled_form()) { // Do nothing
     console.log("Form not filled so recipe not submitted!");
     setDisplayError('Must fill out all fields!');
-    //window.location.href = "my_recipes.html";
     return;
   }
 

@@ -13,7 +13,7 @@ export function RecipeCard({recipe}) {
   function createItem(ingredient){
       return (
         <li className="list-group-item">
-        {ingredient.Amount} {ingredient.Name}
+        {ingredient.amount} {ingredient.ingredient}
       </li>
       )
   }
