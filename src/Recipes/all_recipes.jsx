@@ -47,7 +47,7 @@ export function AllRecipes() {
     return (
         <div className="grid">
             {recipes.map((recipe) => (
-                <RecipeCard recipe={recipe}/>
+                <RecipeCard key={recipe._id} recipe={recipe}/>
             ))}
         </div>
     );

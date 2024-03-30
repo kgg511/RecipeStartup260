@@ -1,14 +1,13 @@
 import React from 'react';
 
 export function RecipeCard({recipe}) {
-
   console.log("made:", recipe.RecipeMakes)
   const [makes, setMakes] = React.useState(recipe.RecipeMakes);
   const [deleted, setDeleted] = React.useState(false);
 
-  function createItem(ingredient){
+  function createItem(ingredient, index){
       return (
-        <li className="list-group-item">
+        <li key ={index} className="list-group-item">
         {ingredient.amount} {ingredient.ingredient}
       </li>
       )
@@ -57,7 +56,7 @@ export function RecipeCard({recipe}) {
                   <div className="card-body">
                     <h5 className="card-title">{recipe.RecipeName}</h5>
                     <ul className="list-group list-group-flush">
-                        {recipe.RecipeIngredients.map((ingredient) => (createItem(ingredient))
+                        {recipe.RecipeIngredients.map((ingredient, index) => (createItem(ingredient, index))
                       )}
 
                     </ul>

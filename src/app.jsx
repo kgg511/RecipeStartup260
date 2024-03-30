@@ -10,12 +10,27 @@ import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 
 
 
-
 //authstate is just a variable, not additional component
 function App() {
     const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
     const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated; // used to alter header
     const [authState, setAuthState] = React.useState(currentAuthState);
+
+    async function signOut(){
+      //make fetch request to the sign out endpoint 
+      // if successful, change the page
+      const response = await fetch(`/api/auth/logout`, {
+          method: 'DELETE',
+          headers: {'content-type': 'application/json'},
+      });
+      setAuthState(AuthState.Unauthenticated); //this will remove the header but it won't bring me to the login page
+
+      // if(response.status === 204){
+      //   return <Redirect to="/" />;
+      // }
+      // console.log("sign out failed")
+      
+  };
 
     //not logged in: NO header
     // logged in: logout, all recipes, my recipes, add recipe
@@ -30,7 +45,8 @@ function App() {
                     <ul><NavLink className="headerLink" to='AllRecipes'>All Recipes</NavLink></ul>
                     <ul><NavLink className="headerLink" to='MyRecipes'>My Recipes</NavLink></ul>
                     <ul><NavLink className="headerLink" to='AddRecipe'>Add Recipe</NavLink></ul>
-                    <ul><NavLink className="headerLink" to='Logout'>Logout</NavLink></ul>
+                    <ul><NavLink className="headerLink" to='/'>Logout</NavLink></ul>
+                    <ul><h5><button className="headerLink" id="SignOut" onClick={signOut}>Sign out</button></h5></ul>
                 </nav>
               
               )}
