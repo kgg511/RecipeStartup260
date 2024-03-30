@@ -40,19 +40,21 @@ export function MyRecipes() {
 
     async function delete_recipe(RecipeID, index){
 
-        setRecipes(prevRecipes => {
-            const copiedArray = [...prevRecipes]; // Create a copy of the current state
-            copiedArray.splice(index, 1); // Remove recipe from array
-            return copiedArray; // Update state variable
-        });
-        
-
         try{
+            setRecipes(prevRecipes => {
+                const copiedArray = [...prevRecipes]; // Create a copy of the current state
+                copiedArray.splice(index, 1); // Remove recipe from array
+                return copiedArray; // Update state variable
+                });
+                
+            const deleteRequestObject = {"id": RecipeID};
             const response = await fetch('/api/recipes', {
                 method: 'DELETE',
                 headers: {'content-type': 'application/json'},
                 body: JSON.stringify(deleteRequestObject),
               });
+            
+            
         }
         catch{
             console.log("deleting error");
