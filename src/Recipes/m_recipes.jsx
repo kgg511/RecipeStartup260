@@ -15,7 +15,12 @@ export function MyRecipes() {
         const response = await fetch('/api/myRecipes');
         console.log("about to make request generate_recipes");
         const theRecipes = await response.json(); // extracts body
-        setRecipes(theRecipes);
+
+        const recipeComponents = theRecipes.map((recipe, index) => (
+            <RecipeCard key={recipe._id} recipe={recipe} deleteButton={true} onDelete={()=>delete_recipe(recipe._id, index)}/>
+        ));
+        setRecipes(recipeComponents);
+
         const theUsername = response.headers.get('username');
         setUsername(theUsername);    
       }
@@ -33,16 +38,21 @@ export function MyRecipes() {
         generate_recipes(); //called when page refreshes??
     }, []);
 
-    async function delete_recipe(RecipeID){
-        if(hasDelete == false){return;}
-        const deleteRequestObject = {"id": RecipeID};
+    async function delete_recipe(RecipeID, index){
+
+        setRecipes(prevRecipes => {
+            const copiedArray = [...prevRecipes]; // Create a copy of the current state
+            copiedArray.splice(index, 1); // Remove recipe from array
+            return copiedArray; // Update state variable
+        });
+        
+
         try{
             const response = await fetch('/api/recipes', {
                 method: 'DELETE',
                 headers: {'content-type': 'application/json'},
                 body: JSON.stringify(deleteRequestObject),
               });
-              setRecipes(recipes.filter(recipe => recipe._id !== RecipeID)); //remove recipe from state variable
         }
         catch{
             console.log("deleting error");
@@ -56,7 +66,7 @@ export function MyRecipes() {
         <h2 id="title">My Recipes: {username}</h2>
         <div className="grid">
             {recipes.map((recipe) => (
-                <RecipeCard key={recipe._id} recipe={recipe} deleteButton={true} onDelete={()=>delete_recipe(recipe._id)}/>
+                recipe
             ))}
         </div>
         </>
