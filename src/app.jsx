@@ -63,7 +63,7 @@ function App() {
                   setUserName(userName);
                 }}
             />} exact />
-            <Route path='/AllRecipes' element={<MyRecipes />} exact />
+            <Route path='/AllRecipes' element={<AllRecipes />} exact />
             <Route path='/MyRecipes' element={<MyRecipes />} exact />
             <Route path='/AddRecipe' element={<AddRecipe />} exact />
             <Route path='*' element={<NotFound />} />

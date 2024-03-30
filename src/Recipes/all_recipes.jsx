@@ -16,7 +16,10 @@ export function AllRecipes() {
               headers: {'content-type': 'application/json'},
           });
           const theRecipes = await response.json();
-          setRecipes(theRecipes);
+          const recipeComponents = theRecipes.map((recipe, index) => (
+            <RecipeCard key={recipe._id} recipe={recipe} deleteButton={false} onDelete={()=>(console.log(""))}/>
+        ));
+        setRecipes(recipeComponents);
           
           //await configureWebSocket(); //create websocket whenever page is loaded     
       }
@@ -39,7 +42,7 @@ export function AllRecipes() {
     return (
         <div className="grid">
             {recipes.map((recipe) => (
-                <RecipeCard key={recipe._id} recipe={recipe} deleteButton={false}/>
+                recipe
             ))}
         </div>
     );
