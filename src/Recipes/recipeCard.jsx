@@ -31,6 +31,7 @@ export function RecipeCard({recipe}) {
         else{
           setMakes(result.makes);
         }
+        setMakes(result.makes);
          
     }
     catch{
@@ -72,7 +73,7 @@ export function RecipeCard({recipe}) {
 
           <div><button className="btn btn-primary" onClick={() => press_make(recipe._id)} ><i className="fa-solid fa-cookie"></i></button></div>
           <div><p>{makes}</p></div>
-          {{deleted} && (<div><p>Recipe Deleted. Refresh page.</p></div>)}
+          {{deleted} == true && (<div><p>Recipe Deleted. Refresh page.</p></div>)}
         </div>
     );
 }
