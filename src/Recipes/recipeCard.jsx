@@ -10,10 +10,10 @@ import { faTimes, faCookie } from '@fortawesome/free-solid-svg-icons';
 <script src="https://kit.fontawesome.com/6dcbbbd878.js" crossorigin="anonymous"></script> */}
 
 
-export function RecipeCard({recipe}) {
+export function RecipeCard({recipe, deleteButton}) {
   console.log("made:", recipe.RecipeMakes)
   const [makes, setMakes] = React.useState(recipe.RecipeMakes);
-  const [hasDelete, setHasDelete] = React.useState(false); //true for myRecipes, false for allRecipes
+  const [hasDelete, setHasDelete] = React.useState(deleteButton); //true for myRecipes, false for allRecipes
   const [deleted, setDeleted] = React.useState(false);
 
   function createItem(ingredient, index){
@@ -49,10 +49,13 @@ export function RecipeCard({recipe}) {
     }
 };
 
+
     return (
         <div className="card" id = {recipe._id} style={{ width: "18rem" }}>
-          <div style={{ alignItems: "flex-start" }}><a href="#" className="delete"><FontAwesomeIcon icon={faTimes} /></a></div>
+          
           <div className="flip-card">
+
+          {hasDelete == true && (<div style={{ alignItems: "flex-start" }}><a href="#" className="delete"><FontAwesomeIcon icon={faTimes} /></a></div>)}
             <div className="flip-card-inner">
                 <div className="flip-card-front">
                   <img className="card-img-top" src={recipe.RecipeImage} alt="Recipe Image" />

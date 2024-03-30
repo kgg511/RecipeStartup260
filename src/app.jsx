@@ -5,6 +5,7 @@ import { AuthState } from './login/authState';
 import {Login} from './login/login';
 //import {myRecipes} from './myRecipes/m_recipes';
 import {AllRecipes} from './Recipes/all_recipes';
+import {MyRecipes} from './Recipes/m_recipes';
 import {AddRecipe} from './addRecipes/add_recipe';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 
@@ -63,7 +64,7 @@ function App() {
                 }}
             />} exact />
             <Route path='/AllRecipes' element={<AllRecipes />} exact />
-            <Route path='/MyRecipes' element={<AllRecipes />} exact />
+            <Route path='/MyRecipes' element={<MyRecipes />} exact />
             <Route path='/AddRecipe' element={<AddRecipe />} exact />
             <Route path='*' element={<NotFound />} />
         </Routes>

@@ -10,14 +10,6 @@ export function AllRecipes() {
     const [recipes, setRecipes] = React.useState([]); //array of recipes
 
     async function generate_recipes(){
-    //     document.addEventListener("DOMContentLoaded", (event) => {
-    //       console.log("DOM fully loaded and parsed");
-    //       document.getElementById("SignOut").addEventListener("click", function(event) {
-    //         // Prevent the default behavior of the anchor tag
-    //         event.preventDefault();
-    //         signOut();
-    //       });
-    //   });
       try{
           const response = await fetch(`/api/recipes`, {
               method: 'GET',
@@ -47,7 +39,7 @@ export function AllRecipes() {
     return (
         <div className="grid">
             {recipes.map((recipe) => (
-                <RecipeCard key={recipe._id} recipe={recipe}/>
+                <RecipeCard key={recipe._id} recipe={recipe} deleteButton={false}/>
             ))}
         </div>
     );
