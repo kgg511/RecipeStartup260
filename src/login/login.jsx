@@ -4,7 +4,7 @@ import { MessageDialog } from '../messageDialogue';
 import { useNavigate } from 'react-router-dom';
 import { AuthState } from './authState';
 
-export function Login(userName, authState, onAuthChange) {//
+export function Login({userName, authState, onAuthChange}) {//
   const [Username, setUsername] = React.useState(userName); //what they typed in
   const [Password, setPassword] = React.useState(''); 
   const [displayError, setDisplayError] = React.useState(null); 
@@ -45,6 +45,7 @@ export function Login(userName, authState, onAuthChange) {//
   
       if(response.ok){
         console.log(`your username is ${Username}`);
+        onAuthChange(Username, AuthState.Authenticated); //change the auth state to authenticated
         navigate('/AllRecipes');
       }
       else{ //you're not going anywhere if you couldn't log in or create correctly
@@ -58,11 +59,7 @@ export function Login(userName, authState, onAuthChange) {//
   }
   
   function loginRegisterError(endpoint){
-    //const div = document.querySelector("div.Login");
-    //const p = document.createElement("p");
     const type = endpoint.slice(10);
-    //p.textContent = `${type} failed. Please try again.`;
-    //div.appendChild(p);
     setDisplayError(`${type} failed. Please try again.`);
   }
   
@@ -91,7 +88,6 @@ export function Login(userName, authState, onAuthChange) {//
     displayImage();
 }, []);
   
-  
   return (
     <main>
     <div className = "Login">
@@ -116,11 +112,7 @@ export function Login(userName, authState, onAuthChange) {//
     </div>
 
     <MessageDialog message={displayError} onHide={() => setDisplayError(null)} />
-    
 </main>
-
-//
-
 
   );
 }

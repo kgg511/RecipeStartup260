@@ -20,9 +20,6 @@ function App() {
     const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated; // used to alter header
     const [authState, setAuthState] = React.useState(currentAuthState);
 
-
-    //not logged in: NO header
-    // logged in: logout, all recipes, my recipes, add recipe
     return (
         <BrowserRouter>
       <div className='body'>

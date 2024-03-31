@@ -13,6 +13,7 @@ export function Logout({changeAuthstate}){ //they basically won't see this
             method: 'DELETE',
             headers: {'content-type': 'application/json'},
         });
+        localStorage.removeItem('userName');
         changeAuthstate(AuthState.Unauthenticated);
         navigate('/'); //this will bring me to the login page
     };

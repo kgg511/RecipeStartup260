@@ -29,13 +29,11 @@ export function MyRecipes() {
       }
   }
 
-
     React.useEffect(() => { //called when recipes state v changes
         console.log('recipes has changed:');
     }, [recipes]); 
 
     React.useEffect(() => { 
-        navigate('/AllRecipes');
         generate_recipes(); //called when page refreshes??
     }, []);
 
