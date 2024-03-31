@@ -144,9 +144,15 @@ apiRouter.get('/getUsername', async (req, res) => {
   // Retrieve the cookie value
   const authToken = req.cookies[authCookieName];
   const user = await DB.getUserByToken(authToken);
-  const username = user.username;
-  // Send the username
-  res.send({ username });
+  if(!user){
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+  else{
+    const username = user.username;
+    // Send the username
+    res.send({ username });
+    }
+  
 });
 
 // secureApiRouter verifies credentials for endpoints
@@ -167,6 +173,10 @@ secureApiRouter.use(async (req, res, next) => {
 // GetMyRecipes (one user's recipes)
 secureApiRouter.get('/myRecipes', async (req, res) => {
   //send the user's recipes
+  if (!req.user) {
+    res.status(401).send({ msg: 'Unauthorized' });
+    return;
+  }
   const username = req.user.username;
   console.log("about to call get my recipes");
   res.set("username", username);
