@@ -40,11 +40,14 @@ export function AllRecipes() {
 
 
     return (
-        <div className="grid">
-            {recipes.map((recipe) => (
-                recipe
-            ))}
-        </div>
+        <main>
+        <h2 id="title">All Recipes</h2>
+            <div className="grid">
+                {recipes.map((recipe) => (
+                    recipe
+                ))}
+            </div>
+        </main>
     );
 
 

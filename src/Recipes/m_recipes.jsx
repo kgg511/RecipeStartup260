@@ -8,7 +8,7 @@ import './all_recipes.css';
 export function MyRecipes() {
 
     const [recipes, setRecipes] = React.useState([]); //array of recipes
-    const [username, setUsername] = React.useState("default"); //username for display
+    const [username, setUsername] = React.useState(""); //username for display
 
     async function generate_recipes(){
       try{
@@ -64,14 +64,14 @@ export function MyRecipes() {
 
 
     return (
-        <>
+        <main>
         <h2 id="title">My Recipes: {username}</h2>
         <div className="grid">
             {recipes.map((recipe) => (
                 recipe
             ))}
         </div>
-        </>
+        </main>
     );
 
 

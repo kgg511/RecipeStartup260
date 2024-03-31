@@ -9,6 +9,8 @@ import {MyRecipes} from './Recipes/m_recipes';
 import {AddRecipe} from './addRecipes/add_recipe';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUtensils } from '@fortawesome/free-solid-svg-icons';
 
 
 //authstate is just a variable, not additional component
@@ -39,10 +41,10 @@ function App() {
         <BrowserRouter>
       <div className='body'>
         <header>
-            {authState === AuthState.Unauthenticated && (<ul><h1>TasteTrove <i className="fa-solid fa-utensils"></i></h1> </ul>)}
+            {authState === AuthState.Unauthenticated && (<ul><h1>TasteTrove <FontAwesomeIcon icon={faUtensils} /></h1> </ul>)}
             {authState === AuthState.Authenticated && (
                 <nav>
-                <ul><h1>TasteTrove <i className="fa-solid fa-utensils"></i></h1> </ul>
+                <ul><h1>TasteTrove <FontAwesomeIcon icon={faUtensils} /></h1> </ul>
                     <ul><NavLink className="headerLink" to='AllRecipes'>All Recipes</NavLink></ul>
                     <ul><NavLink className="headerLink" to='MyRecipes'>My Recipes</NavLink></ul>
                     <ul><NavLink className="headerLink" to='AddRecipe'>Add Recipe</NavLink></ul>
