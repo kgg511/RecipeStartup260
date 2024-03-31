@@ -7,6 +7,7 @@ import {Login} from './login/login';
 import {AllRecipes} from './Recipes/all_recipes';
 import {MyRecipes} from './Recipes/m_recipes';
 import {AddRecipe} from './addRecipes/add_recipe';
+import {Logout} from './Logout/logout';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,21 +20,6 @@ function App() {
     const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated; // used to alter header
     const [authState, setAuthState] = React.useState(currentAuthState);
 
-    async function signOut(){
-      //make fetch request to the sign out endpoint 
-      // if successful, change the page
-      const response = await fetch(`/api/auth/logout`, {
-          method: 'DELETE',
-          headers: {'content-type': 'application/json'},
-      });
-      setAuthState(AuthState.Unauthenticated); //this will remove the header but it won't bring me to the login page
-
-      // if(response.status === 204){
-      //   return <Redirect to="/" />;
-      // }
-      // console.log("sign out failed")
-      
-  };
 
     //not logged in: NO header
     // logged in: logout, all recipes, my recipes, add recipe
@@ -48,8 +34,7 @@ function App() {
                     <ul><NavLink className="headerLink" to='AllRecipes'>All Recipes</NavLink></ul>
                     <ul><NavLink className="headerLink" to='MyRecipes'>My Recipes</NavLink></ul>
                     <ul><NavLink className="headerLink" to='AddRecipe'>Add Recipe</NavLink></ul>
-                    <ul><NavLink className="headerLink" to='/'>Logout</NavLink></ul>
-                    <ul><h5><button className="headerLink" id="SignOut" onClick={signOut}>Sign out</button></h5></ul>
+                    <ul><NavLink className="headerLink" to='/Logout'>Logout</NavLink></ul>
                 </nav>
               
               )}
@@ -68,6 +53,7 @@ function App() {
             <Route path='/AllRecipes' element={<AllRecipes />} exact />
             <Route path='/MyRecipes' element={<MyRecipes />} exact />
             <Route path='/AddRecipe' element={<AddRecipe />} exact />
+            <Route path='/Logout' element={<Logout changeAuthstate={setAuthState}/>} exact />
             <Route path='*' element={<NotFound />} />
         </Routes>
 

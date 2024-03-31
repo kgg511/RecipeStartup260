@@ -104,15 +104,16 @@ apiRouter.delete('/recipes', async (req, res) => {
   await DB.deleteRecipe(recipeID);
 
   //delete file from the uploads directory
-  if(fs.existsSync(fullPath)){console.log("FILE EXISTS");}
-  fs.unlink(fullPath, (err) => {
-    if (err) {
-      console.error('Error deleting file:', err);
-      return;
-    }
-  });
-  console.log(`Deleted file: ${fullPath}`);
-
+  if(fs.existsSync(fullPath)){
+    fs.unlink(fullPath, (err) => {
+      if (err) {
+        console.error('Error deleting file:', err);
+        return;
+      }
+    });
+    console.log(`Deleted image: ${fullPath}`);
+  }
+  
   res.status(200);
 });
 

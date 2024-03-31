@@ -35,6 +35,7 @@ export function MyRecipes() {
     }, [recipes]); 
 
     React.useEffect(() => { 
+        navigate('/AllRecipes');
         generate_recipes(); //called when page refreshes??
     }, []);
 
