@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { RecipeRow } from './recipe_row';
 import { MessageDialog } from '../messageDialogue';
+import { useNavigate } from 'react-router-dom';
 import './add_recipe.css';
 
 export function AddRecipe() {
@@ -11,6 +12,7 @@ export function AddRecipe() {
   const [ingredients, setIngredients] = useState([{name: '', amount: '' }, {name: '', amount: '' }]);
   const [instructions, setInstructions] = useState('');
   const [displayError, setDisplayError] = React.useState(null); 
+  const navigate = useNavigate();
 
   function onUpdate(event) { 
     if (event.target.id === 'exampleName') { //recipe name
@@ -101,7 +103,7 @@ async function submit_recipe() {
 
     // Process data from second fetch
     console.log("Recipe submitted!");
-    window.location.href = "my_recipes.html";
+    navigate('/MyRecipes');
   } 
   catch (error) {
     console.error('Error:', error.message);

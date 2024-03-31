@@ -9,19 +9,6 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 
-// // Define storage settings
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, path.join(__dirname, 'uploads/'));
-//   },
-//   filename: function (req, file, cb) {
-//     const fileExtension = path.extname(file.originalname);
-//     cb(null, file.fieldname + fileExtension);
-//   }
-// });
-
-// const upload = multer({ storage: storage });
-
 const upload = multer({ dest: path.join(__dirname, 'uploads/') });
 
 const authCookieName = 'token';
