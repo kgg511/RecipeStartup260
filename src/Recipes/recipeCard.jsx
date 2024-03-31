@@ -9,12 +9,19 @@ import { faTimes, faCookie } from '@fortawesome/free-solid-svg-icons';
 
 <script src="https://kit.fontawesome.com/6dcbbbd878.js" crossorigin="anonymous"></script> */}
 
-
+import { ws } from './notifier';
 export function RecipeCard({recipe, deleteButton, onDelete}) {
   console.log("made:", recipe.RecipeMakes)
   const [makes, setMakes] = React.useState(recipe.RecipeMakes);
   const [hasDelete, setHasDelete] = React.useState(deleteButton); //true for myRecipes, false for allRecipes
   const [deleted, setDeleted] = React.useState(false);
+
+  React.useEffect(() => {
+    ws.addHandler(update_makes);
+    return () => {
+      ws.removeHandler(update_makes);
+    };
+  });
 
   function createItem(ingredient, index){
       return (
@@ -22,6 +29,13 @@ export function RecipeCard({recipe, deleteButton, onDelete}) {
         {ingredient.amount} {ingredient.ingredient}
       </li>
       )
+  }
+
+  function update_makes(RecipeID){
+    console.log(RecipeID, recipe._id.toString());
+    if(RecipeID == recipe._id.toString()){
+      setMakes(makes + 1);
+    }
   }
 
   async function press_make(RecipeID){
@@ -40,12 +54,13 @@ export function RecipeCard({recipe, deleteButton, onDelete}) {
         }
         else{
           setMakes(result.makes);
+          ws.broadcast_makes(RecipeID, result.makes);
         }
-        setMakes(result.makes);
          
     }
-    catch{
-        console.log("press_make error");
+    catch (error){
+        console.log("press_make error", error);
+        console.error("An error occurred:", error);
     }
 };
 
