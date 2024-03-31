@@ -17,7 +17,7 @@ export function MyRecipes() {
         const theRecipes = await response.json(); // extracts body
 
         const recipeComponents = theRecipes.map((recipe, index) => (
-            <RecipeCard key={recipe._id} recipe={recipe} deleteButton={true} onDelete={()=>delete_recipe(recipe._id, index)}/>
+            <RecipeCard key={recipe._id} recipe={recipe} deleteButton={true} onDelete={()=>delete_recipe({rID: recipe._id, file: recipe.RecipeImage}, index)}/>
         ));
         setRecipes(recipeComponents);
 
@@ -38,8 +38,8 @@ export function MyRecipes() {
         generate_recipes(); //called when page refreshes??
     }, []);
 
-    async function delete_recipe(RecipeID, index){
-
+    async function delete_recipe(requestObject, index){
+            //requesObject holds id & file path
         try{
             setRecipes(prevRecipes => {
                 const copiedArray = [...prevRecipes]; // Create a copy of the current state
@@ -47,11 +47,11 @@ export function MyRecipes() {
                 return copiedArray; // Update state variable
                 });
                 
-            const deleteRequestObject = {"id": RecipeID};
+            //const deleteRequestObject = {"id": RecipeID};
             const response = await fetch('/api/recipes', {
                 method: 'DELETE',
                 headers: {'content-type': 'application/json'},
-                body: JSON.stringify(deleteRequestObject),
+                body: JSON.stringify(requestObject),
               });
             
             

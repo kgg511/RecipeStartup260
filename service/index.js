@@ -110,8 +110,22 @@ apiRouter.post('/upload', upload.single('image'), (req, res) => {
 
 // DeleteRecipes: receives a recipe id, deletes the recipe, sends nothing
 apiRouter.delete('/recipes', async (req, res) => {
-  const recipeID = req.body.id;
+  const recipeID = req.body.rID;
+  
+  const fullPath = path.resolve(__dirname, '..', req.body.file);
+  
   await DB.deleteRecipe(recipeID);
+
+  //delete file from the uploads directory
+  if(fs.existsSync(fullPath)){console.log("FILE EXISTS");}
+  fs.unlink(fullPath, (err) => {
+    if (err) {
+      console.error('Error deleting file:', err);
+      return;
+    }
+  });
+  console.log(`Deleted file: ${fullPath}`);
+
   res.status(200);
 });
 
