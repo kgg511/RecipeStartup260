@@ -15,7 +15,7 @@ export function Logout({changeAuthstate}){ //they basically won't see this
         });
         localStorage.removeItem('userName');
         changeAuthstate(AuthState.Unauthenticated);
-        navigate('/'); //this will bring me to the login page
+        navigate('/');
     };
 
     React.useEffect(() => {

@@ -19,7 +19,7 @@ export function RecipeCard({recipe, deleteButton, onDelete}) {
   function createItem(ingredient, index){
       return (
         <li key ={index} className="list-group-item">
-        {ingredient.amount} {ingredient.ingredient}
+          {`${ingredient.amount} ${ingredient.name}`}
       </li>
       )
   }
