@@ -4,15 +4,21 @@ import { RecipeRow } from './recipe_row';
 import { MessageDialog } from '../messageDialogue';
 import { useNavigate } from 'react-router-dom';
 import './add_recipe.css';
+import { AuthState } from '../login/authState';
 
-export function AddRecipe() {
-
+export function AddRecipe({changeAuthstate}) {
   const [recipeName, setRecipeName] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [ingredients, setIngredients] = useState([{name: '', amount: '' }, {name: '', amount: '' }]);
   const [instructions, setInstructions] = useState('');
   const [displayError, setDisplayError] = React.useState(null); 
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if(localStorage.getItem("userName") == null){
+      changeAuthstate(AuthState.Unauthenticated);
+      navigate('/');}
+  }, []);
 
   function onUpdate(event) { 
     if (event.target.id === 'exampleName') { //recipe name

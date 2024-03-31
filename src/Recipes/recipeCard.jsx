@@ -1,15 +1,9 @@
 import React from 'react';
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faCookie } from '@fortawesome/free-solid-svg-icons';
-{/* <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link href="https://getbootstrap.com/docs/5.1/assets/css/docs.css" rel="stylesheet">
-
-<script src="https://kit.fontawesome.com/6dcbbbd878.js" crossorigin="anonymous"></script> */}
-
+import './all_recipes.css';
 import { ws } from './notifier';
+
 export function RecipeCard({recipe, deleteButton, onDelete}) {
   console.log("made:", recipe.RecipeMakes)
   const [makes, setMakes] = React.useState(recipe.RecipeMakes);
@@ -63,14 +57,10 @@ export function RecipeCard({recipe, deleteButton, onDelete}) {
         console.error("An error occurred:", error);
     }
 };
-
-
     return (
         <div className="card" id = {recipe._id} style={{ width: "18rem" }}>
-          
+          {hasDelete == true && (<div style={{ alignItems: "flex-start" }}><a id="deleteIcon" href="#" className="delete" onClick={() => {onDelete()}} ><FontAwesomeIcon icon={faTimes} /></a></div>)}
           <div className="flip-card">
-
-          {hasDelete == true && (<div style={{ alignItems: "flex-start" }}><a href="#" className="delete" onClick={() => {onDelete()}} ><FontAwesomeIcon icon={faTimes} /></a></div>)}
             <div className="flip-card-inner">
                 <div className="flip-card-front">
                   <img className="card-img-top" src={recipe.RecipeImage} alt="Recipe Image" />
@@ -104,5 +94,3 @@ export function RecipeCard({recipe, deleteButton, onDelete}) {
         </div>
     );
 }
-
-//{authState === AuthState.Unauthenticated && (<ul><h1>TasteTrove <i className="fa-solid fa-utensils"></i></h1> </ul>)}

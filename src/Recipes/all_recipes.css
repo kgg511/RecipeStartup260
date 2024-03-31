@@ -1,6 +1,4 @@
 
-
-
 header{
   display: flex;
   flex: 1;
@@ -130,8 +128,6 @@ main{
     backface-visibility: hidden;
     
   }
-
-
 
   .flip-card-back {
     position: relative;

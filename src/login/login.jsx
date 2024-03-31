@@ -12,10 +12,8 @@ export function Login({userName, authState, onAuthChange}) {//
   function onChange(event) {
     if (event.target.id === 'exampleUsername') {
       setUsername(event.target.value);
-      console.log(`your username is ${Username}`);
     } else if (event.target.id === 'examplePassword') {
       setPassword(event.target.value);
-      console.log(`your password has been changed to ${Password}`);
     }
   }
 
@@ -30,8 +28,6 @@ export function Login({userName, authState, onAuthChange}) {//
   }
   
   async function loginCreate(endpoint){
-    // const username = document.querySelector("#exampleUsername")?.value;
-    // const password = document.querySelector("#examplePassword")?.value;
     const makeRequestObject = {username: Username, password: Password}; //using state variables
     try{
       if(Username === "" || Password === ""){loginRegisterError(endpoint); return;}
@@ -45,10 +41,11 @@ export function Login({userName, authState, onAuthChange}) {//
   
       if(response.ok){
         console.log(`your username is ${Username}`);
-        onAuthChange(Username, AuthState.Authenticated); //change the auth state to authenticated
+        onAuthChange(Username, AuthState.Authenticated);
+        localStorage.setItem('userName', Username);
         navigate('/AllRecipes');
       }
-      else{ //you're not going anywhere if you couldn't log in or create correctly
+      else{
         loginRegisterError(endpoint);
       }
   }
@@ -66,7 +63,7 @@ export function Login({userName, authState, onAuthChange}) {//
   function displayImage() {
     fetch('https://foodish-api.com/api/')
       .then((response) => {
-        if (!response.ok) { // Check if the response is OK
+        if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         return response.json();

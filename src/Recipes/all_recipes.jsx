@@ -4,10 +4,9 @@ import React from 'react';
 import {RecipeCard} from './recipeCard';
 import './all_recipes.css';
 import { useNavigate } from 'react-router-dom';
+import { AuthState } from '../login/authState';
 
-//let socket;
-export function AllRecipes() {
-
+export function AllRecipes({changeAuthstate}) {
     const [recipes, setRecipes] = React.useState([]); //array of recipes
     const navigate = useNavigate();
     async function generate_recipes(){
@@ -26,19 +25,20 @@ export function AllRecipes() {
           console.log("Error generating recipes in my_recipes.js");
       }
   }
-
-
     React.useEffect(() => { //called when recipes state v changes
         console.log('recipes has changed:');
     }, [recipes]); 
 
     React.useEffect(() => { 
-        navigate('/AllRecipes');
-        generate_recipes(); //called when page refreshes??
+        if(localStorage.getItem("userName") == null){
+            changeAuthstate(AuthState.Unauthenticated);
+            navigate('/');
+        }
+        else{
+            navigate('/AllRecipes');
+            generate_recipes(); //called when page refreshes??
+        } 
     }, []);
-
-
-
     return (
         <main>
         <h2 id="title">All Recipes</h2>

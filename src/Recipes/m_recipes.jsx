@@ -1,14 +1,13 @@
-
-
 import React from 'react';
 import {RecipeCard} from './recipeCard';
 import './all_recipes.css';
+import { useNavigate } from 'react-router-dom';
+import { AuthState } from '../login/authState';
 
-//let socket;
-export function MyRecipes() {
-
+export function MyRecipes({changeAuthstate}) {
     const [recipes, setRecipes] = React.useState([]); //array of recipes
-    const [username, setUsername] = React.useState(""); //username for display
+    const [username, setUsername] = React.useState("");
+    const navigate = useNavigate();
 
     async function generate_recipes(){
       try{
@@ -28,40 +27,36 @@ export function MyRecipes() {
           console.log("Error generating recipes in my_recipes.js");
       }
   }
-
-    React.useEffect(() => { //called when recipes state v changes
+    React.useEffect(() => {
         console.log('recipes has changed:');
     }, [recipes]); 
 
     React.useEffect(() => { 
-        generate_recipes(); //called when page refreshes??
+        if(localStorage.getItem("userName") == null){
+            changeAuthstate(AuthState.Unauthenticated);
+            navigate('/');
+        }
+        generate_recipes();
     }, []);
 
     async function delete_recipe(requestObject, index){
-            //requesObject holds id & file path
+            //requestObject holds id & file path
         try{
             setRecipes(prevRecipes => {
-                const copiedArray = [...prevRecipes]; // Create a copy of the current state
+                const copiedArray = [...prevRecipes];
                 copiedArray.splice(index, 1); // Remove recipe from array
                 return copiedArray; // Update state variable
                 });
-                
-            //const deleteRequestObject = {"id": RecipeID};
             const response = await fetch('/api/recipes', {
                 method: 'DELETE',
                 headers: {'content-type': 'application/json'},
                 body: JSON.stringify(requestObject),
               });
-            
-            
         }
         catch{
             console.log("deleting error");
         }
       }
-
-
-
     return (
         <main>
         <h2 id="title">My Recipes: {username}</h2>
@@ -72,7 +67,4 @@ export function MyRecipes() {
         </div>
         </main>
     );
-
-
-
 }
