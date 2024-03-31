@@ -112,4 +112,12 @@ For this deliverable I used webSocket to update the ‘makes’ on the recipes i
 - Data sent over WebSocket connection: done.
 - WebSocket data displayed - All recipe ‘makes’ display in real time.
 
+## React Deliverable ##
+For this deliverable I converted this application to use React.
+- Bundled and transpiled: done.
+- Components: Components made for every page with some pages being further broken down into additional components; the recipe form contains recipe rows and myRecipes and allRecipes are made up of recipe cards. 
+- Router: Routing between Logout, myRecipes, allRecipes, and addRecipes.
+- Hooks: State variables used to update recipe cards and update header. UseEffect used for loading pages.
+
+
 
