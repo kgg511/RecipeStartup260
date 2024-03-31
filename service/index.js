@@ -47,7 +47,7 @@ apiRouter.post('/auth/create', async (req, res) => {
     }
   }
   catch{
-    console.log("error in create user endpoint");
+    console.log("error creating user");
   }
 });
 
@@ -72,13 +72,10 @@ apiRouter.post('/upload', upload.single('image'), (req, res) => {
   if (!file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
-
   const uploadedFilePath = file.path; // Get the current path of the uploaded file
   const newFilename = file.filename + ".png"; //new name
   const directoryPath = path.dirname(uploadedFilePath); //directory path of file
   const newFilePath = path.join(directoryPath, newFilename); //define new path
-
-  console.log(`New file path: ${newFilePath}`);
 
   // Rename the file
   fs.rename(uploadedFilePath, newFilePath, (err) => {
@@ -86,7 +83,6 @@ apiRouter.post('/upload', upload.single('image'), (req, res) => {
       console.error('Error renaming file:', err);
       return res.status(500).json({ error: 'Error renaming file' });
     }
-    console.log('File renamed successfully');
   });
 
     res.send({
@@ -98,9 +94,7 @@ apiRouter.post('/upload', upload.single('image'), (req, res) => {
 // DeleteRecipes: receives a recipe id, deletes the recipe, sends nothing
 apiRouter.delete('/recipes', async (req, res) => {
   const recipeID = req.body.rID;
-  
   const fullPath = path.resolve(__dirname, '..', req.body.file);
-  
   await DB.deleteRecipe(recipeID);
 
   //delete file from the uploads directory
@@ -111,9 +105,7 @@ apiRouter.delete('/recipes', async (req, res) => {
         return;
       }
     });
-    console.log(`Deleted image: ${fullPath}`);
   }
-  
   res.status(200);
 });
 
@@ -178,14 +170,11 @@ secureApiRouter.get('/myRecipes', async (req, res) => {
     return;
   }
   const username = req.user.username;
-  console.log("about to call get my recipes");
   res.set("username", username);
   const recipesList = await DB.getRecipes(username);
-  // const recipesList = getMyRecipes(username); //body stores the username
   res.send(recipesList);
 });
 
-// makeRecipe ('make' the specified recipe, send RECIPE)
 apiRouter.post('/make', async (req, res) => {
   const makes = await DB.updateMake(req.body.id);
   if(makes == 0){
@@ -193,8 +182,6 @@ apiRouter.post('/make', async (req, res) => {
     res.send({makes: 0});
   }
   else{
-    console.log(`makes is ${makes}`);
-    console.log(typeof makes); // Output: object
     res.status(200);
     res.send({makes: makes});
   }

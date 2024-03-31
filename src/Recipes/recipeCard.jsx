@@ -7,7 +7,7 @@ import { ws } from './notifier';
 export function RecipeCard({recipe, deleteButton, onDelete}) {
   console.log("made:", recipe.RecipeMakes)
   const [makes, setMakes] = React.useState(recipe.RecipeMakes);
-  const [hasDelete, setHasDelete] = React.useState(deleteButton); //true for myRecipes, false for allRecipes
+  const [hasDelete, setHasDelete] = React.useState(deleteButton);
   const [deleted, setDeleted] = React.useState(false);
 
   React.useEffect(() => {
@@ -16,7 +16,6 @@ export function RecipeCard({recipe, deleteButton, onDelete}) {
       ws.removeHandler(update_makes);
     };
   });
-
   function createItem(ingredient, index){
       return (
         <li key ={index} className="list-group-item">
