@@ -87,8 +87,8 @@ async function submit_recipe() {
     const filename = data.filename;
     const path = data.path;
 
-    //remove everything before service, add .png to end
-    const serviceNameIndex = path.indexOf("service");
+    //remove everything before public
+    const serviceNameIndex = path.indexOf("public");
     const noService = path.slice(serviceNameIndex); 
     const realPath = noService;
     const recipe = {

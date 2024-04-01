@@ -9,7 +9,8 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 
-const upload = multer({ dest: path.join(__dirname, 'uploads/') });
+//const upload = multer({ dest: path.join(__dirname, 'uploads/') });
+const upload = multer({ dest: '../public/uploads/' });
 
 const authCookieName = 'token';
 // The service port. In production the frontend code is statically hosted by the service on the same port.
@@ -72,10 +73,11 @@ apiRouter.post('/upload', upload.single('image'), (req, res) => {
   if (!file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
-  const uploadedFilePath = file.path; // Get the current path of the uploaded file
+
+  const uploadedFilePath = file.path;
+  const absolutePath = path.resolve(__dirname, `${file.path}`);
   const newFilename = file.filename + ".png"; //new name
-  const directoryPath = path.dirname(uploadedFilePath); //directory path of file
-  const newFilePath = path.join(directoryPath, newFilename); //define new path
+  const newFilePath = absolutePath + ".png"; //define new path
 
   // Rename the file
   fs.rename(uploadedFilePath, newFilePath, (err) => {
