@@ -9,8 +9,7 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 
-//const upload = multer({ dest: path.join(__dirname, 'uploads/') });
-const upload = multer({ dest: '../public/uploads/' });
+const upload = multer({ dest: 'uploads/' });
 
 const authCookieName = 'token';
 // The service port. In production the frontend code is statically hosted by the service on the same port.
@@ -23,7 +22,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Serve up the frontend static content hosting
-app.use(express.static('public'));
+app.use(express.static('public')); 
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Router for service endpoints
 var apiRouter = express.Router();
@@ -66,7 +67,6 @@ apiRouter.post('/auth/login', async (req, res) => {
   res.status(401).send({ msg: 'Unauthorized'});
 });
 
-
 //uploadImages to server
 apiRouter.post('/upload', upload.single('image'), (req, res) => {
   const file = req.file;
@@ -75,9 +75,9 @@ apiRouter.post('/upload', upload.single('image'), (req, res) => {
   }
 
   const uploadedFilePath = file.path;
-  const absolutePath = path.resolve(__dirname, `${file.path}`);
   const newFilename = file.filename + ".png"; //new name
-  const newFilePath = absolutePath + ".png"; //define new path
+  const newFilePath = uploadedFilePath + ".png"; //define new path
+  console.log("new path", newFilePath);
 
   // Rename the file
   fs.rename(uploadedFilePath, newFilePath, (err) => {
@@ -91,6 +91,22 @@ apiRouter.post('/upload', upload.single('image'), (req, res) => {
       filename: newFilename,
       path: newFilePath
     });
+});
+
+//given age name
+apiRouter.get('/image', (req, res) => {
+  const imageName = req.headers['x-filepath'];
+  const imagePath = path.join(__dirname, imageName);
+
+  // Check if the image file exists
+  if (fs.existsSync(imagePath)) {
+    res.contentType('image/png');
+    res.status(200);
+    res.sendFile(imagePath);
+
+  } else {
+    res.status(404).send('Image not found');
+  }
 });
 
 // DeleteRecipes: receives a recipe id, deletes the recipe, sends nothing
@@ -189,7 +205,6 @@ apiRouter.post('/make', async (req, res) => {
   }
   
 });
-
 
 // Return the application's default page if the path is unknown
 app.use((_req, res) => {

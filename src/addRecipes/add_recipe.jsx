@@ -23,13 +23,11 @@ export function AddRecipe({changeAuthstate}) {
   function onUpdate(event) { 
     if (event.target.id === 'exampleName') { //recipe name
       setRecipeName(event.target.value);
-      console.log(`recipe name changed ${recipeName}`);
     } else if (event.target.id === 'imageFile') {
       setImageFile(event.target.files[0]);
     }
     else if (event.target.id === 'formInstructions') {
       setInstructions(event.target.value);
-      console.log(`instructions: ${instructions}`);
     }
   }
 
@@ -40,7 +38,6 @@ export function AddRecipe({changeAuthstate}) {
         [columnName]: newValue // Update the specific column value
       };
     setIngredients(newData); // update state variable
-    console.log("ALERT: ingredient" + ingredients[rowIndex].name + " amount:" + ingredients[rowIndex].amount)
   };
 
   const addRow = () => {
@@ -62,8 +59,6 @@ async function submit_recipe() {
   })
   const userObject = await data.json();
   const username = userObject.username;
-
-
   const formData = new FormData();
   const fileSizeMB = imageFile.size/ 1048576;
   if(fileSizeMB > 20){ //file
@@ -87,13 +82,9 @@ async function submit_recipe() {
     const filename = data.filename;
     const path = data.path;
 
-    //remove everything before public
-    const serviceNameIndex = path.indexOf("public");
-    const noService = path.slice(serviceNameIndex); 
-    const realPath = noService;
     const recipe = {
       RecipeName: recipeName,
-      RecipeImage: realPath,
+      RecipeImage: path,
       RecipeIngredients: ingredients,
       RecipeInstructions: instructions,
       RecipeMakes: 0,
@@ -106,9 +97,6 @@ async function submit_recipe() {
       body: JSON.stringify(recipe),
     });
 
-
-    // Process data from second fetch
-    console.log("Recipe submitted!");
     navigate('/MyRecipes');
   } 
   catch (error) {

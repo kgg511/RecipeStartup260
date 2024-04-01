@@ -8,6 +8,7 @@ export function RecipeCard({recipe, deleteButton, onDelete}) {
   const [makes, setMakes] = React.useState(recipe.RecipeMakes);
   const [hasDelete, setHasDelete] = React.useState(deleteButton);
   const [deleted, setDeleted] = React.useState(false);
+
   const [recipeImage, setRecipeImage] = React.useState(null);
 
   React.useEffect(() => {
@@ -16,14 +17,30 @@ export function RecipeCard({recipe, deleteButton, onDelete}) {
       ws.removeHandler(update_makes);
     };
   });
-  React.useEffect(() => {
-    async function importImage() {
-      const imagePath = recipe.RecipeImage.substring(6); //remove public
-      setRecipeImage(imagePath);
-    }
-    importImage();
-  }, [recipe.RecipeImage]);
 
+  React.useEffect(() => {
+    // Fetch the image from the backend
+    fetch("/api/image", {
+      method: 'GET',
+      headers: { 'Accept': 'image/png', 'X-FilePath': recipe.RecipeImage},
+
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.arrayBuffer();
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then(arrayBuffer => {
+      // Convert the array buffer to a base64 string
+      const base64String = btoa(
+        new Uint8Array(arrayBuffer)
+          .reduce((data, byte) => data + String.fromCharCode(byte), '')
+      );
+      setRecipeImage(base64String);
+    })
+    .catch(error => console.error('Error fetching image:', error));
+}, []);
   function createItem(ingredient, index){
       return (
         <li key ={index} className="list-group-item">
@@ -37,6 +54,7 @@ export function RecipeCard({recipe, deleteButton, onDelete}) {
       setMakes(makes + 1);
     }
   }
+
   async function press_make(RecipeID){
     //update recipe in the database
     try{
@@ -54,8 +72,7 @@ export function RecipeCard({recipe, deleteButton, onDelete}) {
         else{
           setMakes(result.makes);
           ws.broadcast_makes(RecipeID, result.makes);
-        }
-         
+        }  
     }
     catch (error){
         console.log("press_make error", error);
@@ -68,12 +85,13 @@ export function RecipeCard({recipe, deleteButton, onDelete}) {
           <div className="flip-card">
             <div className="flip-card-inner">
                 <div className="flip-card-front">
-                  <img className="card-img-top" src={recipeImage} alt="Recipe Image" />
+                  <img className="card-img-top" src={`data:image/png;base64,${recipeImage}`} alt="Recipe Image" />
                   <div className="card-body">
                     <h5 className="card-title">{recipe.RecipeName}</h5>
                     <h6 className="card-subtitle mb-2 text-muted">{recipe.Username}</h6>
                   </div>
                 </div>
+  
                 <div className="flip-card-back">
                   <div className="card-body">
                     <h5 className="card-title">{recipe.RecipeName}</h5>
