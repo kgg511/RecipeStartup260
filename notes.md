@@ -1264,7 +1264,7 @@ Sources: you can set breakpoints by clicking the numbers. Then just reload the p
 
 **Midterm line**
 --------------------------
-MIDTERM 2/26: The internet, Web servers, Domain names
+**MIDTERM 2/26: The internet, Web servers, Domain names**
 The internet
 internet connects independent networks and computing devices
 to talk to another a device must have an IP address. Domain names converted to IP
@@ -1389,7 +1389,6 @@ Client caches and returns as HTTP header
 HTTP/2 200
 Cookie: myAppCookie=tasty
 
-
 Fetch
 fetch API is preferred way to make HTTP requests
 takes in URL, returns a promise. then function takes callback function that is called when the requested URL content is  obtained. If returned content is of type json then json function on response object to convert to js
@@ -1424,7 +1423,7 @@ fetch('https://jsonplaceholder.typicode.com/posts', {
 
 https://codepen.io/kgg511/pen/qBvgrmK
 
-3/1: Node.js
+**3/1: Node.js**
 Chromium browsers use V8. Node.js runs V8 engine inside console application. When run JS in Chrome/Node.js, V8 reads code and executes
 install Node version manager and use to install Node.js into development environment.
 node -v    → tells you what version of node you have. Use to verify it’s installed.
@@ -1480,8 +1479,7 @@ Add require('<package name here>') to your application's JavaScript
 Use the code the package provides in your JavaScript
 Run your code with node index.js
 
-¾: ☑ Express, Simon service, ☑ Startup Service
-
+**¾: ☑ Express, Simon service, ☑ Startup Service**
 Express 
 Node package Express provides support for:
 Routing requests for service endpoints
@@ -1550,7 +1548,6 @@ EXAMPLE WEB SERVICE BUILT USING EXPRESS
 
 
 Simon service
-
 EXAMPLE
 endpoints for getting and updating scores
 third party endpoints for inspirational quotes
@@ -1610,14 +1607,938 @@ debug node.js video
 set up breakpoints in vscode
 curl localhost:3000/api/user/test
 
-./deployService.sh -k <yourpemkey> -h <yourdomain> -s simon
-./deployService.sh -k ~/cs260/Lofthouse260.pem -h tastetrove.click -s simon
+**3/6: SOP and CORS, Service design**
+SOP and CORS
+SOP: Same origin policy: JS can only make requests to a domain if it is the same domain that the user is current viewing.
+A request from hacker website to real website would fail
+CORS: Cross Origin Resource Sharing: Allows the client to specify the origin of a request and then let the server respond with what origins are allowed.
 
-Startup Service
+Using third party services
+to make requests to a different domain
+HTTP/2 200
+access-control-allow-origin: https://cs260.click //HTTP header explicitly list domain
+h * or your calling origin else you can’t use them.
+make sure services respond wit
 
 
+Service design
+
+GET, POST, PUT, and DELETE 
+
+RPC (function call)
+expose service endpoints as function calls
+POST /updateOrder HTTP/2
+{"id": 2197, "date": "20220505"}
+
+OR
+POST /rpc HTTP/2
+{"cmd":"updateOrder", "params":{"id": 2197, "date": "20220505"}}
+ 
+REST (resource)
+PUT /order/2197 HTTP/2
+{"date": "20220505"}
+
+GraphQL *one endpoint, the query endpoint
+manipulation of data instead of a function call/resource
+specifies desired data and how it should be joined and filtered
+with the query you can request for multiple things at once
+query {
+  getOrder(id: "2197") {
+    orders(filter: {date: {allofterms: "20220505"}}) {
+      store
+      description
+      orderedBy
+    }
+  }
+}
+
+Service Deliverable
+For this deliverable I added backend endpoints that receive recipe makes, new recipe posts, and images.
+
+Node.js/Express HTTP service: done
+Static middleware for frontend: done
+Calls to third party endpoints: On the login page it displays a random food image. (takes a second to show up, might have to return back to page later)
+Backend service endpoints: Endpoints for uploading images to the server, deleting/adding/updating recipes and fetching recipes
+Frontend calls service endpoints: The frontend calls the endpoints using fetch.
+
+3/11: Development and production environments
+development & production environments are kept separate using CI processes: checkout code, link, build, test, stage, then finally deploy to production environment
+dev environment: your computer
+production env: your server
+
+./deployService.sh -k ~/prod.pem -h yourdomain.click -s simon
+-k: credential file to access production env
+-h: domain name of production env
+-s: name of application being deployed
+
+Deployment script
+parse cmdline parameters
+copy applicable source files into dist directory. dist is to be copied to production server
+target directory on production env deleted for new one to replace
+distribution directory copied to production env using scp
+ssh to install node packages, restart service daemon that runs web application
+clean development env by deleting distribution package
+
+**3/13: Storage services, Data services**
+Storage services
+web applications often need to store files, this can be done using a database service
+reasons to not store files directly on server: server has limited drive space, data will disappear when server disappears
+AWS S3: unlimited capacity, only pay for what you use, global access, etc
+STEPS (should you decide to use it)
+create S3 bucket
+get credentials so application can access bucket
+use credentials
+use SDK to write/list/read/delete files
+Data services
+https://cloud.mongodb.com/v2/65e55ac15965653a540ff80d#/metrics/replicaSet/65e55bec09f5b17de54b2062/explorer/rental/house/find
+
+SQL has been great historically but there are DB that are better NoSQL solutions bc don’t use the general purpose relational db paradigms
+
+Services & Specialities
+MySQL: Relational queries
+Redis: Memory cached objects
+ElasticSearch: Ranked free text
+MongoDB: JSON objects
+DynamoDB: key value pairs
+Neo4j: Graph based data
+influxDB: Time series data
+
+MongoDB
+db made of 1+ collections that each contain JSON documents
+collection: array of JS objects each with unique id
+[
+  {
+    _id: '62300f5316f7f58839c811de',
+    name: 'Lovely Loft',
+    summary: 'A charming loft in Paris',
+    beds: 1,
+    last_review: {
+      $date: '2022-03-15T04:06:17.766Z',
+    },
+    price: 3000,
+  },
+  {
+    _id: '623010b97f1fed0a2df311f8',
+    name: 'Infinite Views',
+    summary: 'Modern home with infinite views from the infinity pool',
+    property_type: 'House',
+    beds: 5,
+    price: 250,
+  },
+];
+
+No strict schema requirements
+
+EXAMPLE of DB:
+db.house.find(); // find all houses
+db.house.find({ beds: { $gte: 2 } }); // find houses with two or more bedrooms
+db.house.find({ status: 'available', beds: { $lt: 3 } }); // find available houses with <3 beds
+db.house.find({ $or: [(beds: { $lt: 3 }), (price: { $lt: 1000 })] }); // find houses with <3 beds OR <$1000/night 
+db.house.find({ summary: /(modern|beach)/i }); // find houses with text 'modern'/ 'beach' in summary
+
+Using MongoDB in application
+install mongodb using NPM:
+npm install mongodb
+
+const { MongoClient } = require('mongodb');
+const userName = 'holowaychuk';
+const password = 'express';
+const hostname = 'mongodb.com';
+const url = `mongodb+srv://${userName}:${password}@${hostname}`;
+const client = new MongoClient(url);
+
+Now you can use this client to get a db object and from this a collection object for insert/query
+if you insert a document into db/collection that doesn’t exist Mongo creates it automatically
+when a document is inserted it automatically gets a random id
+
+const collection = client.db('rental').collection('house'); //create collection object
+
+const house = {
+  name: 'Beachfront views',
+  summary: 'From your bedroom to the beach, no shoes required',
+  property_type: 'Condo',
+  beds: 1,
+};
+await collection.insertOne(house); //insert document into db
+
+const cursor = collection.find(); //query
+const rentals = await cursor.toArray(); //find is asynch
+rentals.forEach((i) => console.log(i));
+
+If find is given no parameters it returns all documents in the collection
+[ //example output
+  {
+    _id: new ObjectId('639a96398f8de594e198fc13'),
+    name: 'Beachfront views',
+    summary: 'From your bedroom to the beach, no shoes required',
+    property_type: 'Condo',
+    beds: 1,
+  },
+];
+
+find() function:
+const query = { property_type: 'Condo', beds: { $lt: 2 } };
+const options = { //sort by descending price, first 10 documents
+  sort: { price: -1 },
+  limit: 10,
+};
+const cursor = collection.find(query, options);
+const rentals = await cursor.toArray();
+rentals.forEach((i) => console.log(i));
+
+**3/18: Authorization services, Account creation and login, Simon Login, Startup Login
+**Authorization services, 
+ask for info like email/password, authenticate user by storing authentication token on the user’s device in a cookie passed back to web service on each request
+allows service to associate data user gives with identifier of token
+authorization services
+
+Account creation and login
+2 service endpoints: create authentication credential, authenticate/login on future visits
+authentication endpoint: taken email & password and return cookie with authtoken and userID. If email DNE or bad password return 401 status code
+POST /auth/create HTTP/2
+Content-Type: application/json
+{
+  "email":"marta@id.com",
+  "password":"toomanysecrets"
+}
+
+HTTP/2 200 OK
+Content-Type: application/json
+Set-Cookie: auth=tokenHere
+
+{
+  "id":"337"
+}
+
+GetMe endpoint: taken authToken, if token/user DNE return 401
+GET /user/me HTTP/2
+Cookie: auth=tokenHere
 
 
+HTTP/2 200 OK
+Content-Type: application/json
+{
+  "email":"marta@id.com"
+}
+
+Web service: 
+const express = require('express');
+const app = express();
+
+app.post('/auth/create', async (req, res) => {
+  res.send({ id: 'user@id.com' });
+});
+
+app.post('/auth/login', async (req, res) => {
+  res.send({ id: 'user@id.com' });
+});
+
+const port = 8080;
+app.listen(port, function () {
+  console.log(`Listening on port ${port}`);
+});
+
+**a bunch of instructions to do all this stuff
+
+function setAuthCookie(res, authToken) {
+ res.cookie('token', authToken, {
+   secure: true, //requires HTTPS to send cookie back to server
+   httpOnly: true, //JS running on browser can’t read cookie
+   sameSite: 'strict', //only return cookie to domain that generated it
+ });
+}
+
+260 Login startup
+database: replace dictionary with this
+db1: The actual recipe info: username, recipe info…
+then you can just get all of their recipes by selecting all rows with their username
+db2: authToken, user. one username can have multiple authTokens
+
+login: 
+create: store user in the database and give them first authtoken. Verify that username is not already taken
+login: verify username and password are correct, if so create an authToken and store.
+cookies:
+add create button to call create endpoint
+creates an authToken associated w username???
+- it puts the authToken in a header called a cookie
+	- it will instead use authToken when fetching recipes. Well, an authToken -> username -> getRecipes
 
 
-![input](notes/internet.png)
+endpoints: create account, login, logout, get user, get recipes…
+3/20:Service daemons - PM2, UI testing, Endpoint testing
+
+Service daemons - PM2
+keep programs running after closing computer by registering it as a daemon, PM2
+
+ssh into server and see PM2 in command. pm2 ls
+![input](notes/3/20.png)
+
+Register new web service (set up domain that accesses a different web service)
+add rule to caddyfile to tell how to direct requests for that domain
+create directory and add files for web service
+configure PM2 to host web service
+
+Modify caddy
+ssh into server, copy startup one, change port.
+when get request for domain pass to web service on specified port
+tacos.cs260.click {
+  reverse_proxy _ localhost:5000
+  header Cache-Control none
+  header -server
+  header Access-Control-Allow-Origin *
+}
+restart caddy: sudo service caddy restart
+
+create web service
+cp -r ~/services/startup ~/services/tacos
+
+
+UI testing
+playright
+npm init playwright@latest
+import { test, expect } from '@playwright/test';
+
+test('testWelcomeButton', async ({ page }) => {
+  // Navigate to the welcome page
+  await page.goto('http://localhost:5500/');
+
+  // Get the target element and make sure it is in the correct starting state
+  const hello = page.getByTestId('msg');
+  await expect(hello).toHaveText('Hello world');
+
+  // Press the button
+  const changeBtn = page.getByRole('button', { name: 'change welcome' });
+  await changeBtn.click();
+
+  // Expect that the change happened correctly
+  await expect(hello).toHaveText('I feel not welcomed');
+});
+
+VScode live server extension
+
+BrowserStack
+
+Endpoint testing
+Jest for testing
+
+console:
+mkdir testJest
+cd testJest
+npm init -y
+npm install express
+code .
+
+server.js
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+// Endpoints
+app.get('/store/:storeName', (req, res) => {
+  res.send({ name: req.params.storeName });
+});
+
+app.put('/store/:storeName', (req, res) => {
+  req.body.updated = true;
+  res.send(req.body);
+});
+
+module.exports = app; //we export app object from server.js then import index.js to run server
+
+index.js
+const app = require('./server');
+
+const port = 8080;
+app.listen(port, function () {
+  console.log(`Listening on port ${port}`);
+});
+![input](notes/3/202.png)
+create file with suffix .test.js
+
+store.test.js
+test('that equal values are equal', () => {
+  expect(false).toBe(true);
+});
+
+const request = require('supertest');
+const app = require('./server');
+
+test('getStore returns the desired store', (done) => {
+  request(app)
+    .get('/store/provo')
+    .expect(200)
+    .expect({ name: 'provo' })
+    .end((err) => (err ? done(err) : done()));
+});
+
+
+npm install jest -D
+replace scripts of package.json to:
+"scripts": {
+  "test": "jest"
+},
+npm run test
+
+**3/22: WebSocket, Debugging WebSocket, WebSocket chat, Simon WebSocket, Startup WebSocket
+**WebSocket
+WebSocket is fully duplexed: After initial connection made to client, then upgraded by server to WebSocket connection, the relationship changes to peer-to-peer connection where either party can efficiently send data at any time
+To have a convo between a group of users, the server is an intermediary: Each peer connects to server, server forwards messages 
+Creating WebSocket convo: WebSocket API
+CLIENT
+const socket = new WebSocket('ws://localhost:9900'); 
+socket.onmessage = (event) => { //register callback to receive messages
+  console.log('received: ', event.data);
+};
+socket.send('I am listening'); //send messages w send function
+
+server uses ws package to create WebSocketServer listening on same port of browser
+SERVER
+const { WebSocketServer } = require('ws');
+const wss = new WebSocketServer({ port: 9900 });
+wss.on('connection', (ws) => {
+  ws.on('message', (data) => {
+    const msg = String.fromCharCode(...data);
+    console.log('received: %s', msg);
+
+    ws.send(`I heard you say "${msg}"`);
+  });
+
+  ws.send('Hello webSocket');
+});
+Debugging WebSocket
+refer back to when doing startup bc no worko
+WebSocket chat
+use ws for http, wss for https
+
+web service
+const { WebSocketServer } = require('ws');
+const express = require('express');
+const app = express();
+
+// Serve up our webSocket client HTML
+app.use(express.static('./public'));
+
+const port = process.argv.length > 2 ? process.argv[2] : 3000;
+server = app.listen(port, () => {
+  console.log(`Listening on ${port}`);
+});
+
+const wss = new WebSocketServer({ noServer: true });
+
+// Handle the protocol upgrade from HTTP to WebSocket
+server.on('upgrade', (request, socket, head) => {
+  wss.handleUpgrade(request, socket, head, function done(ws) {
+    wss.emit('connection', ws, request);
+  });
+});
+connection, message, and close events to forward messages between peers
+let connections = [];
+
+wss.on('connection', (ws) => {
+  const connection = { id: connections.length + 1, alive: true, ws: ws };
+  connections.push(connection);
+
+  // Forward messages to everyone except the sender
+  ws.on('message', function message(data) {
+    connections.forEach((c) => {
+      if (c.id !== connection.id) {
+        c.ws.send(data);
+      }
+    });
+  });
+
+  // Remove the closed connection so we don't try to forward anymore
+  ws.on('close', () => {
+    connections.findIndex((o, i) => {
+      if (o.id === connection.id) {
+        connections.splice(i, 1);
+        return true;
+      }
+    });
+  });
+});
+
+automatically closes if no data is sent to it. You can have it send a ping message to see if user is there and receive pong to indicate yes.
+setInterval(() => {
+  connections.forEach((c) => {
+    // Kill any connection that didn't respond to the ping last time
+    if (!c.alive) {
+      c.ws.terminate(); //terminate connections that don’t respond to ping
+    } else {
+      c.alive = false;
+      c.ws.ping();
+    }
+  });
+}, 10000);
+
+//client side
+ws.on('pong', () => {
+  connection.alive = true;
+});
+
+
+Simon WebSocket
+install ws 
+attach websocket listener to HTTP server
+Startup WebSocket
+
+WebSocket Deliverable
+For this deliverable I used webSocket to update the ‘makes’ on the recipes in realtime.
+-Backend listens for WebSocket connection - done!
+-Frontend makes WebSocket connection - done!
+-Data sent over WebSocket connection - done!
+-WebSocket data displayed - All recipe ‘makes’ display in real time.
+
+**3/25: Security, OWASP top 10**
+
+Security
+sudo less +G /var/log/auth.log
+
+-Hacking: process of making system do something it’s not supposed to
+-Exploit: code or input that takes advantage of programming/configuration flaw
+-Attack Vector: Method hacker employs to penetrate and exploit a system
+-Attack Surface: Exposed parts of a system that an attacker can access: server endpoints, open port 22,443,80, user accounts
+-Attack payload: The code/data that hacker delivers to system to exploit it
+-Input sanitization: ‘cleaning’ input of potentially malicious data
+-Black box testing: testing application without knowledge of internals of application
+-White box testing: testing application with knowledge of source code and internal structure
+-penetration testing: attempting to gain access to/exploit system
+-mitigation: action taken to remove/reduce threat
+
+Motivations to attack
+-Disruption: destroy normal business operations
+-Data exfiltration: by extract/expose data can embarrass company, exploit info, sell info, etc
+-Resource consumption: if take control of computing resources can use it for other purposes.
+
+Hacking Techniques
+-Injection: turn user input into search query
+-Cross-site scripting XSS: make malicious code execute on a different user’s browser. Turn a trustworthy browser into one that can steal passwords.
+-Denial of service: attack with goal to make service inaccessible
+-Credential Stuffing: steal credentials from previous attack and use on a different website. Or, brute force.
+-Social engineering: Appeal to human desire to help to gain unauthorized access or info
+
+What to do
+-Sanitize input data: input data should not be able to be turned into executable or overload resources
+-Logging: Log requests that will expose when system is exploited
+-Traps: Create ‘valuable info’ and trigger alarms when data accessed
+-Eucate
+-Reduce Attack surfaces: Do not open access anymore than necessary for application
+-Layered security: Multiple layers of security
+-Least required access policy: Only give user the access they need
+-safeguard credentials: do not store credentials in accessible locations
+-public review
+
+OWASP top 10
+top 10 list of most important web application security risks
+Broken Access Control: Doesn’t properly enforce permissions on user. Even if UI restricts it they could just change the URL
+Cryptographic Failures: sensitive data accessible without encryption, weak encryption, etc
+Injection: 
+`p@ssword!'; DROP TABLE db; --`;
+`SELECT user FROM db WHERE password='${password}' LIMIT 1`;
+SELECT user FROM db WHERE password='p@ssword!'; DROP TABLE db; -- ` LIMIT 1
+Insecure design: designed badly. EX: can create trial accounts easy -> make millions of accounts
+Security Misconfiguration: 
+Vulnerable and Outdated Components
+Identification and Authentication Failures: Scenario where user’s identity can be impersonated by attacker. Guessing password, easy password recovery
+Software and Data Integrity Failure: Attacks that allow external software, to compromise your application. Do security audit before using packages
+Security Logging and Monitoring Failures: Store logs to be accessible, immutable so that hackers can’t just delete them
+Server Side Request Forgery: Attack that causes service to make unintended internal requests to expose internal data or services
+
+
+**3/29: Web frameworks, React, ☑ Components**
+Codepen: https://codepen.io/kgg511/pen/zYXoePr
+ Web frameworks, 
+provide tools for common application task
+React creates hybrid file format with html + JS
+
+Vue framework: HTML, CSS, JS
+template: html
+script: js
+style: css
+Svelte: combines all 3. Requires transpiler.
+React: JS + HTML. CSS is declared outside of JSX
+import 'hello.css';
+
+const Hello = () => {
+  let name = 'world';
+  return <p>Hello {name}</p>;
+};
+
+
+p {
+  color: green;
+}
+
+Angular component: defines what JS, HTML, and CSS combined together. Keeps JS, HTML, CSS separate
+
+
+React, ☑ 
+abstracts HTML into JS variant called JSX
+JSX is converted into valid HTML and JS using preprocessor Babel
+REACT
+const i = 3;
+const list = (
+  <ol class='big'>
+    <li>Item {i}</li>
+    <li>Item {3 + i}</li>
+  </ol>
+);
+
+converts to JS
+const i = 3;
+const list = React.createElement(
+  'ol',
+  { class: 'big' },
+  React.createElement('li', null, 'Item ', i),
+  React.createElement('li', null, 'Item ', 3 + i)
+);
+React.createElement generates the DOM elements. When change in data they represent changes, React triggers dependent changes 
+
+Components
+-react allows you to modularize application so that code directly represents the components the user interacts with
+-render function: whatever is returned from this function is inserted into component HTML element
+
+JSX
+<div>
+  Component: <Demo /> //this causes react to load Demo component, call render, insert here
+</div>
+
+React component
+function Demo() { //render function
+  const who = 'world';
+  return <b>Hello {who}</b>;
+}
+
+Creates Resulting HTML
+<div>Component: <b>Hello world</b></div>
+
+-Properties: pass info to components as element properties
+
+JSX
+<div>Component: <Demo who="Walke" /><div>
+
+Component
+function Demo(props) {
+  return <b>Hello {props.who}</b>;}
+
+RESULT
+<div>Component: <b>Hello Walke</b></div>
+
+-State: Component can have internal state. state created by calling React.useState function. Returns variable containing current state and function to update state.
+EX: create state variable, clicked, toggles click state in updateClicked function
+
+
+const Clicker = () => { //creates component named Clicker
+  const [clicked, updateClicked] = React.useState(false); 
+//declare state variable clicked and initialize to false
+
+  const onClicked = (e) => { //takes in event e. When called, toggles clicked
+    updateClicked(!clicked);
+  };
+
+  return <p onClick={(e) => onClicked(e)}>clicked: {`${clicked}`}</p>;
+};
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Clicker />);
+
+-You can use JSX without a function, just anywhere you would otherwise give component
+const hello = <div>Hello</div>;
+ReactDOM.render(hello, document.getElementById('root'));
+
+-Class style components: Don’t use these bc they are getting old but you should be able to read them. Properties on loaded on the constructor and state is set using setState function
+
+class Clicker extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      clicked: false,
+    };
+  }
+  onClicked() {
+    this.setState({
+      clicked: !this.state.clicked,
+    });
+  }
+  render() {
+    return <p onClick={(e) => this.onClicked(e)}>clicked: {`${this.state.clicked}`}</p>;
+  }
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Clicker />);
+
+-Reactivity: A component’s properties and state are used by React framework to determine the reactivity of the interface. Reactivity controls how a component reacts to user actions or events. When state/properties change, the render function for the component and all of its dependent component render functions are called.
+
+const Demo = ({ who }) //these two lines are the same
+const Demo = (props.who) 
+
+**4/1 Toolchain, ☑ Vite, ☑ Router**
+ Toolchains
+-code repository: stores code in shared, versioned,location
+-linter: removes, or warns, of non-idiomatic code usage
+-prettier: Format code according to shared standard
+-Transpiler: compiles code into different format
+-Polyfill: Generates backward compatible code to support old browser versions that do not support latest standards
+-Bundler: packages code into bundles to deliver to browser
+-Minifier:  Removes whitespace and rename variables to make code smaller and more efficient to deploy
+-Testing: automated tests at multiple levels
+-Deployment: automated packaging and delivery of code
+
+-for React we use Github as repository, Vite for JSX, TS, dev and debugging support, ESBuild, Rollup for bundling, PostCSS for CSS transpile, deployReact.sh for deploy
+☑ Vite
+-Vite bundles your code quickly, has great debugging support, and allows you to easily support JSX, TypeScript, and different CSS flavors
+
+-create new web application in the demoVite directory, download 3rd party packages, start up application on HTTP debugging server
+-o to open browser to where it is, h to see all options
+npm create vite@latest demoVite -- --template react
+cd demoVite
+npm install
+npm run dev
+
+Generated project directory
+![input](notes/4/1.png)
+-The index.html is loaded, which tells it to load jsx in the html
+-while in the jsx it saids load the app component in App.jsx
+
+-use jsx for files with JSX
+-Building production release: npm run dev bundles the code to a temp directory that Vite debug HTTP server loads from. To bundle application to deploy to production env, do npm run build
+-npm run build: executes build script in package.json, invokes Vite. Outputs everything to deploy ready version contains in subdirectory named dist
+
+-deployReact.sh creates production distribution by calling npm run build and then copying dist to production server
+
+Alter the CSS to change background and text colors to something different.
+Replace the text in the App component with your name.
+Change the counter to increment by 10 instead of by one.
+
+☑ Router
+codepen: https://codepen.io/kgg511/pen/yLrVwye
+-A web framework router provides functionality for single-page applications
+-if you have multiple pages then the headers/footers/nav/common components must either be duplicated in each HTML page or injected before the server sends the page to the browser
+-we use react-router-dom
+// Inject the router into the application root DOM element
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  // BrowserRouter component that controls what is rendered
+  // NavLink component captures user navigation requests
+  // Routes component defines what component is routed to
+  <BrowserRouter>
+    <div className='app'>
+      <nav>
+        <NavLink to='/'>Home</Link>
+        <NavLink to='/about'>About</Link>
+        <NavLink to='/users'>Users</Link>
+      </nav>
+
+      <main>
+        <Routes>
+          <Route path='/' element={<Home />} exact />
+          <Route path='/about' element={<About />} />
+          <Route path='/users' element={<Users />} />
+          <Route path='*' element={<Navigate to='/' replace />} />
+        </Routes>
+      </main>
+    </div>
+  </BrowserRouter>
+);
+
+**4/3:  Reactivity, ☑ Tic-tac-toe tutorial, Hooks**
+Reactivity: https://codepen.io/kgg511/pen/jORVJMb
+-React enables reactivity with props, state, and render
+-when a component’s JSX is rendered, React parses the JSX, creates a list of any references to the component’s state or prop objects. Then, react monitors to see if any change. If so, call the render function.
+
+// The Survey component
+const Survey = () => {
+  const [color, updateColor] = React.useState('#737AB0');
+
+  // When the color changes update the state
+  const onChange = (e) => {
+    updateColor(e.target.value);
+  };
+  return (
+    <div>
+      <h1>Survey</h1>
+      {/* Pass the Survey color state as a property to the Question.
+          When the color changes the Question property will also be updated and rendered. */}
+      <Question color={color} />
+
+      <p>
+        <span>Pick a color: </span>
+        {/* Pass the Survey color state as a property to the input element.
+            When the color changes, the input property will also be updated and rendered. */}
+        <input type='color' onChange={(e) => onChange(e)} value={color} />
+      </p>
+    </div>
+  );
+};
+
+// The Question component
+const Question = ({ color }) => {
+  const [answer, updateAnswer] = React.useState('pending...');
+
+  function onChange({ target }) {
+    updateAnswer(target.value);
+  }
+
+  return (
+    <div>
+      <span>Do you like this</span>
+      {/* Color rerendered whenever the property changes */}
+      <span style={{ color: color }}> color</span>?
+      <label>
+        <input type='radio' name='answer' value='yes' onChange={(e) => onChange(e)} />
+        Yes
+      </label>
+      <label>
+        <input type='radio' name='answer' value='no' onChange={(e) => onChange(e)} />
+        No
+      </label>
+      {/* Answer rerendered whenever the state changes */}
+      <p>Your answer: {answer}</p>
+    </div>
+  );
+};
+
+ReactDOM.render(<Survey />, document.getElementById('root'));
+
+☑ Tic-tac-toe tutorial
+Hooks
+used to make style components be able to do everything that a class style component can do. Also, as new features are added to React they are included as hooks
+function Clicker({initialCount}) {
+  const [count, updateCount] = React.useState(initialCount);
+  return <div onClick={() => updateCount(count + 1)}>Click count: {count}</div>;
+}
+
+ReactDOM.render(<Clicker initialCount={3} />, document.getElementById('root'));
+
+
+-useEffect hook: represent lifecycle events: ex: every time component renders.
+No dependencies in this example. Effect will be triggered on every render.
+function UseEffectHookDemo() {
+  React.useEffect(() => {
+    console.log('rendered');
+  });
+  return <div>useEffectExample</div>;
+}
+
+ReactDOM.render(<UseEffectHookDemo />, document.getElementById('root'));
+
+-Control what triggers useEffect by specifying dependencies:
+count1 is dependency. So, effect is only triggered when count1 changes
+function UseEffectHookDemo() {
+  const [count1, updateCount1] = React.useState(0);
+  const [count2, updateCount2] = React.useState(0);
+
+//use effect takes 2 arguments. function & optional dependency array
+  React.useEffect(() => {
+    console.log(`count1 effect triggered ${count1}`);
+  }, [count1]);
+
+  return (
+    <ol>
+      <li onClick={() => updateCount1(count1 + 1)}>Item 1 - {count1}</li>
+      <li onClick={() => updateCount2(count2 + 1)}>Item 2 - {count2}</li>
+    </ol>
+  );
+}
+
+ReactDOM.render(<UseEffectHookDemo />, document.getElementById('root'));
+
+**4/8: TypeScript, Performance monitoring**
+TypeScript
+-adds type checking to javascript. Will give you an error before code runs.
+function increment(value: number) {
+  return value + 1;
+}
+-you could use it to specify types of object properties
+state: {
+    imageUrl: string;
+    quote: string;
+    price: number;
+  };
+
+-Interfaces: collection of parameters and types an object must contain to satisfy that type.
+interface Book {
+  title: string;
+  id: number;
+}
+-typescript could warn of variable possibly being null
+-querySelector<HTMLElement>() : coerced subtype?
+-unions: 
+-define possible values for a type
+type AuthState = 'unknown' | 'authenticated' | 'unauthenticated';
+let auth: AuthState = 'authenticated';
+	-define possible types variable can be:
+function square(n: number | string) {
+  if (typeof n === 'string') {
+    console.log(`{$n}^2`);
+  } else {
+    console.log(n * n);
+  }
+}
+
+https://www.typescriptlang.org/play
+
+npx create-react-app my-app --template typescript
+-create tsconfig.json to configure
+
+Performance monitoring
+-need to keep program loading fast or users will lose interest
+-monitor browser application latency, network latency, service endpoint latency
+
+Browser Application Latency
+-impacted by speed of user’s device, amount of data, time complexity of algorithm
+-make application processing as asynchronous as possible
+-use compression when transferring files over HTTP, reduce quality of images/video, minify J/CSS, use HTTP/2or3
+
+Network Latency
+-avoid unnecessary/large network requests
+-impacted by amount of data sent, amount user can receive/s, distance
+-host application files in data centers close to the users you wish to serve
+
+Service Endpoint Latency
+-number of requests made and amount of time to process each
+-reduce as much as possible
+
+TOOLS
+-Chrome network tab: see network request made and time, see which take most time/size
+-network, you can simulate 3g low-end phone throttling
+-chrome lighthouse: run analysis of application
+-chrome performance tab
+-global speed tests: test application from different locations around the world
+
+**4/10: UX design**
+-simplicity: attracts users attention and engages them. Not necessarily a blank page, just keep things focused on 1 purpose
+-consistency: follow standard layout to other web pages so user doesn’t have to think too much
+-navigation: 
+-Application map: make map of all views to present to user
+-Device controls: add navigational controls to use application
+-Breadcrumb: where user is, form, to
+-common actions
+-colors: pick 1 primary, 1 secondary, 1 focus
+-typography
+-Iconography
+-Text
+-Limit line length. Specify max width 60-80 characters via max-width
+-Internationalization: select desired language, different date formats, right-to-left
+-space
+-Interaction
+-images
+-Animation
+-Decision fatigue: limit number of choices given at any time
+-Device aware
+-Device size and orientation
+-Performance: consistently monitor loading speeds
+-Short circuit: have alternative for when something isn’t working like a 3rd party call
+-Accessibility: account for visual/audio/physical impairment
+-legal:
+	hipaa: individual chooses access/sharing of records
+	ferpa: how student data can be shared/stored
+	ada: 
+	gdrr: applications must get approval from user before data is stored/shared
+-walls: remove if possible
+-complexity
+-payment: move paywall so that user can see the value you offer before they hit it
+-application failure: apologize to the user
+-security: if too much user leaves if too little might leave
