@@ -1263,3 +1263,53 @@ console tab you can see print statements or run JS code there to see variable va
 Sources: you can set breakpoints by clicking the numbers. Then just reload the page and it will stop there
 
 **Midterm line**
+--------------------------
+MIDTERM 2/26: The internet, Web servers, Domain names
+The internet
+internet connects independent networks and computing devices
+to talk to another a device must have an IP address. Domain names converted to IP
+connect by asking for connection route to device
+traceroute: determine hops in a connection
+traceroute byu.edu
+sending of data uses TCP/IP model
+layers: 
+Application layer: web user functionality
+Transport: breaks into chunks and sends data
+Internet: makes the connection. 
+Link layer: physical connections and hardware
+
+![input](notes/internet.png)
+Web servers
+web server hosts a web service that knows how to accept incoming internet connections and speak HTTP protocol
+
+package main
+
+import (
+	"net/http"
+)
+func getTime(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, time.Now().String())
+}
+func main() {
+	fs := http.FileServer(http.Dir("./public_html")) // Serve up files found in public_html
+	http.Handle("/", fs)
+	http.HandleFunc("/api/time", getTime) // Dynamically provide data
+	http.ListenAndServe(":3000", nil) // Listen for HTTP requests
+}
+curl localhost:3000/api/time -> make HTTP request
+
+web service gateways: 
+each service on different port
+service gateway listens on common HTTPs port 443, looks at request, and maps to services running on different ports. CADDY will be gateway
+Microservices: web services that provide single functional purpose. For one microservice you may need to deploy 1000 instances of it to support 1 million users
+Serverless: server removed and write function to speak HTTP
+Domain names
+get ip address for any domain using dig: dig amazon.com
+broken into root domain, 1+ subdomain prefixes
+react.simon.cs260.click //subdomain + root in bold
+DNS: once domain name is in the registry it can be listed with DNS server and associated with IP address
+DNS database records facilitate mapping names to IP addresses
+A record: straight mapping from domain name to ip address
+CNAME record: maps one domain name to another domain name
+
+
