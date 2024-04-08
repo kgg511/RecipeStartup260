@@ -1323,7 +1323,7 @@ functions provided by web service are called endpoints
 access web service endpoints via fetch function
 
 can make requests to other web services.
-![input](notes/2/28.png)
+![input](notes/2:28.png)
 URL
 location of web resource: web page, font, image, database record, JSON object ,etc
 only required parts are scheme and domain name
@@ -1346,7 +1346,7 @@ To connect to device you need IP address and port
 port allows single device to support multiple protocols and different types of services
 0-1023: standard protocols, 1024-49152: ports assigned to requesting entities, 49152-65535 create dynamic connections to a device.
 when you built web server you externally exposed port 22 so you could use ssh to open remote console on server, port 443 for secure HTTP communication, port 80 for unsecure HTTP communication
-![input](notes/2/282.png)
+![input](notes/2:282.png)
 caddy is listening on 80 and 443
 when get request on 80, redirect to port 443 to use secure connection
 request on 443 -> examines path in HTTP request, if match static file, read file. If match def for gateway service, caddy makes connection on that service’s port and passes request
@@ -1372,11 +1372,11 @@ RESPONSE
 [
   <body>
 ]
-![input](notes/2/283.png)
+![input](notes/2:283.png)
 Status codes:
 1xx: informational, 2xx: success, 3xx: redirect to another location, 4xx: client errors, 5xx: server errors
 headers: specify metadata
-![input](notes/2/284.png)
+![input](notes/2:284.png)
 body: format of body defined by Content-Type header
 Cookies: 
 an HTTP request knows nothing about previous/future request
@@ -1871,7 +1871,7 @@ Service daemons - PM2
 keep programs running after closing computer by registering it as a daemon, PM2
 
 ssh into server and see PM2 in command. pm2 ls
-![input](notes/3/20.png)
+![input](notes/3:20.png)
 
 Register new web service (set up domain that accesses a different web service)
 add rule to caddyfile to tell how to direct requests for that domain
@@ -1953,7 +1953,7 @@ const port = 8080;
 app.listen(port, function () {
   console.log(`Listening on port ${port}`);
 });
-![input](notes/3/202.png)
+![input](notes/3:202.png)
 create file with suffix .test.js
 
 store.test.js
@@ -2298,7 +2298,7 @@ npm install
 npm run dev
 
 Generated project directory
-![input](notes/4/1.png)
+![input](notes/4:1.png)
 -The index.html is loaded, which tells it to load jsx in the html
 -while in the jsx it saids load the app component in App.jsx
 
