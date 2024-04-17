@@ -2542,3 +2542,30 @@ TOOLS
 -payment: move paywall so that user can see the value you offer before they hit it
 -application failure: apologize to the user
 -security: if too much user leaves if too little might leave
+
+
+
+KAHOOT STUFF
+
+
+1. port 80 for HTTP
+2. HTTP status codes in 300 range are for content redirects or caching
+3. Language is not a standard http header, but content-type, host and cookie are.
+4. cookies allow a server to store data on the client
+5. paul george john for get /fav/geore
+
+6. which express middleware will match fetch request
+app.delete(/fav\/(.*)/, () => {})
+
+7. MongoDB query mathces: { name: "Walke", score: -55 }
+8. Hashing stored passwords is important bc It improves security by making the password unreadable
+9. console.log prints Client:Server:Hello
+10. what value does WS add to HTTP: It is peer to peer instead of client to server
+11. Purpose of JSX: render HTML from JS, componentize HTML, alow composability of HTML. NOT combine CSS/HTML/JS
+12. tacofish
+13. /burger renders B
+14. NPM install ws DOES: Locks the version of the websocket package for your application, Adds the websocket source code to the node_modules directory, Adds a dependency to your package.json file. NOT Adds template code for websockets to your JavaScript
+15. You can use fetch in front-end and back-end code
+16. Linux Daemon: Executes independent of a user, Starts when the computer is rebooted, PM2 is an example of a daemon. It can fork other processes
+
+
